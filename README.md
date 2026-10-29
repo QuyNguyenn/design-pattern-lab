@@ -74,10 +74,12 @@ Data belongs to the current browser and origin, is not synced between devices, a
 
 ```text
 src/
-  App.tsx                 Application shell, navigation, state orchestration
+  App.tsx                 Compose app state and provide the screen view model
   app-context.tsx        Typed view-model boundary for screen components
+  hooks/                  Persistence, browser theme, hash navigation, and learning actions
+  styles/                 Design tokens, layout, dashboard, practice, progress, settings, themes, and responsive rules
   screens/                Dashboard, practice, progress, and settings screens
-  components/ui.tsx       Shared icons, controls, meters, and dialogs
+  components/             App shell and shared components by responsibility
   CodeBlock.tsx           Escaped, token-highlighted code display
   engine.ts               Session creation, scoring, filters, statistics, storage validation
   types.ts                Data and progress contracts

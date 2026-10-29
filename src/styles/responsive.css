@@ -1,0 +1,521 @@
+@media (min-width: 1500px) {
+  main {
+    padding-left: 60px;
+    padding-right: 60px;
+  }
+  .hero-copy {
+    padding: 40px;
+  }
+  .hero-art {
+    width: 45%;
+  }
+  .hero {
+    min-height: 340px;
+  }
+  .art-code {
+    width: 320px;
+  }
+  .hero h2 {
+    font-size: 40px;
+  }
+}
+@media (max-width: 1180px) {
+  .sidebar {
+    width: 205px;
+    padding: 30px 16px 20px;
+  }
+  .main-shell {
+    margin-left: 205px;
+  }
+  .brand {
+    font-size: 22px;
+    gap: 8px;
+    padding: 0;
+  }
+  .brand small {
+    font-size: 6.5px;
+  }
+  .brand-mark {
+    width: 37px;
+    height: 37px;
+  }
+  main {
+    padding: 30px 26px 0;
+  }
+  .topbar {
+    padding: 0 26px;
+  }
+  .edition {
+    display: none;
+  }
+  .hero-copy {
+    padding: 27px;
+  }
+  .art-code {
+    width: 240px;
+    padding: 18px;
+  }
+  .top-node {
+    right: 20px;
+  }
+  .bottom-node {
+    right: 20px;
+  }
+  .stats-grid {
+    gap: 10px;
+  }
+  .stat-card {
+    padding: 17px 14px;
+  }
+  .stat-top {
+    font-size: 10px;
+  }
+  .stat-card p {
+    font-size: 9px;
+  }
+  .practice-layout {
+    grid-template-columns: minmax(0, 1fr) 190px;
+    gap: 15px;
+  }
+  .question-map {
+    padding: 14px;
+  }
+  .question-dots {
+    gap: 5px;
+  }
+  .question-panel {
+    padding: 22px;
+  }
+  .mode-card {
+    padding: 19px;
+  }
+  .mode-top > span:last-child {
+    font-size: 7px;
+  }
+  .filter-grid {
+    gap: 10px;
+  }
+  .builder-options {
+    gap: 12px;
+  }
+  .pattern-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .type-stats {
+    gap: 10px;
+  }
+  .type-stats .panel {
+    padding: 15px;
+  }
+}
+@media (max-width: 940px) {
+  .sidebar {
+    width: 78px;
+    padding: 25px 12px;
+  }
+  .brand {
+    justify-content: center;
+  }
+  .brand > span:last-child,
+  .nav-caption,
+  .nav-link span,
+  .sidebar-bottom {
+    display: none;
+  }
+  .sidebar nav {
+    margin-top: 40px;
+  }
+  .nav-link {
+    justify-content: center;
+    padding: 13px;
+  }
+  .main-shell {
+    margin-left: 78px;
+  }
+  .hero-art {
+    width: 38%;
+  }
+  .art-code {
+    width: 215px;
+    padding: 15px;
+    font-size: 10px;
+  }
+  .art-code p {
+    font-size: 10px;
+  }
+  .hero h2 {
+    font-size: 31px;
+  }
+  .hero-copy {
+    padding: 28px;
+  }
+  .hero-art .left-node {
+    left: -15px;
+  }
+  .builder-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .builder-bottom > .button {
+    align-self: flex-end;
+  }
+  .filter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .practice-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .session-aside {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .question-dots {
+    grid-template-columns: repeat(10, minmax(24px, 1fr));
+  }
+  .question-map {
+    padding: 20px;
+    grid-column: 1/-1;
+  }
+  .study-tip {
+    padding: 10px;
+  }
+  .save-note {
+    align-self: center;
+  }
+  .settings-card {
+    padding: 22px;
+  }
+  .topbar {
+    height: 72px;
+  }
+}
+@media (max-width: 650px) {
+  .sidebar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 62px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .brand-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+  }
+  .sidebar nav {
+    display: flex;
+    margin: 0;
+    gap: 7px;
+  }
+  .nav-link {
+    padding: 10px;
+  }
+  .main-shell {
+    margin-left: 0;
+  }
+  .topbar {
+    height: 61px;
+    padding: 0 18px;
+  }
+  .topbar-right {
+    gap: 10px;
+  }
+  .topbar .language-label,
+  .avatar {
+    display: none;
+  }
+  .topbar .slash {
+    margin: 0 8px;
+  }
+  .topbar {
+    font-size: 10px;
+  }
+  .segmented button {
+    font-size: 10px;
+    padding: 5px 9px;
+  }
+  main {
+    padding: 25px 17px 0;
+  }
+  .page-heading {
+    margin-bottom: 22px;
+  }
+  .page-heading h1 {
+    font-size: 26px;
+    max-width: 330px;
+  }
+  .page-heading p:not(.eyebrow) {
+    font-size: 12px;
+  }
+  .eyebrow {
+    font-size: 8px;
+    letter-spacing: 1.4px;
+  }
+  .hero {
+    min-height: 0;
+    border-radius: 12px;
+  }
+  .hero-art {
+    display: none;
+  }
+  .hero-copy {
+    padding: 27px;
+    width: 100%;
+  }
+  .hero h2 {
+    font-size: 31px;
+  }
+  .hero p {
+    font-size: 12px;
+  }
+  .hero small {
+    font-size: 9px;
+  }
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 17px 0 28px;
+    gap: 10px;
+  }
+  .stat-card {
+    padding: 17px;
+  }
+  .stat-top {
+    font-size: 10px;
+  }
+  .stat-value {
+    font-size: 28px;
+  }
+  .stat-card p {
+    font-size: 9px;
+  }
+  .section-heading > span.muted {
+    display: none;
+  }
+  .section-heading h2 {
+    font-size: 19px;
+  }
+  .mode-grid {
+    grid-template-columns: 1fr;
+  }
+  .mode-card {
+    padding: 21px;
+    position: relative;
+  }
+  .mode-top {
+    margin-bottom: 15px;
+  }
+  .mode-card p {
+    max-width: none;
+    margin-bottom: 18px;
+  }
+  .mode-card .text-button {
+    justify-content: flex-start;
+  }
+  .mode-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .mode-top > span:last-child {
+    font-size: 9px;
+  }
+  .builder {
+    padding: 21px;
+  }
+  .builder > .section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+  .filter-grid label {
+    font-size: 11px;
+  }
+  select,
+  input[type='search'] {
+    font-size: 13px;
+    padding: 11px;
+  }
+  .builder-bottom > .button {
+    width: 100%;
+  }
+  .reference-note {
+    align-items: flex-start;
+  }
+  .reference-note p {
+    font-size: 10px;
+  }
+  .reference-note > svg {
+    margin-top: 3px;
+  }
+  footer {
+    font-size: 8px;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 25px;
+  }
+  .practice-top {
+    align-items: flex-start;
+  }
+  .practice-top h1 {
+    font-size: 23px;
+  }
+  .practice-top > .text-button {
+    font-size: 9px;
+    max-width: 80px;
+    line-height: 1.5;
+    text-align: left;
+    gap: 5px;
+  }
+  .question-panel {
+    padding: 19px;
+  }
+  .question-prompt {
+    font-size: 17px;
+    line-height: 1.65;
+  }
+  .question-meta {
+    margin-bottom: 16px;
+  }
+  .difficulty {
+    font-size: 9px;
+    margin-left: 8px;
+  }
+  .answer {
+    font-size: 12px;
+    padding: 12px 10px;
+    gap: 9px;
+  }
+  .answer-status {
+    font-size: 8px;
+  }
+  .answer-letter {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+  .code-language {
+    align-items: flex-start;
+  }
+  .code-language > span {
+    font-size: 9px;
+    max-width: 115px;
+  }
+  .code-frame {
+    margin: 0 -7px;
+  }
+  .code-caption {
+    font-size: 8px;
+  }
+  pre {
+    font-size: 10px;
+  }
+  .line-number {
+    width: 25px;
+    margin-right: 12px;
+  }
+  .session-progress > div:first-child {
+    font-size: 10px;
+  }
+  .question-map {
+    padding: 17px;
+  }
+  .question-dots {
+    grid-template-columns: repeat(7, minmax(24px, 1fr));
+  }
+  .study-tip {
+    grid-column: 1/-1;
+    padding: 0 10px;
+  }
+  .save-note {
+    grid-column: 1/-1;
+    margin: 0;
+  }
+  .explanation {
+    padding: 16px;
+  }
+  .explanation p {
+    font-size: 12px;
+  }
+  .explanation a {
+    font-size: 10px;
+  }
+  .question-actions .button {
+    font-size: 11px;
+    padding: 10px 13px;
+  }
+  .completion {
+    padding: 30px 20px;
+  }
+  .completion h1 {
+    font-size: 26px;
+  }
+  .completion-actions {
+    flex-direction: column;
+  }
+  .review-row {
+    padding: 18px;
+    gap: 10px;
+  }
+  .review-row p {
+    font-size: 11px;
+  }
+  .type-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .pattern-grid {
+    grid-template-columns: 1fr;
+  }
+  .pattern-card > p {
+    min-height: 0;
+  }
+  .section-heading:has(.search-label) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .settings-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .settings-card p,
+  .about-card p {
+    font-size: 12px;
+  }
+  .settings-card h2,
+  .about-card h2 {
+    font-size: 17px;
+  }
+  .empty-state {
+    padding: 40px 22px;
+  }
+  .empty-state h1 {
+    font-size: 26px;
+  }
+  .nav-link {
+    position: relative;
+  }
+  .nav-link[aria-current='page']:after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    width: 3px;
+    height: 3px;
+    background: #587b41;
+    border-radius: 50%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *:before,
+  *:after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}

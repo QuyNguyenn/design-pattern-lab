@@ -1,4 +1,4 @@
-import { Icon, Stat, ModeCard } from '../components/ui.tsx';
+import { Icon, ModeCard, PageHeader, SectionHeading, StatCard } from '../components/index.ts';
 import { patterns, questions, kindLabels } from '../data/index.ts';
 import { createSession } from '../engine.ts';
 import type { Filters } from '../engine.ts';
@@ -23,14 +23,12 @@ export function DashboardScreen() {
   } = useAppContext();
   return (
     <>
-      <div className="page-heading">
-        <div>
-          <p className="eyebrow">YOUR DAILY DOSE OF BETTER DESIGN</p>
-          <h1>Small sessions. Lasting understanding.</h1>
-          <p>Go beyond the names. Learn when, why, and how to use design patterns.</p>
-        </div>
-        <span className="edition">22 PATTERNS · 132 QUESTIONS</span>
-      </div>
+      <PageHeader
+        eyebrow="Your daily dose of better design"
+        title="Small sessions. Lasting understanding."
+        description="Go beyond the names. Learn when, why, and how to use design patterns."
+        aside={<span className="edition">22 PATTERNS · 132 QUESTIONS</span>}
+      />
       <section className="hero">
         <div className="hero-copy">
           <span className="hero-pill">
@@ -90,14 +88,14 @@ export function DashboardScreen() {
         </div>
       </section>
       <section className="stats-grid" aria-label="Learning summary">
-        <Stat
+        <StatCard
           label="Questions studied"
           value={`${stats.studied}`}
           suffix={`/ ${stats.total}`}
           icon="book"
           note="Unique questions checked"
         />
-        <Stat
+        <StatCard
           label="Answer accuracy"
           value={stats.accuracy === null ? '—' : `${stats.accuracy}%`}
           icon="target"
@@ -107,14 +105,14 @@ export function DashboardScreen() {
               : 'Your first answer starts the story'
           }
         />
-        <Stat
+        <StatCard
           label="Ready to revisit"
           value={`${stats.mistakes}`}
           icon="reset"
           note="Latest answer was incorrect"
           onClick={() => focusPool('mistakes')}
         />
-        <Stat
+        <StatCard
           label="Bookmarked"
           value={`${progress.bookmarks.length}`}
           icon="bookmark"
@@ -123,13 +121,11 @@ export function DashboardScreen() {
         />
       </section>
       <section className="section">
-        <div className="section-heading">
-          <div>
-            <h2>Make practice your own</h2>
-            <p>Pick a pace. Build a little confidence.</p>
-          </div>
-          <span className="muted small">Progress saves automatically</span>
-        </div>
+        <SectionHeading
+          title="Make practice your own"
+          description="Pick a pace. Build a little confidence."
+          aside={<span className="muted small">Progress saves automatically</span>}
+        />
         <div className="mode-grid">
           <ModeCard
             icon="shuffle"
@@ -163,14 +159,12 @@ export function DashboardScreen() {
         </div>
       </section>
       <section className="builder panel" id="practice-builder">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">YOUR FOCUS, YOUR RULES</p>
-            <h2>Focused practice</h2>
-            <p>Spend more time on what matters to you.</p>
-          </div>
-          <span className="count-pill">{pool.length} matching questions</span>
-        </div>
+        <SectionHeading
+          eyebrow="Your focus, your rules"
+          title="Focused practice"
+          description="Spend more time on what matters to you."
+          aside={<span className="count-pill">{pool.length} matching questions</span>}
+        />
         <div className="filter-grid">
           <label>
             Question pool

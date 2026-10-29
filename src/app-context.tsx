@@ -11,10 +11,11 @@ import type {
   Session,
   Theme,
 } from './types.ts';
-import type { Confirmation } from './components/ui.tsx';
+import type { Confirmation } from './components/index.ts';
 import type { statistics } from './engine.ts';
+import type { Page } from './hooks/use-hash-navigation.ts';
 
-export type Page = 'dashboard' | 'practice' | 'progress' | 'settings';
+export type { Page } from './hooks/use-hash-navigation.ts';
 export type LearningStats = ReturnType<typeof statistics>;
 
 export interface AppContextValue {
