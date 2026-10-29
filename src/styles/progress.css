@@ -80,6 +80,9 @@
   margin: 0;
   min-height: 0;
 }
+.list-view .pattern-card .category {
+  justify-self: start;
+}
 .list-view .pattern-card .meter {
   margin: 0;
 }
