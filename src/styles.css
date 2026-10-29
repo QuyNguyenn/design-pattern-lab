@@ -1412,55 +1412,8 @@ pre {
 .settings-card button {
   white-space: nowrap;
 }
-.theme-toggle {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--text);
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
-  cursor: pointer;
-}
-.theme-toggle input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-}
-.switch-track {
-  width: 42px;
-  height: 24px;
-  position: relative;
-  border: 1px solid #aeb6c0;
-  border-radius: 999px;
-  background: #dce1e6;
-  transition: background 0.15s ease;
-}
-.switch-track::after {
-  content: '';
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  left: 2px;
-  top: 2px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 1px 3px #17212b35;
-  transition: transform 0.15s ease;
-}
-.theme-toggle input:checked + .switch-track {
-  background: #18324a;
-  border-color: #18324a;
-}
-.theme-toggle input:checked + .switch-track::after {
-  transform: translateX(18px);
-  background: #f2a93b;
-}
-.theme-toggle input:focus-visible + .switch-track {
-  outline: 3px solid #b97812;
-  outline-offset: 3px;
+.theme-options button {
+  min-width: 66px;
 }
 .danger-zone {
   border-color: #eadfd5;
@@ -1596,8 +1549,7 @@ dialog p {
   color: #ffd078;
 }
 :root[data-theme='dark'] .button.primary,
-:root[data-theme='dark'] .button.lime,
-:root[data-theme='dark'] .theme-toggle input:checked + .switch-track {
+:root[data-theme='dark'] .button.lime {
   color: #19232e;
   background: #f2b64d;
   border-color: #f2b64d;
@@ -1677,13 +1629,6 @@ dialog p {
 }
 :root[data-theme='dark'] .secondary:hover:not(:disabled) {
   background: var(--surface-hover);
-}
-:root[data-theme='dark'] .switch-track {
-  background: #334251;
-  border-color: #647386;
-}
-:root[data-theme='dark'] .switch-track::after {
-  background: #e8edf3;
 }
 :root[data-theme='dark'] .danger {
   background: #a94e42;

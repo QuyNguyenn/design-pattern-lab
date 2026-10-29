@@ -28,18 +28,23 @@ export function SettingsScreen() {
         <section className="panel settings-card">
           <div>
             <h2>Appearance</h2>
-            <p>Choose a light or dark color theme. Your preference is saved in this browser.</p>
+            <p>
+              Choose a theme or follow your system setting. Your preference is saved in this
+              browser.
+            </p>
           </div>
-          <label className="theme-toggle">
-            <span>Dark theme</span>
-            <input
-              type="checkbox"
-              role="switch"
-              checked={theme === 'dark'}
-              onChange={(event) => setTheme(event.target.checked ? 'dark' : 'light')}
-            />
-            <span className="switch-track" aria-hidden="true" />
-          </label>
+          <div className="segmented theme-options" role="group" aria-label="Color theme">
+            {(['light', 'dark', 'system'] as const).map((option) => (
+              <button
+                key={option}
+                className={theme === option ? 'selected' : ''}
+                aria-pressed={theme === option}
+                onClick={() => setTheme(option)}
+              >
+                {option === 'system' ? 'System' : option === 'dark' ? 'Dark' : 'Light'}
+              </button>
+            ))}
+          </div>
         </section>
         <section className="panel settings-card">
           <div>

@@ -1,5 +1,5 @@
 export type Language = 'typescript' | 'java';
-export type Theme = 'light' | 'dark';
+export type Theme = 'light' | 'dark' | 'system';
 export type Category = 'Creational' | 'Structural' | 'Behavioral';
 export type QuestionKind = 'scenario' | 'comparison' | 'code' | 'refactor';
 export interface Example {

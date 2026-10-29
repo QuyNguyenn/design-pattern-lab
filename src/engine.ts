@@ -137,7 +137,7 @@ export function parseProgress(raw: string | null): Progress {
     !data ||
     data.version !== 1 ||
     !['typescript', 'java'].includes(data.language) ||
-    (data.theme !== undefined && !['light', 'dark'].includes(data.theme)) ||
+    (data.theme !== undefined && !['light', 'dark', 'system'].includes(data.theme)) ||
     !Array.isArray(data.bookmarks) ||
     !Array.isArray(data.attempts)
   )

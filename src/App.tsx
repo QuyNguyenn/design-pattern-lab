@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { patterns, questionById, kindLabels } from './data/index.ts';
 import {
   STORAGE_KEY,
@@ -41,6 +41,10 @@ export function App() {
   const [progress, setProgress] = useState<Progress>(initial.progress);
   const [storageError, setStorageError] = useState(initial.error);
   const theme = progress.theme;
+  const [systemPrefersDark, setSystemPrefersDark] = useState(
+    () => window.matchMedia('(prefers-color-scheme: dark)').matches,
+  );
+  const resolvedTheme = theme === 'system' ? (systemPrefersDark ? 'dark' : 'light') : theme;
   const [page, setPage] = useState<Page>(currentPage);
   const [confirmation, setConfirmation] = useState<Confirmation | null>(null);
   const [filters, setFilters] = useState<Filters>(defaultFilters);
@@ -66,9 +70,16 @@ export function App() {
     document.title = `${page[0].toUpperCase() + page.slice(1)} · Design Pattern Lab`;
   }, [page]);
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    document.documentElement.style.colorScheme = theme;
-  }, [theme]);
+    const preference = window.matchMedia('(prefers-color-scheme: dark)');
+    const onPreferenceChange = (event: MediaQueryListEvent) => setSystemPrefersDark(event.matches);
+    setSystemPrefersDark(preference.matches);
+    preference.addEventListener('change', onPreferenceChange);
+    return () => preference.removeEventListener('change', onPreferenceChange);
+  }, []);
+  useLayoutEffect(() => {
+    document.documentElement.dataset.theme = resolvedTheme;
+    document.documentElement.style.colorScheme = resolvedTheme;
+  }, [resolvedTheme]);
   function navigate(next: Page) {
     location.hash = `/${next}`;
     setPage(next);
