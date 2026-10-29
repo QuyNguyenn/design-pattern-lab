@@ -230,8 +230,7 @@
   .topbar-right {
     gap: 10px;
   }
-  .topbar .language-label,
-  .avatar {
+  .topbar .language-label {
     display: none;
   }
   .topbar .slash {

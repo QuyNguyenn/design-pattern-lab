@@ -52,7 +52,7 @@
   font-weight: 700;
   color: #92998f;
   letter-spacing: 1.8px;
-  margin: 0 14px 16px;
+  margin: 0;
 }
 .sidebar nav {
   display: grid;
@@ -160,18 +160,6 @@
 .language-label {
   font-size: 11px;
 }
-.avatar {
-  height: 33px;
-  width: 33px;
-  display: grid;
-  place-items: center;
-  background: #f8ead0;
-  border: 1px solid #ead6b0;
-  color: #775014;
-  border-radius: 50%;
-  font-weight: 700;
-  font-size: 10px;
-}
 .segmented {
   display: inline-flex;
   background: var(--surface-subtle);
@@ -229,20 +217,25 @@ main {
   padding-top: 6px;
 }
 
+.sidebar-nav-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 36px 0 16px;
+  padding-left: 14px;
+}
 .sidebar-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  align-self: flex-end;
-  gap: 7px;
-  min-height: 34px;
-  padding: 7px 9px;
-  margin: 18px 0 2px;
-  border: 1px solid var(--border);
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border: 0;
   border-radius: 6px;
-  background: var(--surface);
+  background: transparent;
   color: var(--muted);
-  font-size: 11px;
 }
 .sidebar-toggle:hover {
   background: var(--surface-hover);
@@ -268,13 +261,13 @@ main {
   .sidebar-collapsed .brand > span:last-child,
   .sidebar-collapsed .nav-caption,
   .sidebar-collapsed .nav-label,
-  .sidebar-collapsed .sidebar-bottom,
-  .sidebar-collapsed .sidebar-toggle > span {
+  .sidebar-collapsed .sidebar-bottom {
     display: none;
   }
-  .sidebar-collapsed .sidebar-toggle {
-    align-self: center;
-    width: 44px;
+  .sidebar-collapsed .sidebar-nav-heading {
+    justify-content: center;
+    padding: 0;
+    margin: 18px 0 0;
   }
   .sidebar-collapsed .sidebar nav {
     margin-top: 20px;
@@ -292,7 +285,7 @@ main {
   }
 }
 @media (max-width: 940px) {
-  .sidebar-toggle {
+  .sidebar-nav-heading {
     display: none;
   }
 }

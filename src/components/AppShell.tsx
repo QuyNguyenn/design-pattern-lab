@@ -56,24 +56,28 @@ export function AppShell() {
             <small>DESIGN BETTER. EVERY DAY.</small>
           </span>
         </a>
-        <button
-          type="button"
-          className="sidebar-toggle"
-          aria-label={progress.sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          title={progress.sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          aria-expanded={!progress.sidebarCollapsed}
-          aria-controls="workspace-sidebar"
-          onClick={() =>
-            setProgress((current) => ({ ...current, sidebarCollapsed: !current.sidebarCollapsed }))
-          }
-        >
-          <Icon
-            name={progress.sidebarCollapsed ? 'sidebar-expand' : 'sidebar-collapse'}
-            size={18}
-          />
-          <span>Collapse sidebar</span>
-        </button>
-        <div className="nav-caption">YOUR WORKSPACE</div>
+        <div className="sidebar-nav-heading">
+          <div className="nav-caption">YOUR WORKSPACE</div>
+          <button
+            type="button"
+            className="sidebar-toggle"
+            aria-label={progress.sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            title={progress.sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            aria-expanded={!progress.sidebarCollapsed}
+            aria-controls="workspace-sidebar"
+            onClick={() =>
+              setProgress((current) => ({
+                ...current,
+                sidebarCollapsed: !current.sidebarCollapsed,
+              }))
+            }
+          >
+            <Icon
+              name={progress.sidebarCollapsed ? 'sidebar-expand' : 'sidebar-collapse'}
+              size={18}
+            />
+          </button>
+        </div>
         <nav aria-label="Main navigation">
           {(Object.keys(pageLabels) as Page[]).map((item) => (
             <a
@@ -118,9 +122,6 @@ export function AppShell() {
           <div className="topbar-right">
             <span className="language-label">Code examples</span>
             <LanguageSwitch value={progress.language} onChange={setLanguage} />
-            <span className="avatar" aria-hidden="true">
-              PL
-            </span>
           </div>
         </header>
         <main id="main" tabIndex={-1}>
