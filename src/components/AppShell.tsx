@@ -60,7 +60,9 @@ export function AppShell() {
               aria-current={page === item ? 'page' : undefined}
             >
               <Icon name={pageIcons[item]} />
-              <span>{pageLabels[item]}</span>
+              <span className="nav-label">
+                {item === 'progress' ? 'Progress' : pageLabels[item]}
+              </span>
               {item === 'practice' && active && !active.finished && <span className="nav-dot" />}
             </a>
           ))}

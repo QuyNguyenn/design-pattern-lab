@@ -174,3 +174,36 @@
   background: #a94e42;
   color: #fff;
 }
+
+:root[data-theme='dark'] .explanation p,
+:root[data-theme='dark'] .explanation summary,
+:root[data-theme='dark'] .difficulty,
+:root[data-theme='dark'] .answers legend,
+:root[data-theme='dark'] .map-legend,
+:root[data-theme='dark'] .session-progress > div:first-child {
+  color: var(--muted);
+}
+:root[data-theme='dark'] .answer.right .answer-status {
+  color: #b4e3ce;
+}
+:root[data-theme='dark'] .answer.incorrect .answer-status {
+  color: #ffc0b5;
+}
+:root[data-theme='dark'] .question-dots button {
+  background: var(--surface-subtle);
+  border-color: var(--border);
+  color: var(--text);
+}
+:root[data-theme='dark'] .question-dots .done-right {
+  background: #18362f;
+  border-color: #3e806b;
+  color: #d0f0e3;
+}
+:root[data-theme='dark'] .question-dots .done-wrong {
+  background: #402a2a;
+  border-color: #8e5151;
+  color: #ffd8d2;
+}
+:root[data-theme='dark'] .question-dots .current {
+  outline-color: var(--amber);
+}

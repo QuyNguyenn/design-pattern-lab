@@ -151,11 +151,11 @@
 }
 .right {
   border-color: #7d9b60;
-  background: #f1f7e9 !important;
+  background: #f1f7e9;
 }
 .incorrect {
   border-color: #cc9b81;
-  background: #fbf0e9 !important;
+  background: #fbf0e9;
 }
 .incorrect .answer-letter {
   background: #b97652;
@@ -246,11 +246,12 @@ fieldset:disabled .answer {
 .question-dots button {
   border: 1px solid #e3e8db;
   border-radius: 5px;
-  height: 30px;
+  height: 44px;
+  position: relative;
   min-width: 0;
   background: #fff;
   color: #8b967e;
-  font-size: 10px;
+  font-size: 12px;
 }
 .question-dots .done-right {
   background: #e9f2dd;
@@ -448,4 +449,15 @@ pre {
 .wrong {
   background: #fbece1;
   color: #b2774b;
+}
+
+.question-dot-status {
+  position: absolute;
+  top: 1px;
+  right: 3px;
+  font-size: 11px;
+  line-height: 1;
+}
+.code-scroll-hint {
+  display: none;
 }

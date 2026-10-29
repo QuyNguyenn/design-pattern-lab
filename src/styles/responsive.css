@@ -438,7 +438,7 @@
     padding: 17px;
   }
   .question-dots {
-    grid-template-columns: repeat(7, minmax(24px, 1fr));
+    grid-template-columns: repeat(5, minmax(36px, 1fr));
   }
   .study-tip {
     grid-column: 1/-1;
@@ -527,5 +527,39 @@
   *:after {
     scroll-behavior: auto !important;
     transition: none !important;
+  }
+}
+
+@media (max-width: 650px) {
+  .sidebar {
+    height: 76px;
+    padding: 8px;
+    gap: 8px;
+  }
+  .sidebar nav {
+    flex: 1;
+    gap: 2px;
+    justify-content: space-between;
+  }
+  .nav-link {
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 5px;
+    min-width: 44px;
+    font-size: 10px;
+  }
+  .nav-link .nav-label {
+    display: block;
+  }
+  .question-prompt {
+    scroll-margin-top: 92px;
+  }
+  .code-scroll-hint {
+    display: block;
+    margin: 0;
+    padding: 10px 12px;
+    color: #b8c9c0;
+    border-top: 1px solid #ffffff20;
+    font-size: 11px;
   }
 }
