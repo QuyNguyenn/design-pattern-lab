@@ -1,6 +1,19 @@
 import type { ReactNode } from 'react';
 
 const iconPaths: Record<string, ReactNode> = {
+  create: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v10M7 12h10" />
+    </>
+  ),
+  structure: (
+    <>
+      <rect x="3" y="3" width="7" height="7" />
+      <rect x="14" y="14" width="7" height="7" />
+      <path d="M10 6h8v8M6 10v8h8" />
+    </>
+  ),
   grid: (
     <>
       <rect x="3" y="3" width="7" height="7" rx="1.5" />

@@ -1,3 +1,4 @@
+import { SessionHistory } from './session-history.tsx';
 import { useEffect, useRef, useState } from 'react';
 import { Icon, Meter, PageHeader, SectionHeading, StatCard } from '../components/index.ts';
 import { patternById, questions, kindLabels } from '../data/index.ts';
@@ -76,6 +77,7 @@ export function ProgressScreen() {
           );
         })}
       </div>
+      <SessionHistory />
       <section className="section">
         <SectionHeading
           title="The pattern collection"
@@ -130,7 +132,19 @@ export function ProgressScreen() {
             );
             return (
               <article className="panel pattern-card" key={p.id}>
-                <span className={`category ${p.category.toLowerCase()}`}>{p.category}</span>
+                <span className={`category ${p.category.toLowerCase()}`}>
+                  <Icon
+                    name={
+                      p.category === 'Creational'
+                        ? 'create'
+                        : p.category === 'Structural'
+                          ? 'structure'
+                          : 'shuffle'
+                    }
+                    size={12}
+                  />
+                  {p.category}
+                </span>
                 <h3>{p.name}</h3>
                 <p>{p.intent}</p>
                 <Meter value={s.studied} total={6} />

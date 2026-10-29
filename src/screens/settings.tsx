@@ -1,4 +1,4 @@
-import { Icon, LanguageSwitch, PageHeader } from '../components/index.ts';
+import { LanguageSwitch, PageHeader } from '../components/index.ts';
 import { emptyProgress, defaultFilters } from '../engine.ts';
 import { useAppContext } from '../app-context.tsx';
 
@@ -6,10 +6,8 @@ export function SettingsScreen() {
   const {
     progress,
     theme,
-    active,
     setLanguage,
     setTheme,
-    restart,
     setConfirmation,
     setProgress,
     setFilters,
@@ -51,25 +49,12 @@ export function SettingsScreen() {
           </div>
           <LanguageSwitch value={progress.language} onChange={setLanguage} />
         </section>
-        <section className="panel settings-card">
-          <div>
-            <h2>Restart current session</h2>
-            <p>
-              Clear session answers and start the same set again. Keep your learning history and
-              bookmarks.
-            </p>
-          </div>
-          <button className="button secondary" disabled={!active} onClick={restart}>
-            <Icon name="reset" size={17} />
-            Restart session
-          </button>
-        </section>
         <section className="panel settings-card danger-zone">
           <div>
             <h2>Reset all progress</h2>
             <p>
-              Remove all answers, history, bookmarks, and preferences from this browser. This cannot
-              be undone.
+              Remove all answers, session records, bookmarks, and preferences from this browser.
+              This cannot be undone.
             </p>
           </div>
           <button
@@ -77,7 +62,7 @@ export function SettingsScreen() {
             onClick={() =>
               setConfirmation({
                 title: 'Reset all progress?',
-                body: 'All checked answers, bookmarks, your active session, and preferences will be removed from this browser. This cannot be undone.',
+                body: 'All checked answers, session records, bookmarks, your active session, and preferences will be removed from this browser. This cannot be undone.',
                 action: 'Reset everything',
                 danger: true,
                 run: () => {
