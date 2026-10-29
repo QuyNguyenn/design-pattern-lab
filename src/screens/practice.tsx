@@ -1,18 +1,28 @@
+import { PracticeSetup } from './practice-setup.tsx';
 import { CodeBlock } from '../CodeBlock.tsx';
 import { Icon, LanguageSwitch, Meter } from '../components/index.ts';
 import { patternById, questionById, kindLabels } from '../data/index.ts';
-import { canCheckAllAnswered, checkAllAnswered, chooseAnswer, checkAnswer } from '../engine.ts';
+import {
+  createSession,
+  sessionMistakes,
+  canCheckAllAnswered,
+  checkAllAnswered,
+  chooseAnswer,
+  checkAnswer,
+} from '../engine.ts';
 import { useAppContext } from '../app-context.tsx';
 
 export function PracticeScreen() {
   const {
     active,
+    practiceSetup,
+    chooseSession,
+    begin,
     q,
     checked,
     selected,
     sessionCorrect,
     progress,
-    navigate,
     restart,
     cancelSession,
     toggleBookmark,
@@ -21,21 +31,12 @@ export function PracticeScreen() {
     storageError,
     heading,
   } = useAppContext();
+  const mistakes = active ? sessionMistakes(active) : [];
   const canCheckAll = canCheckAllAnswered(progress);
   const remainingCount =
     active?.questionIds.filter((id) => !active.checked.includes(id)).length ?? 0;
-  return !active || !q ? (
-    <div className="empty-state panel">
-      <span className="empty-icon">
-        <Icon name="practice" size={32} />
-      </span>
-      <h1>Your next insight starts here.</h1>
-      <p>Choose a session to begin exploring design patterns.</p>
-      <button className="button primary" onClick={() => navigate('dashboard')}>
-        Choose a session
-        <Icon name="arrow" />
-      </button>
-    </div>
+  return practiceSetup || !active || !q ? (
+    <PracticeSetup />
   ) : active.finished ? (
     <>
       <div className="completion panel">
@@ -45,7 +46,9 @@ export function PracticeScreen() {
         <p className="eyebrow">SESSION COMPLETE</p>
         <h1>Another step toward better design.</h1>
         <p>
-          You checked all {active.questionIds.length} questions in {active.title.toLowerCase()}.
+          You checked {active.questionIds.length}{' '}
+          {active.questionIds.length === 1 ? 'question' : 'questions'} in{' '}
+          {active.title.toLowerCase()}.
         </p>
         <div className="result-score">
           {sessionCorrect}
@@ -56,10 +59,20 @@ export function PracticeScreen() {
           accuracy this session
         </p>
         <div className="completion-actions">
-          <button className="button primary" onClick={() => navigate('dashboard')}>
-            Back to overview
+          <button className="button primary" onClick={chooseSession}>
+            Choose next session
             <Icon name="arrow" />
           </button>
+          {mistakes.length > 0 && (
+            <button
+              className="button secondary"
+              onClick={() =>
+                begin(createSession(mistakes, 'Mistake review', mistakes.length, false))
+              }
+            >
+              Review mistakes
+            </button>
+          )}
           <button className="button secondary" onClick={restart}>
             Practice again
           </button>
@@ -281,51 +294,56 @@ export function PracticeScreen() {
           </div>
         </section>
         <aside className="session-aside">
-          <div className="panel question-map">
-            <h3>Your session</h3>
-            <p className="small muted">Move freely. Pick up where you left off.</p>
-            <div className="question-dots">
-              {active.questionIds.map((id, index) => {
-                const checkedQuestion = active.checked.includes(id);
-                const hasPendingAnswer = !!active.answers[id] && !checkedQuestion;
-                const bookmarked = progress.bookmarks.includes(id);
-                const status = checkedQuestion
-                  ? active.answers[id] === questionById[id].patternId
-                    ? 'correct'
-                    : 'incorrect, revisit'
-                  : hasPendingAnswer
-                    ? 'answered, not checked'
-                    : 'unchecked';
-                return (
-                  <button
-                    key={id}
-                    aria-label={`Question ${index + 1}, ${status}${bookmarked ? ', bookmarked' : ''}`}
-                    aria-current={index === active.index ? 'step' : undefined}
-                    className={`${index === active.index ? 'current' : ''} ${hasPendingAnswer ? 'has-pending-answer' : ''} ${bookmarked ? 'question-bookmarked' : ''} ${checkedQuestion ? (active.answers[id] === questionById[id].patternId ? 'done-right' : 'done-wrong') : ''}`}
-                    onClick={() => {
-                      setProgress((p) => ({ ...p, session: { ...p.session!, index } }));
-                      heading.current?.focus();
-                    }}
-                  >
-                    {index + 1}
-                    {checkedQuestion && (
-                      <span className="question-dot-status" aria-hidden="true">
-                        {active.answers[id] === questionById[id].patternId ? '✓' : '×'}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
+          <div className="session-navigation">
+            <div className="panel question-map">
+              <h3>Your session</h3>
+              <p className="small muted">Move freely. Pick up where you left off.</p>
+              <div className="question-dots">
+                {active.questionIds.map((id, index) => {
+                  const checkedQuestion = active.checked.includes(id);
+                  const hasPendingAnswer = !!active.answers[id] && !checkedQuestion;
+                  const bookmarked = progress.bookmarks.includes(id);
+                  const status = checkedQuestion
+                    ? active.answers[id] === questionById[id].patternId
+                      ? 'correct'
+                      : 'incorrect, revisit'
+                    : hasPendingAnswer
+                      ? 'answered, not checked'
+                      : 'unchecked';
+                  return (
+                    <button
+                      key={id}
+                      aria-label={`Question ${index + 1}, ${status}${bookmarked ? ', bookmarked' : ''}`}
+                      aria-current={index === active.index ? 'step' : undefined}
+                      className={`${index === active.index ? 'current' : ''} ${hasPendingAnswer ? 'has-pending-answer' : ''} ${bookmarked ? 'question-bookmarked' : ''} ${checkedQuestion ? (active.answers[id] === questionById[id].patternId ? 'done-right' : 'done-wrong') : ''}`}
+                      onClick={() => {
+                        setProgress((p) => ({ ...p, session: { ...p.session!, index } }));
+                        heading.current?.focus();
+                      }}
+                    >
+                      {index + 1}
+                      {checkedQuestion && (
+                        <span className="question-dot-status" aria-hidden="true">
+                          {active.answers[id] === questionById[id].patternId ? '✓' : '×'}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="map-legend">
+                <span>○ Unchecked</span>
+                <span className="answered-legend">◌ Answered</span>
+                <span className="bookmarked-legend">
+                  <i aria-hidden="true" /> Marked
+                </span>
+                <span>✓ Correct</span>
+                <span>× Revisit</span>
+              </div>
             </div>
-            <div className="map-legend">
-              <span>○ Unchecked</span>
-              <span className="answered-legend">◌ Answered</span>
-              <span className="bookmarked-legend">
-                <i aria-hidden="true" /> Marked
-              </span>
-              <span>✓ Correct</span>
-              <span>× Revisit</span>
-            </div>
+            <button className="button secondary" onClick={chooseSession}>
+              Choose another session
+            </button>
           </div>
           <div className="study-tip">
             <Icon name="target" />

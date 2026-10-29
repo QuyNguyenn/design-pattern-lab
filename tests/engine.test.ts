@@ -5,6 +5,7 @@ import {
   emptyProgress,
   shuffle,
   createSession,
+  sessionMistakes,
   chooseAnswer,
   checkAnswer,
   canCheckAllAnswered,
@@ -238,4 +239,38 @@ test('restarting preserves history while a full reset clears all learning state'
   assert.equal(reset.session, null);
   assert.equal(reset.attempts.length, 0);
   assert.equal(reset.bookmarks.length, 0);
+});
+
+test('session mistake review includes only checked wrong answers from that session', () => {
+  const pool = questions.slice(0, 4);
+  let progress = {
+    ...emptyProgress(),
+    session: createSession(pool.slice(0, 3), 'Original', 3, false),
+  };
+  progress = checkAnswer(chooseAnswer(progress, pool[0].id, pool[0].patternId), pool[0].id);
+  progress = checkAnswer(
+    chooseAnswer(
+      progress,
+      pool[1].id,
+      pool[1].options.find((id) => id !== pool[1].patternId)!,
+    ),
+    pool[1].id,
+  );
+  progress = chooseAnswer(
+    progress,
+    pool[2].id,
+    pool[2].options.find((id) => id !== pool[2].patternId)!,
+  );
+  const snapshot = structuredClone(progress);
+  const mistakes = sessionMistakes(progress.session!);
+  assert.deepEqual(
+    mistakes.map((q) => q.id),
+    [pool[1].id],
+  );
+  const review = createSession(mistakes, 'Mistake review', mistakes.length, false);
+  assert.deepEqual(review.questionIds, [pool[1].id]);
+  assert.deepEqual(review.answers, {});
+  assert.deepEqual(review.checked, []);
+  assert.deepEqual(progress, snapshot);
+  assert.deepEqual(sessionMistakes(createSession(pool, 'Fresh')), []);
 });

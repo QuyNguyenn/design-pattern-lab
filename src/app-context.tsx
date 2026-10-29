@@ -20,6 +20,9 @@ export type LearningStats = ReturnType<typeof statistics>;
 
 export interface AppContextValue {
   page: Page;
+  practiceSetup: boolean;
+  setPracticeSetup: Dispatch<SetStateAction<boolean>>;
+  chooseSession: () => void;
   progress: Progress;
   theme: Theme;
   setProgress: Dispatch<SetStateAction<Progress>>;
