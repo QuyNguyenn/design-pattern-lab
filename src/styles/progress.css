@@ -81,6 +81,7 @@
   min-height: 0;
 }
 .list-view .pattern-card .category {
+  align-self: center;
   justify-self: start;
   box-sizing: border-box;
   width: 92px;
