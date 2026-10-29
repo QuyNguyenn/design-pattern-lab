@@ -104,6 +104,28 @@
 :root[data-theme='dark'] .hero {
   background: #0d1c2b;
 }
+:root[data-theme='dark'] .field-note {
+  color: var(--text);
+  background: var(--surface);
+  border-color: var(--border);
+  box-shadow: 4px 5px 0 #07111a55;
+}
+:root[data-theme='dark'] .field-note-kicker,
+:root[data-theme='dark'] .field-note-foot {
+  color: var(--amber);
+}
+:root[data-theme='dark'] .field-note > div {
+  border-left-color: var(--border);
+}
+:root[data-theme='dark'] .field-note > div > span {
+  color: var(--amber);
+}
+:root[data-theme='dark'] .field-note small {
+  color: var(--muted);
+}
+:root[data-theme='dark'] .field-note-foot span {
+  color: var(--text);
+}
 :root[data-theme='dark'] .hero em,
 :root[data-theme='dark'] .hero-pill,
 :root[data-theme='dark'] .hero-pill span,
