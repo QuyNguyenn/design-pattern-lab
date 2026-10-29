@@ -113,7 +113,7 @@ export function PracticeScreen() {
             <Icon name="reset" size={16} />
             Restart session
           </button>
-          <button className="text-button cancel-session-button" onClick={cancelSession}>
+          <button className="button secondary cancel-session-button" onClick={cancelSession}>
             Cancel session
           </button>
         </div>

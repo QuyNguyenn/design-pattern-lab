@@ -14,9 +14,6 @@
   gap: 10px;
   flex-shrink: 0;
 }
-.cancel-session-button {
-  color: var(--muted);
-}
 .session-progress {
   margin: 22px 0;
 }

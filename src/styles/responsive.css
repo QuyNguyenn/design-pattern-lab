@@ -389,6 +389,11 @@
     text-align: right;
     gap: 5px;
   }
+  .practice-session-actions .cancel-session-button {
+    min-height: 38px;
+    padding: 8px 10px;
+    font-size: 10px;
+  }
   .question-panel {
     padding: 19px;
   }
