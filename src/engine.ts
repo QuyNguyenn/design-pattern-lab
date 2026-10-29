@@ -15,6 +15,7 @@ export const emptyProgress = (): Progress => ({
   history: [],
   language: 'typescript',
   theme: 'system',
+  sidebarCollapsed: false,
   bookmarks: [],
   attempts: [],
   session: null,
@@ -223,12 +224,14 @@ export function parseProgress(raw: string | null): Progress {
     ![1, 2].includes(data.version) ||
     !['typescript', 'java'].includes(data.language) ||
     (data.theme !== undefined && !['light', 'dark', 'system'].includes(data.theme)) ||
+    (data.sidebarCollapsed !== undefined && typeof data.sidebarCollapsed !== 'boolean') ||
     !Array.isArray(data.bookmarks) ||
     !Array.isArray(data.attempts)
   )
     return fail();
   // Keep saved progress from before theme preferences were added readable.
   data.theme ??= 'system';
+  data.sidebarCollapsed ??= false;
   if (
     data.bookmarks.some((id) => typeof id !== 'string' || !questionById[id]) ||
     new Set(data.bookmarks).size !== data.bookmarks.length

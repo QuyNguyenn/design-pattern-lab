@@ -52,7 +52,7 @@
   font-weight: 700;
   color: #92998f;
   letter-spacing: 1.8px;
-  margin: 55px 14px 16px;
+  margin: 0 14px 16px;
 }
 .sidebar nav {
   display: grid;
@@ -227,4 +227,72 @@ main {
   white-space: nowrap;
   align-self: flex-start;
   padding-top: 6px;
+}
+
+.sidebar-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+  gap: 7px;
+  min-height: 34px;
+  padding: 7px 9px;
+  margin: 18px 0 2px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 11px;
+}
+.sidebar-toggle:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+@media (min-width: 941px) {
+  .sidebar-collapsed .sidebar {
+    width: 78px;
+    padding: 35px 12px 22px;
+  }
+  .sidebar-collapsed .main-shell {
+    margin-left: 78px;
+  }
+  .sidebar-collapsed .brand {
+    justify-content: center;
+    padding: 0;
+  }
+  .sidebar-collapsed .brand-mark {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+  }
+  .sidebar-collapsed .brand > span:last-child,
+  .sidebar-collapsed .nav-caption,
+  .sidebar-collapsed .nav-label,
+  .sidebar-collapsed .sidebar-bottom,
+  .sidebar-collapsed .sidebar-toggle > span {
+    display: none;
+  }
+  .sidebar-collapsed .sidebar-toggle {
+    align-self: center;
+    width: 44px;
+  }
+  .sidebar-collapsed .sidebar nav {
+    margin-top: 20px;
+  }
+  .sidebar-collapsed .nav-link {
+    justify-content: center;
+    padding: 14px;
+    position: relative;
+  }
+  .sidebar-collapsed .nav-dot {
+    position: absolute;
+    top: 9px;
+    right: 8px;
+    margin: 0;
+  }
+}
+@media (max-width: 940px) {
+  .sidebar-toggle {
+    display: none;
+  }
 }

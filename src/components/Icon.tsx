@@ -1,6 +1,18 @@
 import type { ReactNode } from 'react';
 
 const iconPaths: Record<string, ReactNode> = {
+  'sidebar-collapse': (
+    <>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <path d="M9 4v16m7-11-3 3 3 3" />
+    </>
+  ),
+  'sidebar-expand': (
+    <>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <path d="M9 4v16m4-11 3 3-3 3" />
+    </>
+  ),
   create: (
     <>
       <circle cx="12" cy="12" r="9" />

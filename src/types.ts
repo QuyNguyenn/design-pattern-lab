@@ -65,6 +65,7 @@ export interface Progress {
   history: SessionRecord[];
   language: Language;
   theme: Theme;
+  sidebarCollapsed: boolean;
   bookmarks: string[];
   attempts: Attempt[];
   session: Session | null;
