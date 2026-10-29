@@ -1,7 +1,7 @@
 import { CodeBlock } from '../CodeBlock.tsx';
 import { Icon, LanguageSwitch, Meter } from '../components/index.ts';
 import { patternById, questionById, kindLabels } from '../data/index.ts';
-import { chooseAnswer, checkAnswer } from '../engine.ts';
+import { canCheckAllAnswered, checkAllAnswered, chooseAnswer, checkAnswer } from '../engine.ts';
 import { useAppContext } from '../app-context.tsx';
 
 export function PracticeScreen() {
@@ -14,12 +14,16 @@ export function PracticeScreen() {
     progress,
     navigate,
     restart,
+    cancelSession,
     toggleBookmark,
     setProgress,
     setLanguage,
     storageError,
     heading,
   } = useAppContext();
+  const canCheckAll = canCheckAllAnswered(progress);
+  const remainingCount =
+    active?.questionIds.filter((id) => !active.checked.includes(id)).length ?? 0;
   return !active || !q ? (
     <div className="empty-state panel">
       <span className="empty-icon">
@@ -107,19 +111,36 @@ export function PracticeScreen() {
           <p className="eyebrow">{active.title}</p>
           <h1>One problem. A better approach.</h1>
         </div>
-        <button className="text-button" onClick={restart}>
-          <Icon name="reset" size={16} />
-          Restart session
-        </button>
+        <div className="practice-session-actions">
+          <button className="text-button" onClick={restart}>
+            <Icon name="reset" size={16} />
+            Restart session
+          </button>
+          <button className="button danger-outline cancel-session-button" onClick={cancelSession}>
+            Cancel session
+          </button>
+        </div>
       </div>
       <div className="session-progress">
-        <div>
+        <div className="session-progress-header">
           <span>
             Question <strong>{active.index + 1}</strong> of {active.questionIds.length}
           </span>
-          <span>
-            {active.checked.length} checked · {sessionCorrect} correct
-          </span>
+          <div className="session-progress-summary">
+            <span>
+              {active.checked.length} checked · {sessionCorrect} correct
+            </span>
+            {canCheckAll && (
+              <button
+                className="button primary check-remaining-button"
+                aria-label={`Check all ${remainingCount} remaining answers and finish the session`}
+                onClick={() => setProgress((current) => checkAllAnswered(current))}
+              >
+                Check {remainingCount} remaining answers
+                <Icon name="check" size={15} />
+              </button>
+            )}
+          </div>
         </div>
         <Meter value={active.checked.length} total={active.questionIds.length} />
       </div>
@@ -264,28 +285,44 @@ export function PracticeScreen() {
             <h3>Your session</h3>
             <p className="small muted">Move freely. Pick up where you left off.</p>
             <div className="question-dots">
-              {active.questionIds.map((id, index) => (
-                <button
-                  key={id}
-                  aria-label={`Question ${index + 1}${active.checked.includes(id) ? (active.answers[id] === questionById[id].patternId ? ', correct' : ', incorrect, revisit') : ', unchecked'}`}
-                  aria-current={index === active.index ? 'step' : undefined}
-                  className={`${index === active.index ? 'current' : ''} ${active.checked.includes(id) ? (active.answers[id] === questionById[id].patternId ? 'done-right' : 'done-wrong') : ''}`}
-                  onClick={() => {
-                    setProgress((p) => ({ ...p, session: { ...p.session!, index } }));
-                    heading.current?.focus();
-                  }}
-                >
-                  {index + 1}
-                  {active.checked.includes(id) && (
-                    <span className="question-dot-status" aria-hidden="true">
-                      {active.answers[id] === questionById[id].patternId ? '✓' : '×'}
-                    </span>
-                  )}
-                </button>
-              ))}
+              {active.questionIds.map((id, index) => {
+                const checkedQuestion = active.checked.includes(id);
+                const hasPendingAnswer = !!active.answers[id] && !checkedQuestion;
+                const bookmarked = progress.bookmarks.includes(id);
+                const status = checkedQuestion
+                  ? active.answers[id] === questionById[id].patternId
+                    ? 'correct'
+                    : 'incorrect, revisit'
+                  : hasPendingAnswer
+                    ? 'answered, not checked'
+                    : 'unchecked';
+                return (
+                  <button
+                    key={id}
+                    aria-label={`Question ${index + 1}, ${status}${bookmarked ? ', bookmarked' : ''}`}
+                    aria-current={index === active.index ? 'step' : undefined}
+                    className={`${index === active.index ? 'current' : ''} ${hasPendingAnswer ? 'has-pending-answer' : ''} ${bookmarked ? 'question-bookmarked' : ''} ${checkedQuestion ? (active.answers[id] === questionById[id].patternId ? 'done-right' : 'done-wrong') : ''}`}
+                    onClick={() => {
+                      setProgress((p) => ({ ...p, session: { ...p.session!, index } }));
+                      heading.current?.focus();
+                    }}
+                  >
+                    {index + 1}
+                    {checkedQuestion && (
+                      <span className="question-dot-status" aria-hidden="true">
+                        {active.answers[id] === questionById[id].patternId ? '✓' : '×'}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
             <div className="map-legend">
               <span>○ Unchecked</span>
+              <span className="answered-legend">◌ Answered</span>
+              <span className="bookmarked-legend">
+                <i aria-hidden="true" /> Marked
+              </span>
               <span>✓ Correct</span>
               <span>× Revisit</span>
             </div>

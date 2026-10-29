@@ -7,6 +7,8 @@ import {
   createSession,
   chooseAnswer,
   checkAnswer,
+  canCheckAllAnswered,
+  checkAllAnswered,
   parseProgress,
   statistics,
   filterQuestions,
@@ -104,6 +106,35 @@ test('checking requires a choice, appends exactly one attempt and locks the answ
     ),
     checked,
   );
+});
+
+test('checking all remaining answers requires a complete set and finishes once', () => {
+  const pool = questions.slice(0, 3);
+  let p = { ...emptyProgress(), session: createSession(pool, 'Three', 3, false) };
+  assert.equal(canCheckAllAnswered(p), false);
+  p = chooseAnswer(p, pool[0].id, pool[0].patternId);
+  assert.strictEqual(checkAllAnswered(p), p);
+
+  p = chooseAnswer(
+    p,
+    pool[1].id,
+    pool[1].options.find((id) => id !== pool[1].patternId)!,
+  );
+  p = chooseAnswer(p, pool[2].id, pool[2].patternId);
+  assert.equal(canCheckAllAnswered(p), true);
+  p = checkAnswer(p, pool[0].id);
+  assert.equal(canCheckAllAnswered(p), true);
+  const result = checkAllAnswered(p);
+
+  assert.deepEqual(
+    result.session?.checked,
+    pool.map((q) => q.id),
+  );
+  assert.equal(result.session?.finished, true);
+  assert.equal(result.attempts.length, 3);
+  assert.equal(result.attempts.filter((attempt) => attempt.correct).length, 2);
+  assert.equal(canCheckAllAnswered(result), false);
+  assert.strictEqual(checkAllAnswered(result), result);
 });
 
 test('invalid answers and questions outside a session cannot alter progress', () => {

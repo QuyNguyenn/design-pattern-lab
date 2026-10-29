@@ -218,7 +218,7 @@
 :root[data-theme='dark'] .difficulty,
 :root[data-theme='dark'] .answers legend,
 :root[data-theme='dark'] .map-legend,
-:root[data-theme='dark'] .session-progress > div:first-child {
+:root[data-theme='dark'] .session-progress-header {
   color: var(--muted);
 }
 :root[data-theme='dark'] .answer.right .answer-status {
@@ -241,6 +241,14 @@
   background: #402a2a;
   border-color: #8e5151;
   color: #ffd8d2;
+}
+:root[data-theme='dark'] .question-dots .has-pending-answer {
+  background: #3b321f;
+  border-color: #a5823e;
+  color: #ffdc95;
+}
+:root[data-theme='dark'] .map-legend .answered-legend {
+  color: #f4cd86;
 }
 :root[data-theme='dark'] .question-dots .current {
   outline-color: var(--amber);

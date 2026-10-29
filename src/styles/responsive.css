@@ -381,12 +381,23 @@
   .practice-top h1 {
     font-size: 23px;
   }
-  .practice-top > .text-button {
-    font-size: 9px;
-    max-width: 80px;
+  .practice-session-actions .text-button {
+    min-height: 32px;
+    font-size: 10px;
+    max-width: 110px;
     line-height: 1.5;
-    text-align: left;
+    text-align: right;
     gap: 5px;
+  }
+  .practice-session-actions {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+  .practice-session-actions .cancel-session-button {
+    min-height: 38px;
+    padding: 8px 10px;
+    font-size: 10px;
   }
   .question-panel {
     padding: 19px;
@@ -435,7 +446,17 @@
     width: 25px;
     margin-right: 12px;
   }
-  .session-progress > div:first-child {
+  .session-progress-header {
+    font-size: 10px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .session-progress-summary {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .check-remaining-button {
+    min-height: 40px;
     font-size: 10px;
   }
   .question-map {

@@ -126,6 +126,25 @@ export function checkAnswer(progress: Progress, questionId: string): Progress {
     ],
   };
 }
+export function canCheckAllAnswered(progress: Progress): boolean {
+  const session = progress.session;
+  return (
+    !!session &&
+    !session.finished &&
+    session.questionIds.every((id) => !!session.answers[id]) &&
+    session.questionIds.some((id) => !session.checked.includes(id))
+  );
+}
+export function checkAllAnswered(progress: Progress): Progress {
+  if (!canCheckAllAnswered(progress)) return progress;
+  const session = progress.session!;
+
+  const checked = session.questionIds.reduce((current, id) => checkAnswer(current, id), progress);
+  return {
+    ...checked,
+    session: { ...checked.session!, finished: true },
+  };
+}
 // Validate the stored version and every reference before letting external JSON reach UI state.
 export function parseProgress(raw: string | null): Progress {
   if (!raw) return emptyProgress();
