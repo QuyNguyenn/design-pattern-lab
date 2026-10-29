@@ -1,4 +1,4 @@
-import { Icon, LanguageSwitch, PageHeader } from '../components/index.ts';
+import { LanguageSwitch, PageHeader } from '../components/index.ts';
 import { emptyProgress, defaultFilters } from '../engine.ts';
 import { useAppContext } from '../app-context.tsx';
 
@@ -6,10 +6,8 @@ export function SettingsScreen() {
   const {
     progress,
     theme,
-    active,
     setLanguage,
     setTheme,
-    restart,
     setConfirmation,
     setProgress,
     setFilters,
@@ -50,19 +48,6 @@ export function SettingsScreen() {
             <p>Used for all code examples. Switch anytime without changing your answers.</p>
           </div>
           <LanguageSwitch value={progress.language} onChange={setLanguage} />
-        </section>
-        <section className="panel settings-card">
-          <div>
-            <h2>Restart current session</h2>
-            <p>
-              Clear session answers and start the same set again. Keep your learning history and
-              bookmarks.
-            </p>
-          </div>
-          <button className="button secondary" disabled={!active} onClick={restart}>
-            <Icon name="reset" size={17} />
-            Restart session
-          </button>
         </section>
         <section className="panel settings-card danger-zone">
           <div>
