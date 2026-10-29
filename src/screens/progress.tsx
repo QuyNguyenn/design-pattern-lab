@@ -9,7 +9,7 @@ export function ProgressScreen() {
   const { stats, progress, focusPool, search, setSearch, begin, filteredPatterns } =
     useAppContext();
   const [category, setCategory] = useState('All');
-  const [layout, setLayout] = useState<'grid' | 'list'>('grid');
+  const [layout, setLayout] = useState<'grid' | 'list'>('list');
   const [compareId, setCompareId] = useState<string | null>(null);
   const compareDialog = useRef<HTMLDialogElement>(null);
   const comparedPattern = compareId ? patternById[compareId] : null;
