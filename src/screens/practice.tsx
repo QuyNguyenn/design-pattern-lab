@@ -1,5 +1,5 @@
 import { CodeBlock } from '../CodeBlock.tsx';
-import { Icon, LanguageSwitch, Meter } from '../components/ui.tsx';
+import { Icon, LanguageSwitch, Meter } from '../components/index.ts';
 import { patternById, questionById, kindLabels } from '../data/index.ts';
 import { chooseAnswer, checkAnswer } from '../engine.ts';
 import { useAppContext } from '../app-context.tsx';

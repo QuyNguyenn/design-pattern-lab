@@ -77,7 +77,7 @@ src/
   App.tsx                 Application shell, navigation, state orchestration
   app-context.tsx        Typed view-model boundary for screen components
   screens/                Dashboard, practice, progress, and settings screens
-  components/ui.tsx       Shared icons, controls, meters, and dialogs
+  components/             Shared components by responsibility (headers, controls, cards, dialogs)
   CodeBlock.tsx           Escaped, token-highlighted code display
   engine.ts               Session creation, scoring, filters, statistics, storage validation
   types.ts                Data and progress contracts

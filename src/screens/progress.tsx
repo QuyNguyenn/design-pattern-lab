@@ -1,4 +1,4 @@
-import { Icon, Meter, Stat } from '../components/ui.tsx';
+import { Icon, Meter, PageHeader, SectionHeading, StatCard } from '../components/index.ts';
 import { questions, kindLabels } from '../data/index.ts';
 import { createSession, statistics } from '../engine.ts';
 import type { QuestionKind } from '../types.ts';
@@ -9,34 +9,32 @@ export function ProgressScreen() {
     useAppContext();
   return (
     <>
-      <div className="page-heading">
-        <div>
-          <p className="eyebrow">SEE WHAT’S TAKING SHAPE</p>
-          <h1>Your learning, in perspective.</h1>
-          <p>Coverage shows what you’ve tried. Accuracy shows where to revisit.</p>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="See what’s taking shape"
+        title="Your learning, in perspective."
+        description="Coverage shows what you’ve tried. Accuracy shows where to revisit."
+      />
       <section className="stats-grid">
-        <Stat
+        <StatCard
           label="Coverage"
           value={`${Math.round((stats.studied / questions.length) * 100)}%`}
           icon="book"
           note={`${stats.studied} of ${questions.length} unique questions`}
         />
-        <Stat
+        <StatCard
           label="Answer accuracy"
           value={stats.accuracy === null ? '—' : `${stats.accuracy}%`}
           icon="target"
           note="All checked attempts, including retries"
         />
-        <Stat
+        <StatCard
           label="Review mistakes"
           value={String(stats.mistakes)}
           icon="reset"
           note="Based on your latest answers"
           onClick={() => focusPool('mistakes')}
         />
-        <Stat
+        <StatCard
           label="Saved for later"
           value={String(progress.bookmarks.length)}
           icon="bookmark"
@@ -66,21 +64,21 @@ export function ProgressScreen() {
         })}
       </div>
       <section className="section">
-        <div className="section-heading">
-          <div>
-            <h2>The pattern collection</h2>
-            <p>Six perspectives on each pattern. Keep connecting the dots.</p>
-          </div>
-          <label className="search-label">
-            <span className="sr-only">Search patterns</span>
-            <input
-              type="search"
-              placeholder="Find a pattern…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </label>
-        </div>
+        <SectionHeading
+          title="The pattern collection"
+          description="Six perspectives on each pattern. Keep connecting the dots."
+          aside={
+            <label className="search-label">
+              <span className="sr-only">Search patterns</span>
+              <input
+                type="search"
+                placeholder="Find a pattern…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </label>
+          }
+        />
         <div className="pattern-grid">
           {filteredPatterns.map((p) => {
             const s = statistics(

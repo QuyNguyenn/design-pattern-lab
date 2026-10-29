@@ -11,14 +11,14 @@ import {
 } from './engine.ts';
 import type { Filters } from './engine.ts';
 import type { Category, Language, Progress, QuestionKind, Session, Theme } from './types.ts';
-import { Icon, LanguageSwitch, ConfirmDialog } from './components/ui.tsx';
+import { ConfirmDialog, Icon, LanguageSwitch } from './components/index.ts';
 import { DashboardScreen } from './screens/dashboard.tsx';
 import { PracticeScreen } from './screens/practice.tsx';
 import { ProgressScreen } from './screens/progress.tsx';
 import { SettingsScreen } from './screens/settings.tsx';
 import { AppProvider } from './app-context.tsx';
 import type { Page } from './app-context.tsx';
-import type { Confirmation } from './components/ui.tsx';
+import type { Confirmation } from './components/index.ts';
 
 function currentPage(): Page {
   const page = location.hash.replace('#/', '');

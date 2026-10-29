@@ -10,7 +10,7 @@ Keep UI copy, questions, explanations, and repository documentation in English. 
 
 - `src/App.tsx`: app shell, navigation, state orchestration, and screen composition. Keep screen markup in `src/screens/`.
 - `src/app-context.tsx`: typed view-model boundary shared by the screen components. Keep its contract explicit; move reusable domain behavior to `engine.ts`.
-- `src/components/ui.tsx`: shared presentational controls and dialogs. Keep screen-specific UI inside its screen module.
+- `src/components/`: shared presentational components grouped by responsibility. Keep screen-specific UI inside its screen module; extract repeated layout such as page and section headings when multiple screens use the same structure.
 - `src/engine.ts`: session creation, answer checking, filters, statistics, and saved-data validation. Keep learning-state rules here rather than duplicating them in views.
 - `src/types.ts`: shared contracts.
 - `src/data/{creational,structural,behavioral}.ts`: authored pattern records.

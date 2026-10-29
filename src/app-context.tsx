@@ -11,7 +11,7 @@ import type {
   Session,
   Theme,
 } from './types.ts';
-import type { Confirmation } from './components/ui.tsx';
+import type { Confirmation } from './components/index.ts';
 import type { statistics } from './engine.ts';
 
 export type Page = 'dashboard' | 'practice' | 'progress' | 'settings';

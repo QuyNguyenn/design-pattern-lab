@@ -1,4 +1,4 @@
-import { Icon, LanguageSwitch } from '../components/ui.tsx';
+import { Icon, LanguageSwitch, PageHeader } from '../components/index.ts';
 import { emptyProgress, defaultFilters } from '../engine.ts';
 import { useAppContext } from '../app-context.tsx';
 
@@ -17,13 +17,11 @@ export function SettingsScreen() {
   } = useAppContext();
   return (
     <>
-      <div className="page-heading">
-        <div>
-          <p className="eyebrow">MAKE YOURSELF AT HOME</p>
-          <h1>A lab that works your way.</h1>
-          <p>Your preferences and progress stay in this browser.</p>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Make yourself at home"
+        title="A lab that works your way."
+        description="Your preferences and progress stay in this browser."
+      />
       <div className="settings-stack">
         <section className="panel settings-card">
           <div>
