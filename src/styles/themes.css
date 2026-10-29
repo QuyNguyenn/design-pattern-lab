@@ -242,6 +242,14 @@
   border-color: #8e5151;
   color: #ffd8d2;
 }
+:root[data-theme='dark'] .question-dots .has-pending-answer {
+  background: #3b321f;
+  border-color: #a5823e;
+  color: #ffdc95;
+}
+:root[data-theme='dark'] .map-legend .answered-legend {
+  color: #f4cd86;
+}
 :root[data-theme='dark'] .question-dots .current {
   outline-color: var(--amber);
 }

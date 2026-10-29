@@ -242,6 +242,14 @@ fieldset:disabled .answer {
 .question-map > p {
   font-size: 11px;
 }
+.check-remaining-button {
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 10px;
+  margin: 12px 0 14px;
+  gap: 7px;
+  font-size: 10px;
+}
 .question-dots {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -259,6 +267,21 @@ fieldset:disabled .answer {
   background: #fff;
   color: #8b967e;
   font-size: 12px;
+}
+.question-dots .has-pending-answer {
+  background: #fff5df;
+  border: 1px dashed #d9ad5b;
+  color: #775014;
+}
+.question-dots .question-bookmarked::before {
+  position: absolute;
+  top: 0;
+  right: 5px;
+  width: 7px;
+  height: 11px;
+  background: var(--amber);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%);
+  content: '';
 }
 .question-dots .done-right {
   background: #e9f2dd;
@@ -282,6 +305,21 @@ fieldset:disabled .answer {
   font-size: 8px;
   color: #929a88;
   margin-top: 17px;
+}
+.map-legend .answered-legend {
+  color: #966d27;
+}
+.map-legend .bookmarked-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.bookmarked-legend i {
+  display: inline-block;
+  width: 7px;
+  height: 10px;
+  background: var(--amber);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%);
 }
 .study-tip {
   padding: 25px 18px;
@@ -460,7 +498,7 @@ pre {
 
 .question-dot-status {
   position: absolute;
-  top: 1px;
+  bottom: 1px;
   right: 3px;
   font-size: 11px;
   line-height: 1;
