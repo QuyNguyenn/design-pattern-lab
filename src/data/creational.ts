@@ -39,12 +39,14 @@ export const creational: Pattern[] = [
           typescript: `interface Writer {
   write(): string;
 }
+
 abstract class ReportJob {
   run() {
     return this.makeWriter().write();
   }
   protected abstract makeWriter(): Writer;
 }
+
 class CsvJob extends ReportJob {
   protected makeWriter(): Writer {
     return { write: () => 'CSV report' };
@@ -53,12 +55,14 @@ class CsvJob extends ReportJob {
           java: `interface Writer {
     String write();
 }
+
 abstract class ReportJob {
     String run() {
         return makeWriter().write();
     }
     protected abstract Writer makeWriter();
 }
+
 class CsvJob extends ReportJob {
     protected Writer makeWriter() {
         return () -> "CSV report";
@@ -74,12 +78,14 @@ class CsvJob extends ReportJob {
           typescript: `interface Courier {
   send(): void;
 }
+
 abstract class Delivery {
   deliver() {
     this.courier().send();
   }
   protected abstract courier(): Courier;
 }
+
 class LocalDelivery extends Delivery {
   protected courier(): Courier {
     return { send: () => console.log('By bike') };
@@ -88,12 +94,14 @@ class LocalDelivery extends Delivery {
           java: `interface Courier {
     void send();
 }
+
 abstract class Delivery {
     void deliver() {
         courier().send();
     }
     protected abstract Courier courier();
 }
+
 class LocalDelivery extends Delivery {
     protected Courier courier() {
         return () -> System.out.println("By bike");
@@ -113,6 +121,7 @@ class LocalDelivery extends Delivery {
     return JSON.parse(s);
   }
 }
+
 class ImportJob {
   importData(source: string) {
     const parser = new JsonParser();
@@ -124,6 +133,7 @@ class ImportJob {
         return s;
     }
 }
+
 class ImportJob {
     Object importData(String source) {
         var parser = new JsonParser();
@@ -172,17 +182,22 @@ class ImportJob {
           typescript: `interface Button {
   paint(): string;
 }
+
 interface Menu {
   items(): string[];
 }
+
 interface UiKit {
   button(): Button;
+
   menu(): Menu;
 }
+
 class NightKit implements UiKit {
   button() {
     return { paint: () => 'dark button' };
   }
+
   menu() {
     return { items: () => ['dark item'] };
   }
@@ -190,13 +205,16 @@ class NightKit implements UiKit {
           java: `interface Button {
     String paint();
 }
+
 interface Menu {
     String[] items();
 }
+
 interface UiKit {
     Button button();
     Menu menu();
 }
+
 class NightKit implements UiKit {
     public Button button() {
         return () -> "dark button";
@@ -214,12 +232,15 @@ class NightKit implements UiKit {
         code: {
           typescript: `interface Platform {
   billing(): { charge(): string };
+
   mail(): { send(): string };
 }
+
 class SandboxPlatform implements Platform {
   billing() {
     return { charge: () => 'test charge' };
   }
+
   mail() {
     return { send: () => 'test mail' };
   }
@@ -227,13 +248,16 @@ class SandboxPlatform implements Platform {
           java: `interface Billing {
     String charge();
 }
+
 interface Mail {
     String send();
 }
+
 interface Platform {
     Billing billing();
     Mail mail();
 }
+
 class SandboxPlatform implements Platform {
     public Billing billing() {
         return () -> "test charge";
@@ -307,20 +331,25 @@ class SandboxPlatform implements Platform {
         code: {
           typescript: `class MealPlan {
   private parts: string[] = [];
+
   main(value: string) {
     this.parts.push(value);
     return this;
   }
+
   side(value: string) {
     this.parts.push(value);
     return this;
   }
+
   build() {
     return [...this.parts];
   }
 }
+
 const meal = new MealPlan().main('Rice').side('Beans').build();`,
           java: `import java.util.*;
+
 class MealPlan {
     private final List<String> parts = new ArrayList<>();
     MealPlan main(String v) {
@@ -346,20 +375,25 @@ class MealPlan {
           typescript: `class RequestDraft {
   private path = '/';
   private headers: Record<string, string> = {};
+
   at(path: string) {
     this.path = path;
     return this;
   }
+
   header(k: string, v: string) {
     this.headers[k] = v;
     return this;
   }
+
   build() {
     return Object.freeze({ path: this.path, headers: { ...this.headers } });
   }
 }`,
           java: `import java.util.*;
+
 record Request(String path, Map<String, String> headers) {}
+
 class RequestDraft {
     private String path = "/";
     private final Map<String, String> headers = new HashMap<>();
@@ -392,8 +426,10 @@ class RequestDraft {
     public insurance: boolean,
   ) {}
 }
+
 const trip = new Trip('Hanoi', true, false, true);`,
         java: `record Trip(String city, boolean hotel, boolean car, boolean insurance) {}
+
 class Booking {
     Trip trip = new Trip("Hanoi", true, false, true);
 }`,
@@ -442,16 +478,21 @@ class Booking {
     public text: string,
     public tags: string[],
   ) {}
+
   copy() {
     return new Note(this.text, [...this.tags]);
   }
 }
+
 const original = new Note('Draft', ['work']);
+
 const duplicate = original.copy();`,
           java: `import java.util.*;
+
 class Note {
     String text;
     List<String> tags;
+
     Note(String t, List<String> tags) {
         text = t;
         this.tags = tags;
@@ -472,12 +513,15 @@ class Note {
     public color: string,
     public size: number,
   ) {}
+
   copy() {
     return new Stamp(this.color, this.size);
   }
 }
+
 class Palette {
   constructor(private preset: Stamp) {}
+
   create() {
     return this.preset.copy();
   }
@@ -485,6 +529,7 @@ class Palette {
           java: `class Stamp {
     String color;
     int size;
+
     Stamp(String c, int s) {
         color = c;
         size = s;
@@ -493,8 +538,10 @@ class Palette {
         return new Stamp(color, size);
     }
 }
+
 class Palette {
     private final Stamp preset;
+
     Palette(Stamp preset) {
         this.preset = preset;
     }
@@ -517,10 +564,12 @@ class Palette {
     public color: string,
   ) {}
 }
+
 function duplicate(c: Circle) {
   return new Circle(c.radius, c.color);
 }`,
         java: `record Circle(int radius, String color) {}
+
 class Editor {
     Circle duplicate(Circle c) {
         return new Circle(c.radius(), c.color());
@@ -615,12 +664,16 @@ class Editor {
         typescript: `class JobRegistry {
   jobs: string[] = [];
 }
+
 const first = new JobRegistry();
+
 const second = new JobRegistry();`,
         java: `import java.util.*;
+
 class JobRegistry {
     List<String> jobs = new ArrayList<>();
 }
+
 class Startup {
     JobRegistry first = new JobRegistry();
     JobRegistry second = new JobRegistry();

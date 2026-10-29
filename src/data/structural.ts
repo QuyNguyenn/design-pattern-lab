@@ -41,11 +41,14 @@ export const structural: Pattern[] = [
     return 77;
   }
 }
+
 interface Sensor {
   degreesC(): number;
 }
+
 class SensorPort implements Sensor {
   constructor(private device: OldSensor) {}
+
   degreesC() {
     return ((this.device.readF() - 32) * 5) / 9;
   }
@@ -55,11 +58,14 @@ class SensorPort implements Sensor {
         return 77;
     }
 }
+
 interface Sensor {
     double degreesC();
 }
+
 class SensorPort implements Sensor {
     private final OldSensor device;
+
     SensorPort(OldSensor d) {
         device = d;
     }
@@ -77,13 +83,16 @@ class SensorPort implements Sensor {
           typescript: `interface Payments {
   charge(cents: number): void;
 }
+
 class VendorPay {
   payDollars(n: number) {
     console.log(n);
   }
 }
+
 class CheckoutPort implements Payments {
   constructor(private vendor: VendorPay) {}
+
   charge(cents: number) {
     this.vendor.payDollars(cents / 100);
   }
@@ -91,13 +100,16 @@ class CheckoutPort implements Payments {
           java: `interface Payments {
     void charge(int cents);
 }
+
 class VendorPay {
     void payDollars(double n) {
         System.out.println(n);
     }
 }
+
 class CheckoutPort implements Payments {
     private final VendorPay vendor;
+
     CheckoutPort(VendorPay v) {
         vendor = v;
     }
@@ -119,6 +131,7 @@ class CheckoutPort implements Payments {
     console.log(n);
   }
 }
+
 function buy(vendor: Vendor, cents: number) {
   vendor.payDollars(cents / 100);
 }`,
@@ -127,6 +140,7 @@ function buy(vendor: Vendor, cents: number) {
         System.out.println(n);
     }
 }
+
 class Checkout {
     void buy(Vendor vendor, int cents) {
         vendor.payDollars(cents / 100.0);
@@ -175,10 +189,12 @@ class Checkout {
           typescript: `interface Renderer {
   circle(r: number): void;
 }
+
 abstract class Shape {
   constructor(protected renderer: Renderer) {}
   abstract draw(): void;
 }
+
 class Circle extends Shape {
   draw() {
     this.renderer.circle(10);
@@ -187,13 +203,16 @@ class Circle extends Shape {
           java: `interface Renderer {
     void circle(int r);
 }
+
 abstract class Shape {
     protected final Renderer renderer;
+
     Shape(Renderer r) {
         renderer = r;
     }
     abstract void draw();
 }
+
 class Circle extends Shape {
     Circle(Renderer r) {
         super(r);
@@ -212,12 +231,15 @@ class Circle extends Shape {
           typescript: `interface Device {
   volume(n: number): void;
 }
+
 class Remote {
   constructor(protected device: Device) {}
+
   setVolume(n: number) {
     this.device.volume(n);
   }
 }
+
 class QuietRemote extends Remote {
   mute() {
     this.device.volume(0);
@@ -226,8 +248,10 @@ class QuietRemote extends Remote {
           java: `interface Device {
     void volume(int n);
 }
+
 class Remote {
     protected final Device device;
+
     Remote(Device d) {
         device = d;
     }
@@ -235,6 +259,7 @@ class Remote {
         device.volume(n);
     }
 }
+
 class QuietRemote extends Remote {
     QuietRemote(Device d) {
         super(d);
@@ -253,13 +278,19 @@ class QuietRemote extends Remote {
         'Keep Circle and Square as abstractions and inject a Renderer implementation for SVG or Canvas.',
       code: {
         typescript: `class SvgCircle {}
+
 class CanvasCircle {}
+
 class SvgSquare {}
+
 class CanvasSquare {}
 // Adding a backend currently needs one class per shape.`,
         java: `class SvgCircle {}
+
 class CanvasCircle {}
+
 class SvgSquare {}
+
 class CanvasSquare {}
 // Adding a backend currently needs one class per shape.`,
       },
@@ -305,28 +336,35 @@ class CanvasSquare {}
           typescript: `interface Item {
   price(): number;
 }
+
 class Product implements Item {
   price() {
     return 12;
   }
 }
+
 class Box implements Item {
   constructor(private children: Item[]) {}
+
   price(): number {
     return this.children.reduce((n, c) => n + c.price(), 0);
   }
 }`,
           java: `import java.util.*;
+
 interface Item {
     int price();
 }
+
 class Product implements Item {
     public int price() {
         return 12;
     }
 }
+
 class Box implements Item {
     private final List<Item> children;
+
     Box(List<Item> c) {
         children = c;
     }
@@ -344,30 +382,38 @@ class Box implements Item {
           typescript: `interface Graphic {
   move(dx: number): void;
 }
+
 class Dot implements Graphic {
   x = 0;
+
   move(dx: number) {
     this.x += dx;
   }
 }
+
 class Group implements Graphic {
   constructor(private children: Graphic[]) {}
+
   move(dx: number) {
     this.children.forEach((c) => c.move(dx));
   }
 }`,
           java: `import java.util.*;
+
 interface Graphic {
     void move(int dx);
 }
+
 class Dot implements Graphic {
     int x;
     public void move(int dx) {
         x += dx;
     }
 }
+
 class Group implements Graphic {
     private final List<Graphic> children;
+
     Group(List<Graphic> c) {
         children = c;
     }
@@ -385,13 +431,18 @@ class Group implements Graphic {
         'Introduce a common Entry contract. File returns its own size; Folder sums child Entry sizes recursively.',
       code: {
         typescript: `type FileEntry = { bytes: number };
+
 type FolderEntry = { files: FileEntry[] };
+
 function size(e: FileEntry | FolderEntry) {
   return 'bytes' in e ? e.bytes : e.files.reduce((s, f) => s + f.bytes, 0);
 }`,
         java: `import java.util.*;
+
 record FileEntry(int bytes) {}
+
 record FolderEntry(List<FileEntry> files) {}
+
 class Disk {
     int size(Object e) {
         if (e instanceof FileEntry f) return f.bytes();
@@ -441,13 +492,16 @@ class Disk {
           typescript: `interface View {
   render(): string;
 }
+
 class Label implements View {
   render() {
     return 'Hello';
   }
 }
+
 class Border implements View {
   constructor(private inner: View) {}
+
   render() {
     return '[' + this.inner.render() + ']';
   }
@@ -455,13 +509,16 @@ class Border implements View {
           java: `interface View {
     String render();
 }
+
 class Label implements View {
     public String render() {
         return "Hello";
     }
 }
+
 class Border implements View {
     private final View inner;
+
     Border(View v) {
         inner = v;
     }
@@ -479,28 +536,35 @@ class Border implements View {
           typescript: `interface Drink {
   cost(): number;
 }
+
 class Coffee implements Drink {
   cost() {
     return 3;
   }
 }
+
 class OatMilk implements Drink {
   constructor(private inner: Drink) {}
+
   cost() {
     return this.inner.cost() + 1;
   }
 }
+
 const order = new OatMilk(new Coffee());`,
           java: `interface Drink {
     int cost();
 }
+
 class Coffee implements Drink {
     public int cost() {
         return 3;
     }
 }
+
 class OatMilk implements Drink {
     private final Drink inner;
+
     OatMilk(Drink d) {
         inner = d;
     }
@@ -518,12 +582,18 @@ class OatMilk implements Drink {
         'Implement each effect as a View wrapper and compose the desired layers around a base view.',
       code: {
         typescript: `class TextView {}
+
 class BorderedTextView extends TextView {}
+
 class ShadowedTextView extends TextView {}
+
 class BorderedShadowedTextView extends TextView {}`,
         java: `class TextView {}
+
 class BorderedTextView extends TextView {}
+
 class ShadowedTextView extends TextView {}
+
 class BorderedShadowedTextView extends TextView {}`,
       },
     },
@@ -571,6 +641,7 @@ class BorderedShadowedTextView extends TextView {}`,
     private sound: { on(): void },
     private screen: { play(): void },
   ) {}
+
   start() {
     this.lights.dim();
     this.sound.on();
@@ -580,16 +651,20 @@ class BorderedShadowedTextView extends TextView {}`,
           java: `interface Lights {
     void dim();
 }
+
 interface Sound {
     void on();
 }
+
 interface Screen {
     void play();
 }
+
 class Studio {
     private final Lights lights;
     private final Sound sound;
     private final Screen screen;
+
     Studio(Lights l, Sound s, Screen p) {
         lights = l;
         sound = s;
@@ -612,6 +687,7 @@ class Studio {
     private compiler: { build(): string },
     private store: { publish(artifact: string): void },
   ) {}
+
   ship() {
     this.store.publish(this.compiler.build());
   }
@@ -619,12 +695,15 @@ class Studio {
           java: `interface Compiler {
     String build();
 }
+
 interface Store {
     void publish(String artifact);
 }
+
 class Release {
     private final Compiler compiler;
     private final Store store;
+
     Release(Compiler c, Store s) {
         compiler = c;
         store = s;
@@ -654,9 +733,11 @@ class Release {
         java: `interface Switch {
     void enable();
 }
+
 interface Connection {
     void open();
 }
+
 class Client {
     void join(Switch mic, Switch camera, Connection connection) {
         mic.enable();
@@ -705,11 +786,14 @@ class Client {
           'style() reuses immutable intrinsic state, while each Tree stores its own coordinates.',
         code: {
           typescript: `type Style = Readonly<{ species: string }>;
+
 const styles = new Map<string, Style>();
+
 function style(species: string): Style {
   if (!styles.has(species)) styles.set(species, Object.freeze({ species }));
   return styles.get(species)!;
 }
+
 class Tree {
   constructor(
     public x: number,
@@ -718,13 +802,16 @@ class Tree {
   ) {}
 }`,
           java: `import java.util.*;
+
 record Style(String species) {}
+
 class Styles {
     private final Map<String, Style> pool = new HashMap<>();
     Style get(String species) {
         return pool.computeIfAbsent(species, Style::new);
     }
 }
+
 record Tree(int x, int y, Style style) {}`,
         },
       },
@@ -734,14 +821,19 @@ record Tree(int x, int y, Style style) {}`,
           'Repeated glyph values are pooled; GlyphPosition carries extrinsic coordinates.',
         code: {
           typescript: `const glyphs = new Map<string, Readonly<{ symbol: string }>>();
+
 function glyph(symbol: string) {
   if (!glyphs.has(symbol)) glyphs.set(symbol, Object.freeze({ symbol }));
   return glyphs.get(symbol)!;
 }
+
 const line = [0, 10, 20].map((x) => ({ x, glyph: glyph('a') }));`,
           java: `import java.util.*;
+
 record Glyph(String symbol) {}
+
 record GlyphPosition(int x, Glyph glyph) {}
+
 class FontCache {
     private final Map<String, Glyph> pool = new HashMap<>();
     Glyph get(String s) {
@@ -759,6 +851,7 @@ class FontCache {
       code: {
         typescript: `class Tree {
   texture: Uint8Array;
+
   constructor(
     public x: number,
     public y: number,
@@ -769,6 +862,7 @@ class FontCache {
         java: `class Tree {
     final byte[] texture = new byte[100_000];
     final int x, y;
+
     Tree(int x, int y) {
         this.x = x;
         this.y = y;
@@ -815,13 +909,16 @@ class FontCache {
           typescript: `interface ImageView {
   draw(): string;
 }
+
 class DiskImage implements ImageView {
   draw() {
     return 'pixels';
   }
 }
+
 class LazyImage implements ImageView {
   private real?: DiskImage;
+
   draw() {
     return (this.real ??= new DiskImage()).draw();
   }
@@ -829,11 +926,13 @@ class LazyImage implements ImageView {
           java: `interface ImageView {
     String draw();
 }
+
 class DiskImage implements ImageView {
     public String draw() {
         return "pixels";
     }
 }
+
 class LazyImage implements ImageView {
     private DiskImage real;
     public String draw() {
@@ -851,23 +950,28 @@ class LazyImage implements ImageView {
           typescript: `interface Vault {
   read(): string;
 }
+
 class GuardedVault implements Vault {
   constructor(
     private real: Vault,
     private allowed: () => boolean,
   ) {}
+
   read() {
     if (!this.allowed()) throw new Error('Denied');
     return this.real.read();
   }
 }`,
           java: `import java.util.function.BooleanSupplier;
+
 interface Vault {
     String read();
 }
+
 class GuardedVault implements Vault {
     private final Vault real;
     private final BooleanSupplier allowed;
+
     GuardedVault(Vault r, BooleanSupplier a) {
         real = r;
         allowed = a;
@@ -889,6 +993,7 @@ class GuardedVault implements Vault {
         typescript: `interface Store {
   read(): string;
 }
+
 function view(store: Store, allowed: boolean) {
   if (!allowed) throw new Error('Denied');
   return store.read();
@@ -896,6 +1001,7 @@ function view(store: Store, allowed: boolean) {
         java: `interface Store {
     String read();
 }
+
 class Page {
     String view(Store store, boolean allowed) {
         if (!allowed) throw new SecurityException("Denied");
