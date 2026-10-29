@@ -5,8 +5,10 @@ import { useAppContext } from '../app-context.tsx';
 export function SettingsScreen() {
   const {
     progress,
+    theme,
     active,
     setLanguage,
+    setTheme,
     restart,
     setConfirmation,
     setProgress,
@@ -23,6 +25,22 @@ export function SettingsScreen() {
         </div>
       </div>
       <div className="settings-stack">
+        <section className="panel settings-card">
+          <div>
+            <h2>Appearance</h2>
+            <p>Choose a light or dark color theme. Your preference is saved in this browser.</p>
+          </div>
+          <label className="theme-toggle">
+            <span>Dark theme</span>
+            <input
+              type="checkbox"
+              role="switch"
+              checked={theme === 'dark'}
+              onChange={(event) => setTheme(event.target.checked ? 'dark' : 'light')}
+            />
+            <span className="switch-track" aria-hidden="true" />
+          </label>
+        </section>
         <section className="panel settings-card">
           <div>
             <h2>Code language</h2>
@@ -56,7 +74,7 @@ export function SettingsScreen() {
             onClick={() =>
               setConfirmation({
                 title: 'Reset all progress?',
-                body: 'All checked answers, bookmarks, your active session, and language preference will be removed from this browser. This cannot be undone.',
+                body: 'All checked answers, bookmarks, your active session, and preferences will be removed from this browser. This cannot be undone.',
                 action: 'Reset everything',
                 danger: true,
                 run: () => {
