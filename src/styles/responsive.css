@@ -446,7 +446,17 @@
     width: 25px;
     margin-right: 12px;
   }
-  .session-progress > div:first-child {
+  .session-progress-header {
+    font-size: 10px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .session-progress-summary {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .check-remaining-button {
+    min-height: 40px;
     font-size: 10px;
   }
   .question-map {

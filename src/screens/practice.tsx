@@ -22,6 +22,8 @@ export function PracticeScreen() {
     heading,
   } = useAppContext();
   const canCheckAll = canCheckAllAnswered(progress);
+  const remainingCount =
+    active?.questionIds.filter((id) => !active.checked.includes(id)).length ?? 0;
   return !active || !q ? (
     <div className="empty-state panel">
       <span className="empty-icon">
@@ -120,13 +122,25 @@ export function PracticeScreen() {
         </div>
       </div>
       <div className="session-progress">
-        <div>
+        <div className="session-progress-header">
           <span>
             Question <strong>{active.index + 1}</strong> of {active.questionIds.length}
           </span>
-          <span>
-            {active.checked.length} checked · {sessionCorrect} correct
-          </span>
+          <div className="session-progress-summary">
+            <span>
+              {active.checked.length} checked · {sessionCorrect} correct
+            </span>
+            {canCheckAll && (
+              <button
+                className="button primary check-remaining-button"
+                aria-label={`Check all ${remainingCount} remaining answers and finish the session`}
+                onClick={() => setProgress((current) => checkAllAnswered(current))}
+              >
+                Check {remainingCount} remaining answers
+                <Icon name="check" size={15} />
+              </button>
+            )}
+          </div>
         </div>
         <Meter value={active.checked.length} total={active.questionIds.length} />
       </div>
@@ -270,16 +284,6 @@ export function PracticeScreen() {
           <div className="panel question-map">
             <h3>Your session</h3>
             <p className="small muted">Move freely. Pick up where you left off.</p>
-            {canCheckAll && (
-              <button
-                className="button primary check-remaining-button"
-                aria-label="Check all remaining answers and finish the session"
-                onClick={() => setProgress((current) => checkAllAnswered(current))}
-              >
-                Check remaining answers
-                <Icon name="check" size={15} />
-              </button>
-            )}
             <div className="question-dots">
               {active.questionIds.map((id, index) => {
                 const checkedQuestion = active.checked.includes(id);

@@ -218,7 +218,7 @@
 :root[data-theme='dark'] .difficulty,
 :root[data-theme='dark'] .answers legend,
 :root[data-theme='dark'] .map-legend,
-:root[data-theme='dark'] .session-progress > div:first-child {
+:root[data-theme='dark'] .session-progress-header {
   color: var(--muted);
 }
 :root[data-theme='dark'] .answer.right .answer-status {
