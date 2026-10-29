@@ -1,4 +1,4 @@
-import { Icon, ModeCard, PageHeader, SectionHeading, StatCard } from '../components/index.ts';
+import { Icon, ModeCard, PageHeader, SectionHeading } from '../components/index.ts';
 import { patterns, questions, kindLabels } from '../data/index.ts';
 import { createSession } from '../engine.ts';
 import type { Filters } from '../engine.ts';
@@ -12,7 +12,6 @@ export function DashboardScreen() {
     begin,
     stats,
     progress,
-    focusPool,
     filters,
     setFilters,
     pool,
@@ -24,17 +23,17 @@ export function DashboardScreen() {
   return (
     <>
       <PageHeader
-        eyebrow="Interactive design-pattern practice"
-        title="Learn patterns by solving problems."
-        description="Read a scenario or code sample, choose the best-fit pattern, then learn why it fits."
-        aside={<span className="edition">22 PATTERNS · 132 QUESTIONS</span>}
+        eyebrow="FIELD NOTES · DESIGN PATTERNS"
+        title="A practice notebook for better design decisions."
+        description="Study the problem, spot the intent, and keep a record of what you learn."
+        aside={<span className="edition">VOL. 01 · 22 PATTERNS</span>}
       />
       <section className="hero">
         <div className="hero-copy">
           <span className="hero-pill">
-            <span /> START HERE
+            <span /> TODAY’S EXERCISE
           </span>
-          <h2>Start with a quick practice.</h2>
+          <h2>{active && !active.finished ? 'Pick up your notes.' : 'One question at a time.'}</h2>
           <p>
             Answer 10 mixed questions. Explore all 22 patterns, with Java and TypeScript code
             examples and a reference after every answer.
@@ -56,36 +55,32 @@ export function DashboardScreen() {
               : 'No account needed · Progress saves in this browser'}
           </small>
         </div>
-        <div className="hero-art" aria-hidden="true">
-          <div className="orbit orbit-one" />
-          <div className="orbit orbit-two" />
-          <div className="art-node top-node">{'{ }'}</div>
-          <div className="art-node left-node">◇</div>
-          <div className="art-node bottom-node">↗</div>
-          <div className="art-code">
-            <div>
-              <i />
-              <i />
-              <i />
-            </div>
-            <span className="art-comment">// a better way to build</span>
-            <p>
-              <b>problem</b>.understand();
-            </p>
-            <p>
-              <b>pattern</b>.recognize();
-            </p>
-            <p>
-              <b>knowledge</b>.apply();
-            </p>
-            <span className="art-tag">LESS GUESSWORK. MORE INTENT.</span>
+        <div className="field-note" aria-label="How to read a pattern question">
+          <p className="field-note-kicker">A USEFUL WAY TO LOOK</p>
+          <div>
+            <span>01</span>
+            <strong>Notice the pressure</strong>
+            <small>What is becoming difficult?</small>
           </div>
+          <div>
+            <span>02</span>
+            <strong>Name the intent</strong>
+            <small>What needs to change?</small>
+          </div>
+          <div>
+            <span>03</span>
+            <strong>Compare the tradeoff</strong>
+            <small>Why this pattern here?</small>
+          </div>
+          <p className="field-note-foot">
+            MARGIN NOTE <span>Understand before you memorize.</span>
+          </p>
         </div>
       </section>
       <section className="how-it-works" aria-label="How it works">
         <SectionHeading
-          title="How it works"
-          description="A simple loop takes you from recognition to understanding."
+          title="Your notebook"
+          description="A few markers help you decide what to study next."
         />
         <ol className="how-steps">
           <li className="how-step">
@@ -93,8 +88,10 @@ export function DashboardScreen() {
               1
             </span>
             <div>
-              <h3>Choose a session</h3>
-              <p>Try 10 mixed questions, study 20, or create a focused set.</p>
+              <h3>
+                {stats.studied} / {stats.total} studied
+              </h3>
+              <p>Distinct questions checked so far.</p>
             </div>
           </li>
           <li className="how-step">
@@ -102,8 +99,8 @@ export function DashboardScreen() {
               2
             </span>
             <div>
-              <h3>Pick the pattern</h3>
-              <p>Read a scenario or inspect code, then choose the best fit.</p>
+              <h3>{stats.mistakes} to revisit</h3>
+              <p>Latest answers that could use another look.</p>
             </div>
           </li>
           <li className="how-step">
@@ -111,44 +108,11 @@ export function DashboardScreen() {
               3
             </span>
             <div>
-              <h3>Review the reasoning</h3>
-              <p>Compare alternatives and open the pattern reference.</p>
+              <h3>{progress.bookmarks.length} saved notes</h3>
+              <p>Questions you bookmarked for later.</p>
             </div>
           </li>
         </ol>
-      </section>
-      <section className="stats-grid" aria-label="Learning summary">
-        <StatCard
-          label="Questions studied"
-          value={`${stats.studied}`}
-          suffix={`/ ${stats.total}`}
-          icon="book"
-          note="Unique questions checked"
-        />
-        <StatCard
-          label="Answer accuracy"
-          value={stats.accuracy === null ? '—' : `${stats.accuracy}%`}
-          icon="target"
-          note={
-            stats.attempts
-              ? `Across ${stats.attempts} checked attempts`
-              : 'Your first answer starts the story'
-          }
-        />
-        <StatCard
-          label="Ready to revisit"
-          value={`${stats.mistakes}`}
-          icon="reset"
-          note="Latest answer was incorrect"
-          onClick={() => focusPool('mistakes')}
-        />
-        <StatCard
-          label="Bookmarked"
-          value={`${progress.bookmarks.length}`}
-          icon="bookmark"
-          note="Keep the tricky ones close"
-          onClick={() => focusPool('bookmarks')}
-        />
       </section>
       <section className="section">
         <SectionHeading
