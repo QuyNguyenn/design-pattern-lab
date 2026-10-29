@@ -25,6 +25,7 @@ Each answer includes an explanation, reasons the alternatives fit less well, and
 - Full practice: all 132 questions in a stable order.
 - Focused practice: filter category, pattern, question type, unseen questions, latest mistakes, or bookmarks; choose shuffle and session size.
 - Question navigation, syntax highlighting, Java/TypeScript switching, and explanations after checking.
+- Navy-and-amber light theme, dark theme, and a system setting that follows the device appearance.
 - Automatically saved selections, including answers not yet checked, current position, language, and shuffled option order.
 - Progress by pattern and question type; coverage counts unique checked questions, accuracy counts all checked attempts.
 - Review mistakes uses the **latest checked answer** per question. A correct retry removes the question from that pool.
@@ -65,7 +66,7 @@ The repository includes `.github/workflows/deploy.yml`. Pull requests run checks
 
 ## Persistence
 
-The versioned key is `design-pattern-lab:progress:v1`. It stores the language, bookmarks, checked attempt history, and active session. Stored IDs, answers, and option order are validated before use. The app warns if browser storage is inaccessible or the saved state cannot be loaded.
+The versioned key is `design-pattern-lab:progress:v1`. It stores the language and theme preferences, bookmarks, checked attempt history, and active session. Stored IDs, answers, and option order are validated before use. The app warns if browser storage is inaccessible or the saved state cannot be loaded. Older saved progress without a theme preference opens in the light theme. The System setting follows the device appearance and updates when that setting changes.
 
 Data belongs to the current browser and origin, is not synced between devices, and is removed when browser site data is cleared. Changing the port, host, or deployment domain starts a separate local-storage area. There is no login or backend. Google Fonts is optional; system fonts are used if it is unavailable.
 

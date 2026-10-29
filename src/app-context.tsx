@@ -9,6 +9,7 @@ import type {
   Question,
   QuestionKind,
   Session,
+  Theme,
 } from './types.ts';
 import type { Confirmation } from './components/ui.tsx';
 import type { statistics } from './engine.ts';
@@ -19,6 +20,7 @@ export type LearningStats = ReturnType<typeof statistics>;
 export interface AppContextValue {
   page: Page;
   progress: Progress;
+  theme: Theme;
   setProgress: Dispatch<SetStateAction<Progress>>;
   storageError: string;
   confirmation: Confirmation | null;
@@ -42,6 +44,7 @@ export interface AppContextValue {
   heading: RefObject<HTMLHeadingElement | null>;
   navigate: (page: Page) => void;
   setLanguage: (language: Language) => void;
+  setTheme: (theme: Theme) => void;
   begin: (session: Session) => void;
   focusPool: (pool: Filters['pool']) => void;
   toggleBookmark: (questionId: string) => void;

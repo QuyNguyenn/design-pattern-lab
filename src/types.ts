@@ -1,4 +1,5 @@
 export type Language = 'typescript' | 'java';
+export type Theme = 'light' | 'dark' | 'system';
 export type Category = 'Creational' | 'Structural' | 'Behavioral';
 export type QuestionKind = 'scenario' | 'comparison' | 'code' | 'refactor';
 export interface Example {
@@ -46,6 +47,7 @@ export interface Session {
 export interface Progress {
   version: 1;
   language: Language;
+  theme: Theme;
   bookmarks: string[];
   attempts: Attempt[];
   session: Session | null;

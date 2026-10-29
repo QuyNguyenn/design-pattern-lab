@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { patterns, questionById, kindLabels } from './data/index.ts';
 import {
   STORAGE_KEY,
@@ -10,7 +10,7 @@ import {
   defaultFilters,
 } from './engine.ts';
 import type { Filters } from './engine.ts';
-import type { Category, Language, Progress, QuestionKind, Session } from './types.ts';
+import type { Category, Language, Progress, QuestionKind, Session, Theme } from './types.ts';
 import { Icon, LanguageSwitch, ConfirmDialog } from './components/ui.tsx';
 import { DashboardScreen } from './screens/dashboard.tsx';
 import { PracticeScreen } from './screens/practice.tsx';
@@ -40,6 +40,11 @@ export function App() {
   });
   const [progress, setProgress] = useState<Progress>(initial.progress);
   const [storageError, setStorageError] = useState(initial.error);
+  const theme = progress.theme;
+  const [systemPrefersDark, setSystemPrefersDark] = useState(
+    () => window.matchMedia('(prefers-color-scheme: dark)').matches,
+  );
+  const resolvedTheme = theme === 'system' ? (systemPrefersDark ? 'dark' : 'light') : theme;
   const [page, setPage] = useState<Page>(currentPage);
   const [confirmation, setConfirmation] = useState<Confirmation | null>(null);
   const [filters, setFilters] = useState<Filters>(defaultFilters);
@@ -64,6 +69,17 @@ export function App() {
   useEffect(() => {
     document.title = `${page[0].toUpperCase() + page.slice(1)} · Design Pattern Lab`;
   }, [page]);
+  useEffect(() => {
+    const preference = window.matchMedia('(prefers-color-scheme: dark)');
+    const onPreferenceChange = (event: MediaQueryListEvent) => setSystemPrefersDark(event.matches);
+    setSystemPrefersDark(preference.matches);
+    preference.addEventListener('change', onPreferenceChange);
+    return () => preference.removeEventListener('change', onPreferenceChange);
+  }, []);
+  useLayoutEffect(() => {
+    document.documentElement.dataset.theme = resolvedTheme;
+    document.documentElement.style.colorScheme = resolvedTheme;
+  }, [resolvedTheme]);
   function navigate(next: Page) {
     location.hash = `/${next}`;
     setPage(next);
@@ -71,6 +87,9 @@ export function App() {
   }
   function setLanguage(language: Language) {
     setProgress((p) => ({ ...p, language }));
+  }
+  function setTheme(nextTheme: Theme) {
+    setProgress((p) => ({ ...p, theme: nextTheme }));
   }
   const stats = statistics(progress);
   const active = progress.session;
@@ -149,6 +168,7 @@ export function App() {
   const contextValue = {
     page,
     progress,
+    theme,
     setProgress,
     storageError,
     confirmation,
@@ -172,6 +192,7 @@ export function App() {
     heading,
     navigate,
     setLanguage,
+    setTheme,
     begin,
     focusPool,
     toggleBookmark,
