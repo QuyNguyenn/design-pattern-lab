@@ -55,6 +55,7 @@ export const behavioral: Pattern[] = [
         this.limit = limit;
         this.next = next;
     }
+
     String resolve(int level) {
         if (level <= limit) return "Resolved";
         return next == null ? "Unresolved" : next.resolve(level);
@@ -88,6 +89,7 @@ class Gate {
         valid = v;
         next = n;
     }
+
     boolean accept(String s) {
         if (!valid.test(s)) return false;
         return next == null || next.accept(s);
@@ -187,6 +189,7 @@ class Insert implements Action {
         doc = d;
         value = v;
     }
+
     public void execute() {
         doc.text += value;
     }
@@ -221,9 +224,11 @@ interface Task {
 
 class JobQueue {
     private final Queue<Task> jobs = new ArrayDeque<>();
+
     void add(Task job) {
         jobs.add(job);
     }
+
     void run() {
         while (!jobs.isEmpty()) jobs.remove().execute();
     }
@@ -249,6 +254,7 @@ function click(name: string, editor: Editor) {
 }`,
         java: `class Editor {
     void save() {}
+
     void print() {}
 }
 
@@ -321,9 +327,11 @@ class Cursor<T> {
     Cursor(List<T> items) {
         this.items = items;
     }
+
     boolean hasNext() {
         return index < items.size();
     }
+
     T next() {
         if (!hasNext()) throw new NoSuchElementException();
         return items.get(index++);
@@ -350,6 +358,7 @@ class Shelf implements Iterable<String> {
     Shelf(List<String> titles) {
         this.titles = List.copyOf(titles);
     }
+
     public Iterator<String> iterator() {
         return titles.iterator();
     }
@@ -447,6 +456,7 @@ class Dialog {
     Dialog(Button b) {
         button = b;
     }
+
     void changed(String value) {
         button.enabled = !value.isEmpty();
     }
@@ -458,6 +468,7 @@ class Field {
     Field(Dialog d) {
         dialog = d;
     }
+
     void input(String value) {
         dialog.changed(value);
     }
@@ -498,6 +509,7 @@ class ControlRoom {
     ControlRoom(Alarm a) {
         alarm = a;
     }
+
     void temperatureChanged(int n) {
         alarm.ringing = n > 50;
     }
@@ -509,6 +521,7 @@ class Sensor {
     Sensor(ControlRoom r) {
         room = r;
     }
+
     void report(int n) {
         room.temperatureChanged(n);
     }
@@ -616,12 +629,15 @@ class Field {
             text = t;
         }
     }
+
     void write(String s) {
         text = s;
     }
+
     Snapshot save() {
         return new Snapshot(text);
     }
+
     void restore(Snapshot s) {
         text = s.text;
     }
@@ -659,12 +675,15 @@ class Field {
             this.x = x;
         }
     }
+
     void move(int x) {
         this.x = x;
     }
+
     Checkpoint checkpoint() {
         return new Checkpoint(x);
     }
+
     void restore(Checkpoint c) {
         x = c.x;
     }
@@ -702,6 +721,7 @@ class History {
     Backup save(Editor e) {
         return new Backup(e.text, e.cursor);
     }
+
     void restore(Editor e, Backup b) {
         e.text = b.text();
         e.cursor = b.cursor();
@@ -763,10 +783,12 @@ import java.util.function.IntConsumer;
 
 class Feed {
     private final Set<IntConsumer> listeners = new LinkedHashSet<>();
+
     Runnable subscribe(IntConsumer fn) {
         listeners.add(fn);
         return () -> listeners.remove(fn);
     }
+
     void publish(int n) {
         listeners.forEach(fn -> fn.accept(n));
     }
@@ -794,9 +816,11 @@ import java.util.function.Consumer;
 
 class Model {
     private final List<Consumer<String>> views = new ArrayList<>();
+
     void observe(Consumer<String> view) {
         views.add(view);
     }
+
     void update(String value) {
         views.forEach(view -> view.accept(value));
     }
@@ -893,6 +917,7 @@ class Open implements Mode {
 
 class Door {
     Mode mode = new Closed();
+
     void press() {
         mode.press(this);
     }
@@ -946,6 +971,7 @@ class Paid implements Phase {
 
 class Invoice {
     Phase phase = new Draft();
+
     String pay() {
         return phase.pay(this);
     }
@@ -984,6 +1010,7 @@ class Paid implements Phase {
 }`,
         java: `class Connection {
     String status = "connecting";
+
     void event(String e) {
         if (status.equals("connecting") && e.equals("ready")) status = "connected";
         else if (status.equals("connected") && e.equals("close")) status = "closed";
@@ -1073,6 +1100,7 @@ class Checkout {
     Checkout(Pricing p) {
         pricing = p;
     }
+
     double bill(double n) {
         return pricing.total(n);
     }
@@ -1105,9 +1133,11 @@ class Planner {
     Planner(BiFunction<String, String, String> r) {
         route = r;
     }
+
     void use(BiFunction<String, String, String> r) {
         route = r;
     }
+
     String plan(String a, String b) {
         return route.apply(a, b);
     }
@@ -1189,6 +1219,7 @@ class UpperImporter extends Importer {
         String result = parse(raw);
         return result.trim();
     }
+
     protected abstract String parse(String raw);
 }
 
@@ -1227,8 +1258,11 @@ class UpperImporter extends Importer {
             cleanup();
         }
     }
+
     protected void setup() {}
+
     protected abstract void body();
+
     protected void cleanup() {}
 }`,
         },
@@ -1331,6 +1365,7 @@ class Label implements Ops {
 }`,
           java: `interface Ops {
     String book(Book b);
+
     String film(Film f);
 }
 
@@ -1350,6 +1385,7 @@ class Label implements Ops {
     public String book(Book b) {
         return "Book label";
     }
+
     public String film(Film f) {
         return "Film label";
     }
@@ -1394,11 +1430,13 @@ class Area implements Measure {
 }`,
           java: `interface Measure {
     double circle(Circle c);
+
     double square(Square s);
 }
 
 class Circle {
     double radius = 2;
+
     double accept(Measure m) {
         return m.circle(this);
     }
@@ -1406,6 +1444,7 @@ class Circle {
 
 class Square {
     double side = 3;
+
     double accept(Measure m) {
         return m.square(this);
     }
@@ -1415,6 +1454,7 @@ class Area implements Measure {
     public double circle(Circle c) {
         return Math.PI * c.radius * c.radius;
     }
+
     public double square(Square s) {
         return s.side * s.side;
     }

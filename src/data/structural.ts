@@ -69,6 +69,7 @@ class SensorPort implements Sensor {
     SensorPort(OldSensor d) {
         device = d;
     }
+
     public double degreesC() {
         return (device.readF() - 32) * 5 / 9;
     }
@@ -113,6 +114,7 @@ class CheckoutPort implements Payments {
     CheckoutPort(VendorPay v) {
         vendor = v;
     }
+
     public void charge(int cents) {
         vendor.payDollars(cents / 100.0);
     }
@@ -210,6 +212,7 @@ abstract class Shape {
     Shape(Renderer r) {
         renderer = r;
     }
+
     abstract void draw();
 }
 
@@ -217,6 +220,7 @@ class Circle extends Shape {
     Circle(Renderer r) {
         super(r);
     }
+
     void draw() {
         renderer.circle(10);
     }
@@ -255,6 +259,7 @@ class Remote {
     Remote(Device d) {
         device = d;
     }
+
     void setVolume(int n) {
         device.volume(n);
     }
@@ -264,6 +269,7 @@ class QuietRemote extends Remote {
     QuietRemote(Device d) {
         super(d);
     }
+
     void mute() {
         device.volume(0);
     }
@@ -368,6 +374,7 @@ class Box implements Item {
     Box(List<Item> c) {
         children = c;
     }
+
     public int price() {
         return children.stream().mapToInt(Item::price).sum();
     }
@@ -406,6 +413,7 @@ interface Graphic {
 
 class Dot implements Graphic {
     int x;
+
     public void move(int dx) {
         x += dx;
     }
@@ -417,6 +425,7 @@ class Group implements Graphic {
     Group(List<Graphic> c) {
         children = c;
     }
+
     public void move(int dx) {
         children.forEach(c -> c.move(dx));
     }
@@ -522,6 +531,7 @@ class Border implements View {
     Border(View v) {
         inner = v;
     }
+
     public String render() {
         return "[" + inner.render() + "]";
     }
@@ -568,6 +578,7 @@ class OatMilk implements Drink {
     OatMilk(Drink d) {
         inner = d;
     }
+
     public int cost() {
         return inner.cost() + 1;
     }
@@ -670,6 +681,7 @@ class Studio {
         sound = s;
         screen = p;
     }
+
     void start() {
         lights.dim();
         sound.on();
@@ -708,6 +720,7 @@ class Release {
         compiler = c;
         store = s;
     }
+
     void ship() {
         store.publish(compiler.build());
     }
@@ -807,6 +820,7 @@ record Style(String species) {}
 
 class Styles {
     private final Map<String, Style> pool = new HashMap<>();
+
     Style get(String species) {
         return pool.computeIfAbsent(species, Style::new);
     }
@@ -836,6 +850,7 @@ record GlyphPosition(int x, Glyph glyph) {}
 
 class FontCache {
     private final Map<String, Glyph> pool = new HashMap<>();
+
     Glyph get(String s) {
         return pool.computeIfAbsent(s, Glyph::new);
     }
@@ -935,6 +950,7 @@ class DiskImage implements ImageView {
 
 class LazyImage implements ImageView {
     private DiskImage real;
+
     public String draw() {
         if (real == null) real = new DiskImage();
         return real.draw();
@@ -976,6 +992,7 @@ class GuardedVault implements Vault {
         real = r;
         allowed = a;
     }
+
     public String read() {
         if (!allowed.getAsBoolean()) throw new SecurityException("Denied");
         return real.read();
