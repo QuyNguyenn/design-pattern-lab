@@ -89,6 +89,14 @@ export function createSession(
     finished: false,
   };
 }
+export function sessionMistakes(session: Session): Question[] {
+  return session.questionIds
+    .filter(
+      (id) => session.checked.includes(id) && session.answers[id] !== questionById[id].patternId,
+    )
+    .map((id) => questionById[id]);
+}
+
 export function chooseAnswer(progress: Progress, questionId: string, answer: string): Progress {
   const s = progress.session;
   if (

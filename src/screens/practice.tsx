@@ -2,7 +2,14 @@ import { PracticeSetup } from './practice-setup.tsx';
 import { CodeBlock } from '../CodeBlock.tsx';
 import { Icon, LanguageSwitch, Meter } from '../components/index.ts';
 import { patternById, questionById, kindLabels } from '../data/index.ts';
-import { canCheckAllAnswered, checkAllAnswered, chooseAnswer, checkAnswer } from '../engine.ts';
+import {
+  createSession,
+  sessionMistakes,
+  canCheckAllAnswered,
+  checkAllAnswered,
+  chooseAnswer,
+  checkAnswer,
+} from '../engine.ts';
 import { useAppContext } from '../app-context.tsx';
 
 export function PracticeScreen() {
@@ -10,7 +17,7 @@ export function PracticeScreen() {
     active,
     practiceSetup,
     chooseSession,
-    focusPool,
+    begin,
     q,
     checked,
     selected,
@@ -24,6 +31,7 @@ export function PracticeScreen() {
     storageError,
     heading,
   } = useAppContext();
+  const mistakes = active ? sessionMistakes(active) : [];
   const canCheckAll = canCheckAllAnswered(progress);
   const remainingCount =
     active?.questionIds.filter((id) => !active.checked.includes(id)).length ?? 0;
@@ -55,8 +63,13 @@ export function PracticeScreen() {
             Choose next session
             <Icon name="arrow" />
           </button>
-          {active.questionIds.some((id) => active.answers[id] !== questionById[id].patternId) && (
-            <button className="button secondary" onClick={() => focusPool('mistakes')}>
+          {mistakes.length > 0 && (
+            <button
+              className="button secondary"
+              onClick={() =>
+                begin(createSession(mistakes, 'Mistake review', mistakes.length, false))
+              }
+            >
               Review mistakes
             </button>
           )}
