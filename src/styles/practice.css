@@ -240,6 +240,11 @@ fieldset:disabled .answer {
 .retry p {
   color: #7d6a43;
 }
+.session-navigation {
+  display: grid;
+  gap: 14px;
+  grid-column: 1 / -1;
+}
 .question-map {
   padding: 20px;
 }
