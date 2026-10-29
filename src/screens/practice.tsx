@@ -1,3 +1,4 @@
+import { PracticeSetup } from './practice-setup.tsx';
 import { CodeBlock } from '../CodeBlock.tsx';
 import { Icon, LanguageSwitch, Meter } from '../components/index.ts';
 import { patternById, questionById, kindLabels } from '../data/index.ts';
@@ -7,12 +8,14 @@ import { useAppContext } from '../app-context.tsx';
 export function PracticeScreen() {
   const {
     active,
+    practiceSetup,
+    chooseSession,
+    focusPool,
     q,
     checked,
     selected,
     sessionCorrect,
     progress,
-    navigate,
     restart,
     cancelSession,
     toggleBookmark,
@@ -24,18 +27,8 @@ export function PracticeScreen() {
   const canCheckAll = canCheckAllAnswered(progress);
   const remainingCount =
     active?.questionIds.filter((id) => !active.checked.includes(id)).length ?? 0;
-  return !active || !q ? (
-    <div className="empty-state panel">
-      <span className="empty-icon">
-        <Icon name="practice" size={32} />
-      </span>
-      <h1>Your next insight starts here.</h1>
-      <p>Choose a session to begin exploring design patterns.</p>
-      <button className="button primary" onClick={() => navigate('dashboard')}>
-        Choose a session
-        <Icon name="arrow" />
-      </button>
-    </div>
+  return practiceSetup || !active || !q ? (
+    <PracticeSetup />
   ) : active.finished ? (
     <>
       <div className="completion panel">
@@ -45,7 +38,9 @@ export function PracticeScreen() {
         <p className="eyebrow">SESSION COMPLETE</p>
         <h1>Another step toward better design.</h1>
         <p>
-          You checked all {active.questionIds.length} questions in {active.title.toLowerCase()}.
+          You checked {active.questionIds.length}{' '}
+          {active.questionIds.length === 1 ? 'question' : 'questions'} in{' '}
+          {active.title.toLowerCase()}.
         </p>
         <div className="result-score">
           {sessionCorrect}
@@ -56,10 +51,15 @@ export function PracticeScreen() {
           accuracy this session
         </p>
         <div className="completion-actions">
-          <button className="button primary" onClick={() => navigate('dashboard')}>
-            Back to overview
+          <button className="button primary" onClick={chooseSession}>
+            Choose next session
             <Icon name="arrow" />
           </button>
+          {active.questionIds.some((id) => active.answers[id] !== questionById[id].patternId) && (
+            <button className="button secondary" onClick={() => focusPool('mistakes')}>
+              Review mistakes
+            </button>
+          )}
           <button className="button secondary" onClick={restart}>
             Practice again
           </button>
@@ -327,6 +327,9 @@ export function PracticeScreen() {
               <span>× Revisit</span>
             </div>
           </div>
+          <button className="button secondary" onClick={chooseSession}>
+            Choose another session
+          </button>
           <div className="study-tip">
             <Icon name="target" />
             <h3>Look for the intent.</h3>

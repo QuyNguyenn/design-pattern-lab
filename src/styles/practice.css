@@ -513,3 +513,90 @@ pre {
 .code-scroll-hint {
   display: none;
 }
+
+.overview-hero {
+  min-height: 230px;
+}
+.overview-hero .hero-copy {
+  flex: 1;
+}
+.practice-quick {
+  padding: clamp(24px, 4vw, 40px);
+  border-left: 4px solid var(--green);
+  margin-bottom: 22px;
+}
+.practice-quick h2 {
+  margin: 12px 0;
+  font-size: clamp(24px, 3vw, 34px);
+}
+.practice-quick > p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+.practice-quick .button {
+  margin: 6px 0 14px;
+}
+.practice-quick > p:last-child {
+  margin-bottom: 0;
+}
+.practice-resume {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 24px;
+  margin-bottom: 22px;
+}
+.practice-resume p {
+  margin: 6px 0 0;
+}
+.practice-disclosure {
+  margin: 18px 0;
+  padding: 0;
+}
+.practice-disclosure > summary {
+  padding: 22px 24px;
+  cursor: pointer;
+  font-weight: 650;
+  line-height: 1.6;
+}
+.practice-disclosure > summary span {
+  display: block;
+  margin-left: 18px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.practice-disclosure > summary:focus-visible {
+  outline: 3px solid #b97812;
+  outline-offset: 3px;
+}
+.practice-disclosure-body {
+  padding: 0 24px 24px;
+}
+.practice-disclosure-body > .section {
+  margin-top: 0;
+}
+.practice-disclosure .mode-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (max-width: 640px) {
+  .practice-disclosure .section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .practice-resume {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .practice-disclosure .mode-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .practice-disclosure > summary {
+    padding: 18px;
+  }
+  .practice-disclosure-body {
+    padding: 0 18px 18px;
+  }
+}

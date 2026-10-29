@@ -20,6 +20,7 @@ export function App() {
   const [filters, setFilters] = useState(defaultFilters);
   const [randomize, setRandomize] = useState(true);
   const [sessionSize, setSessionSize] = useState('20');
+  const [practiceSetup, setPracticeSetup] = useState(false);
   const [search, setSearch] = useState('');
   const heading = useRef<HTMLHeadingElement>(null);
 
@@ -29,6 +30,7 @@ export function App() {
     setProgress,
     setConfirmation,
     setFilters,
+    setPracticeSetup,
     navigate,
   });
   const stats = statistics(progress);
@@ -44,6 +46,8 @@ export function App() {
 
   const contextValue: AppContextValue = {
     page,
+    practiceSetup,
+    setPracticeSetup,
     progress,
     theme: progress.theme,
     setProgress,

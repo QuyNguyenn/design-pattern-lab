@@ -13,6 +13,7 @@ interface LearningActionsOptions {
   setProgress: Dispatch<SetStateAction<Progress>>;
   setConfirmation: Dispatch<SetStateAction<Confirmation | null>>;
   setFilters: Dispatch<SetStateAction<Filters>>;
+  setPracticeSetup: Dispatch<SetStateAction<boolean>>;
   navigate: (page: Page) => void;
 }
 
@@ -21,12 +22,14 @@ export function useLearningActions({
   setProgress,
   setConfirmation,
   setFilters,
+  setPracticeSetup,
   navigate,
 }: LearningActionsOptions) {
   const begin = useCallback(
     (session: Session) => {
       if (!session.questionIds.length) return;
       const start = () => {
+        setPracticeSetup(false);
         setProgress((current) => ({ ...current, session }));
         navigate('practice');
       };
@@ -42,19 +45,24 @@ export function useLearningActions({
         start();
       }
     },
-    [active, navigate, setConfirmation, setProgress],
+    [active, navigate, setConfirmation, setProgress, setPracticeSetup],
   );
+
+  const chooseSession = useCallback(() => {
+    setPracticeSetup(true);
+    navigate('practice');
+  }, [navigate, setPracticeSetup]);
 
   const focusPool = useCallback(
     (pool: Filters['pool']) => {
       setFilters({ ...defaultFilters, pool });
-      navigate('dashboard');
+      chooseSession();
       window.setTimeout(
         () => document.getElementById('practice-builder')?.scrollIntoView({ behavior: 'smooth' }),
         50,
       );
     },
-    [navigate, setFilters],
+    [chooseSession, setFilters],
   );
 
   const toggleBookmark = useCallback(
@@ -103,5 +111,5 @@ export function useLearningActions({
     });
   }, [active, navigate, setConfirmation, setProgress]);
 
-  return { begin, focusPool, toggleBookmark, restart, cancelSession };
+  return { begin, chooseSession, focusPool, toggleBookmark, restart, cancelSession };
 }
