@@ -6,13 +6,13 @@ An English-language practice app for recognizing design patterns from problems a
 
 132 original multiple-choice questions cover all 22 patterns in the [Refactoring.Guru catalog](https://refactoring.guru/design-patterns/catalog).
 
-| Question type | Per pattern | Total |
-| --- | ---: | ---: |
-| Foundational scenarios | 2 | 44 |
-| Distinguish similar patterns | 1 | 22 |
-| Recognize a pattern in code | 2 | 44 |
-| Choose a pattern for refactoring | 1 | 22 |
-| **Total** | **6** | **132** |
+| Question type                    | Per pattern |   Total |
+| -------------------------------- | ----------: | ------: |
+| Foundational scenarios           |           2 |      44 |
+| Distinguish similar patterns     |           1 |      22 |
+| Recognize a pattern in code      |           2 |      44 |
+| Choose a pattern for refactoring |           1 |      22 |
+| **Total**                        |       **6** | **132** |
 
 Every code question includes equivalent **Java 17+** and **TypeScript** examples. That is 66 code questions and 132 code snippets. Switching languages does not count as another question. Snippets isolate the relevant collaboration, rather than claiming to be complete production implementations.
 
@@ -43,12 +43,14 @@ npm run dev
 Open the local URL printed by Vite, normally `http://127.0.0.1:5173/design-pattern-lab/`.
 
 ```sh
-npm run check          # source hygiene, strict typecheck, 11 behavioral/data tests, production build
+npm run format        # format source, docs, configuration, and tests with Prettier
+npm run lint          # fail if files need formatting or violate source hygiene
+npm run check         # lint, strict typecheck, behavioral/data tests, production build
 npm run test:examples  # compile every Java and TypeScript snippet; requires JDK 17+
 npm run preview       # serve the production build after npm run build
 ```
 
-The lightweight `lint` command checks source-file hygiene; strict TypeScript checking also rejects unused declarations. Tests use Node's built-in test runner, without a test framework dependency. The example checker compiles snippets in isolated temporary directories and removes them afterward.
+Prettier 3 is configured in `.prettierrc.json`; `.prettierignore` excludes generated and installed files. `lint` includes `prettier --check`, so CI and `npm run check` fail if manually edited source is not formatted. Run `npm run format` to apply the rules. Strict TypeScript checking also rejects unused declarations. Tests use Node's built-in test runner, without a test framework dependency. The example checker compiles snippets in isolated temporary directories and removes them afterward.
 
 ## GitHub Pages
 
@@ -71,7 +73,10 @@ Data belongs to the current browser and origin, is not synced between devices, a
 
 ```text
 src/
-  App.tsx                 Screens and interactions
+  App.tsx                 Application shell, navigation, state orchestration
+  app-context.tsx        Typed view-model boundary for screen components
+  screens/                Dashboard, practice, progress, and settings screens
+  components/ui.tsx       Shared icons, controls, meters, and dialogs
   CodeBlock.tsx           Escaped, token-highlighted code display
   engine.ts               Session creation, scoring, filters, statistics, storage validation
   types.ts                Data and progress contracts
