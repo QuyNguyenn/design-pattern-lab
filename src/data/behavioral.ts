@@ -37,19 +37,29 @@ export const behavioral: Pattern[] = [
         explanation: 'Support either handles the request within its limit or forwards it to next.',
         code: {
           typescript: `class Support {
-  constructor(private limit: number, private next?: Support) {}
+  constructor(
+    private limit: number,
+    private next?: Support,
+  ) {}
+
   resolve(level: number): string {
-    if (level <= this.limit) return "Resolved";
-    return this.next?.resolve(level) ?? "Unresolved";
+    if (level <= this.limit) return 'Resolved';
+    return this.next?.resolve(level) ?? 'Unresolved';
   }
 }`,
           java: `class Support {
-  private final int limit; private final Support next;
-  Support(int limit, Support next) { this.limit = limit; this.next = next; }
-  String resolve(int level) {
-    if (level <= limit) return "Resolved";
-    return next == null ? "Unresolved" : next.resolve(level);
-  }
+    private final int limit;
+    private final Support next;
+
+    Support(int limit, Support next) {
+        this.limit = limit;
+        this.next = next;
+    }
+
+    String resolve(int level) {
+        if (level <= limit) return "Resolved";
+        return next == null ? "Unresolved" : next.resolve(level);
+    }
 }`,
         },
       },
@@ -59,20 +69,31 @@ export const behavioral: Pattern[] = [
           'Gate forwards only when its own check succeeds, linking independently configurable handlers.',
         code: {
           typescript: `class Gate {
-  constructor(private valid: (s: string) => boolean, private next?: Gate) {}
+  constructor(
+    private valid: (s: string) => boolean,
+    private next?: Gate,
+  ) {}
+
   accept(s: string): boolean {
     if (!this.valid(s)) return false;
     return this.next?.accept(s) ?? true;
   }
 }`,
           java: `import java.util.function.Predicate;
+
 class Gate {
-  private final Predicate<String> valid; private final Gate next;
-  Gate(Predicate<String> v, Gate n) { valid = v; next = n; }
-  boolean accept(String s) {
-    if (!valid.test(s)) return false;
-    return next == null || next.accept(s);
-  }
+    private final Predicate<String> valid;
+    private final Gate next;
+
+    Gate(Predicate<String> v, Gate n) {
+        valid = v;
+        next = n;
+    }
+
+    boolean accept(String s) {
+        if (!valid.test(s)) return false;
+        return next == null || next.accept(s);
+    }
 }`,
         },
       },
@@ -88,11 +109,11 @@ class Gate {
   return true;
 }`,
         java: `class Endpoint {
-  boolean accept(String token, int quota) {
-    if (token.isEmpty()) return false;
-    if (quota <= 0) return false;
-    return true;
-  }
+    boolean accept(String token, int quota) {
+        if (token.isEmpty()) return false;
+        if (quota <= 0) return false;
+        return true;
+    }
 }`,
       },
     },
@@ -134,18 +155,44 @@ class Gate {
         explanation:
           'Insert holds both receiver and arguments, exposing the request through execute().',
         code: {
-          typescript: `class Document { text = ""; }
-interface Action { execute(): void }
+          typescript: `class Document {
+  text = '';
+}
+
+interface Action {
+  execute(): void;
+}
+
 class Insert implements Action {
-  constructor(private doc: Document, private value: string) {}
-  execute() { this.doc.text += this.value; }
+  constructor(
+    private doc: Document,
+    private value: string,
+  ) {}
+
+  execute() {
+    this.doc.text += this.value;
+  }
 }`,
-          java: `class Document { String text = ""; }
-interface Action { void execute(); }
+          java: `class Document {
+    String text = "";
+}
+
+interface Action {
+    void execute();
+}
+
 class Insert implements Action {
-  private final Document doc; private final String value;
-  Insert(Document d, String v) { doc = d; value = v; }
-  public void execute() { doc.text += value; }
+    private final Document doc;
+    private final String value;
+
+    Insert(Document d, String v) {
+        doc = d;
+        value = v;
+    }
+
+    public void execute() {
+        doc.text += value;
+    }
 }`,
         },
       },
@@ -154,18 +201,37 @@ class Insert implements Action {
         explanation:
           'The queue holds executable request objects without knowing which receiver or parameters each operation uses.',
         code: {
-          typescript: `interface Task { execute(): void }
+          typescript: `interface Task {
+  execute(): void;
+}
+
 class JobQueue {
   private jobs: Task[] = [];
-  add(job: Task) { this.jobs.push(job); }
-  run() { this.jobs.splice(0).forEach(job => job.execute()); }
+
+  add(job: Task) {
+    this.jobs.push(job);
+  }
+
+  run() {
+    this.jobs.splice(0).forEach((job) => job.execute());
+  }
 }`,
           java: `import java.util.*;
-interface Task { void execute(); }
+
+interface Task {
+    void execute();
+}
+
 class JobQueue {
-  private final Queue<Task> jobs = new ArrayDeque<>();
-  void add(Task job) { jobs.add(job); }
-  void run() { while (!jobs.isEmpty()) jobs.remove().execute(); }
+    private final Queue<Task> jobs = new ArrayDeque<>();
+
+    void add(Task job) {
+        jobs.add(job);
+    }
+
+    void run() {
+        while (!jobs.isEmpty()) jobs.remove().execute();
+    }
 }`,
         },
       },
@@ -176,17 +242,27 @@ class JobQueue {
       explanation:
         'Create a command per action, capturing the receiver and arguments; invokers can execute or record the same objects.',
       code: {
-        typescript: `class Editor { save() {} print() {} }
+        typescript: `class Editor {
+  save() {}
+
+  print() {}
+}
+
 function click(name: string, editor: Editor) {
-  if (name === "save") editor.save();
-  if (name === "print") editor.print();
+  if (name === 'save') editor.save();
+  if (name === 'print') editor.print();
 }`,
-        java: `class Editor { void save() {} void print() {} }
+        java: `class Editor {
+    void save() {}
+
+    void print() {}
+}
+
 class Toolbar {
-  void click(String name, Editor editor) {
-    if (name.equals("save")) editor.save();
-    if (name.equals("print")) editor.print();
-  }
+    void click(String name, Editor editor) {
+        if (name.equals("save")) editor.save();
+        if (name.equals("print")) editor.print();
+    }
 }`,
       },
     },
@@ -230,22 +306,36 @@ class Toolbar {
         code: {
           typescript: `class Cursor<T> {
   private index = 0;
+
   constructor(private items: readonly T[]) {}
-  hasNext() { return this.index < this.items.length; }
+
+  hasNext() {
+    return this.index < this.items.length;
+  }
+
   next() {
-    if (!this.hasNext()) throw new Error("Exhausted");
+    if (!this.hasNext()) throw new Error('Exhausted');
     return this.items[this.index++];
   }
 }`,
           java: `import java.util.*;
+
 class Cursor<T> {
-  private int index; private final List<T> items;
-  Cursor(List<T> items) { this.items = items; }
-  boolean hasNext() { return index < items.size(); }
-  T next() {
-    if (!hasNext()) throw new NoSuchElementException();
-    return items.get(index++);
-  }
+    private int index;
+    private final List<T> items;
+
+    Cursor(List<T> items) {
+        this.items = items;
+    }
+
+    boolean hasNext() {
+        return index < items.size();
+    }
+
+    T next() {
+        if (!hasNext()) throw new NoSuchElementException();
+        return items.get(index++);
+    }
 }`,
         },
       },
@@ -261,10 +351,17 @@ class Cursor<T> {
   }
 }`,
           java: `import java.util.*;
+
 class Shelf implements Iterable<String> {
-  private final List<String> titles;
-  Shelf(List<String> titles) { this.titles = List.copyOf(titles); }
-  public Iterator<String> iterator() { return titles.iterator(); }
+    private final List<String> titles;
+
+    Shelf(List<String> titles) {
+        this.titles = List.copyOf(titles);
+    }
+
+    public Iterator<String> iterator() {
+        return titles.iterator();
+    }
 }`,
         },
       },
@@ -274,15 +371,21 @@ class Shelf implements Iterable<String> {
         'Storage will change to a paginated source. Clients should use next()/hasNext() without seeing indexes or pages. Which pattern supplies this abstraction?',
       explanation: 'Move traversal state and storage-specific advancement into an iterator.',
       code: {
-        typescript: `class Playlist { tracks = ["A", "B"]; }
+        typescript: `class Playlist {
+  tracks = ['A', 'B'];
+}
+
 function play(p: Playlist) {
   for (let i = 0; i < p.tracks.length; i++) console.log(p.tracks[i]);
 }`,
-        java: `class Playlist { String[] tracks = {"A", "B"}; }
+        java: `class Playlist {
+    String[] tracks = {"A", "B"};
+}
+
 class Player {
-  void play(Playlist p) {
-    for (int i = 0; i < p.tracks.length; i++) System.out.println(p.tracks[i]);
-  }
+    void play(Playlist p) {
+        for (int i = 0; i < p.tracks.length; i++) System.out.println(p.tracks[i]);
+    }
 }`,
       },
     },
@@ -324,25 +427,51 @@ class Player {
         explanation:
           'Field communicates only with Dialog; Dialog owns the rule that changes Button.',
         code: {
-          typescript: `class Button { enabled = false; }
+          typescript: `class Button {
+  enabled = false;
+}
+
 class Dialog {
   constructor(private button: Button) {}
-  changed(value: string) { this.button.enabled = value.length > 0; }
+
+  changed(value: string) {
+    this.button.enabled = value.length > 0;
+  }
 }
+
 class Field {
   constructor(private dialog: Dialog) {}
-  input(value: string) { this.dialog.changed(value); }
+
+  input(value: string) {
+    this.dialog.changed(value);
+  }
 }`,
-          java: `class Button { boolean enabled; }
-class Dialog {
-  private final Button button;
-  Dialog(Button b) { button = b; }
-  void changed(String value) { button.enabled = !value.isEmpty(); }
+          java: `class Button {
+    boolean enabled;
 }
+
+class Dialog {
+    private final Button button;
+
+    Dialog(Button b) {
+        button = b;
+    }
+
+    void changed(String value) {
+        button.enabled = !value.isEmpty();
+    }
+}
+
 class Field {
-  private final Dialog dialog;
-  Field(Dialog d) { dialog = d; }
-  void input(String value) { dialog.changed(value); }
+    private final Dialog dialog;
+
+    Field(Dialog d) {
+        dialog = d;
+    }
+
+    void input(String value) {
+        dialog.changed(value);
+    }
 }`,
         },
       },
@@ -351,25 +480,51 @@ class Field {
         explanation:
           'ControlRoom receives the participant event and applies the rule for the other participant, rather than Sensor referencing Alarm.',
         code: {
-          typescript: `class Alarm { ringing = false; }
+          typescript: `class Alarm {
+  ringing = false;
+}
+
 class ControlRoom {
   constructor(private alarm: Alarm) {}
-  temperatureChanged(n: number) { this.alarm.ringing = n > 50; }
+
+  temperatureChanged(n: number) {
+    this.alarm.ringing = n > 50;
+  }
 }
+
 class Sensor {
   constructor(private room: ControlRoom) {}
-  report(n: number) { this.room.temperatureChanged(n); }
+
+  report(n: number) {
+    this.room.temperatureChanged(n);
+  }
 }`,
-          java: `class Alarm { boolean ringing; }
-class ControlRoom {
-  private final Alarm alarm;
-  ControlRoom(Alarm a) { alarm = a; }
-  void temperatureChanged(int n) { alarm.ringing = n > 50; }
+          java: `class Alarm {
+    boolean ringing;
 }
+
+class ControlRoom {
+    private final Alarm alarm;
+
+    ControlRoom(Alarm a) {
+        alarm = a;
+    }
+
+    void temperatureChanged(int n) {
+        alarm.ringing = n > 50;
+    }
+}
+
 class Sensor {
-  private final ControlRoom room;
-  Sensor(ControlRoom r) { room = r; }
-  void report(int n) { room.temperatureChanged(n); }
+    private final ControlRoom room;
+
+    Sensor(ControlRoom r) {
+        room = r;
+    }
+
+    void report(int n) {
+        room.temperatureChanged(n);
+    }
 }`,
         },
       },
@@ -380,21 +535,33 @@ class Sensor {
       explanation:
         'A mediator accepts events from controls and performs the appropriate changes on other controls.',
       code: {
-        typescript: `class Submit { enabled = false; }
-class Warning { visible = true; }
+        typescript: `class Submit {
+  enabled = false;
+}
+
+class Warning {
+  visible = true;
+}
+
 class Field {
   changed(value: string, submit: Submit, warning: Warning) {
     submit.enabled = value.length > 0;
     warning.visible = value.length === 0;
   }
 }`,
-        java: `class Submit { boolean enabled; }
-class Warning { boolean visible = true; }
+        java: `class Submit {
+    boolean enabled;
+}
+
+class Warning {
+    boolean visible = true;
+}
+
 class Field {
-  void changed(String value, Submit submit, Warning warning) {
-    submit.enabled = !value.isEmpty();
-    warning.visible = value.isEmpty();
-  }
+    void changed(String value, Submit submit, Warning warning) {
+        submit.enabled = !value.isEmpty();
+        warning.visible = value.isEmpty();
+    }
 }`,
       },
     },
@@ -437,25 +604,43 @@ class Field {
           'The opaque snapshot hides the saved data from the history caretaker; only the originator restores it.',
         code: {
           typescript: `class Editor {
-  private text = "";
+  private text = '';
   private saved = new WeakMap<object, string>();
-  write(s: string) { this.text = s; }
-  save(): object {
-    const token = {}; this.saved.set(token, this.text); return token;
+
+  write(s: string) {
+    this.text = s;
   }
+
+  save(): object {
+    const token = {};
+    this.saved.set(token, this.text);
+    return token;
+  }
+
   restore(token: object) {
     if (this.saved.has(token)) this.text = this.saved.get(token)!;
   }
 }`,
           java: `class Editor {
-  private String text = "";
-  static final class Snapshot {
-    private final String text;
-    private Snapshot(String t) { text = t; }
-  }
-  void write(String s) { text = s; }
-  Snapshot save() { return new Snapshot(text); }
-  void restore(Snapshot s) { text = s.text; }
+    private String text = "";
+    static final class Snapshot {
+        private final String text;
+        private Snapshot(String t) {
+            text = t;
+        }
+    }
+
+    void write(String s) {
+        text = s;
+    }
+
+    Snapshot save() {
+        return new Snapshot(text);
+    }
+
+    void restore(Snapshot s) {
+        text = s.text;
+    }
 }`,
         },
       },
@@ -467,23 +652,41 @@ class Field {
           typescript: `class Player {
   private x = 0;
   private snapshots = new WeakMap<object, number>();
-  move(x: number) { this.x = x; }
-  checkpoint() {
-    const token = {}; this.snapshots.set(token, this.x); return token;
+
+  move(x: number) {
+    this.x = x;
   }
+
+  checkpoint() {
+    const token = {};
+    this.snapshots.set(token, this.x);
+    return token;
+  }
+
   restore(token: object) {
     if (this.snapshots.has(token)) this.x = this.snapshots.get(token)!;
   }
 }`,
           java: `class Player {
-  private int x;
-  static final class Checkpoint {
-    private final int x;
-    private Checkpoint(int x) { this.x = x; }
-  }
-  void move(int x) { this.x = x; }
-  Checkpoint checkpoint() { return new Checkpoint(x); }
-  void restore(Checkpoint c) { x = c.x; }
+    private int x;
+    static final class Checkpoint {
+        private final int x;
+        private Checkpoint(int x) {
+            this.x = x;
+        }
+    }
+
+    void move(int x) {
+        this.x = x;
+    }
+
+    Checkpoint checkpoint() {
+        return new Checkpoint(x);
+    }
+
+    void restore(Checkpoint c) {
+        x = c.x;
+    }
 }`,
         },
       },
@@ -494,18 +697,35 @@ class Field {
       explanation:
         'Move capture and restore into Editor and let History keep mementos instead of copying internal fields.',
       code: {
-        typescript: `class Editor { text = ""; cursor = 0; }
+        typescript: `class Editor {
+  text = '';
+  cursor = 0;
+}
+
 function backup(e: Editor) {
   return { text: e.text, cursor: e.cursor };
 }
+
 function restore(e: Editor, s: { text: string; cursor: number }) {
-  e.text = s.text; e.cursor = s.cursor;
+  e.text = s.text;
+  e.cursor = s.cursor;
 }`,
-        java: `class Editor { String text = ""; int cursor; }
+        java: `class Editor {
+    String text = "";
+    int cursor;
+}
+
 record Backup(String text, int cursor) {}
+
 class History {
-  Backup save(Editor e) { return new Backup(e.text, e.cursor); }
-  void restore(Editor e, Backup b) { e.text = b.text(); e.cursor = b.cursor(); }
+    Backup save(Editor e) {
+        return new Backup(e.text, e.cursor);
+    }
+
+    void restore(Editor e, Backup b) {
+        e.text = b.text();
+        e.cursor = b.cursor();
+    }
 }`,
       },
     },
@@ -548,20 +768,30 @@ class History {
         code: {
           typescript: `class Feed {
   private listeners = new Set<(n: number) => void>();
+
   subscribe(fn: (n: number) => void) {
     this.listeners.add(fn);
     return () => this.listeners.delete(fn);
   }
-  publish(n: number) { this.listeners.forEach(fn => fn(n)); }
+
+  publish(n: number) {
+    this.listeners.forEach((fn) => fn(n));
+  }
 }`,
           java: `import java.util.*;
 import java.util.function.IntConsumer;
+
 class Feed {
-  private final Set<IntConsumer> listeners = new LinkedHashSet<>();
-  Runnable subscribe(IntConsumer fn) {
-    listeners.add(fn); return () -> listeners.remove(fn);
-  }
-  void publish(int n) { listeners.forEach(fn -> fn.accept(n)); }
+    private final Set<IntConsumer> listeners = new LinkedHashSet<>();
+
+    Runnable subscribe(IntConsumer fn) {
+        listeners.add(fn);
+        return () -> listeners.remove(fn);
+    }
+
+    void publish(int n) {
+        listeners.forEach(fn -> fn.accept(n));
+    }
 }`,
         },
       },
@@ -572,15 +802,28 @@ class Feed {
         code: {
           typescript: `class Model {
   private views: Array<(s: string) => void> = [];
-  observe(view: (s: string) => void) { this.views.push(view); }
-  update(value: string) { this.views.forEach(view => view(value)); }
+
+  observe(view: (s: string) => void) {
+    this.views.push(view);
+  }
+
+  update(value: string) {
+    this.views.forEach((view) => view(value));
+  }
 }`,
           java: `import java.util.*;
 import java.util.function.Consumer;
+
 class Model {
-  private final List<Consumer<String>> views = new ArrayList<>();
-  void observe(Consumer<String> view) { views.add(view); }
-  void update(String value) { views.forEach(view -> view.accept(value)); }
+    private final List<Consumer<String>> views = new ArrayList<>();
+
+    void observe(Consumer<String> view) {
+        views.add(view);
+    }
+
+    void update(String value) {
+        views.forEach(view -> view.accept(value));
+    }
 }`,
         },
       },
@@ -593,17 +836,17 @@ class Model {
       code: {
         typescript: `class PriceFeed {
   update(n: number) {
-    console.log("Update chart", n);
-    console.log("Send alert", n);
-    console.log("Write log", n);
+    console.log('Update chart', n);
+    console.log('Send alert', n);
+    console.log('Write log', n);
   }
 }`,
         java: `class PriceFeed {
-  void update(int n) {
-    System.out.println("Update chart " + n);
-    System.out.println("Send alert " + n);
-    System.out.println("Write log " + n);
-  }
+    void update(int n) {
+        System.out.println("Update chart " + n);
+        System.out.println("Send alert " + n);
+        System.out.println("Write log " + n);
+    }
 }`,
       },
     },
@@ -645,20 +888,52 @@ class Model {
         explanation:
           'Door delegates to the current Mode, and each concrete mode transitions the Door to another mode.',
         code: {
-          typescript: `interface Mode { press(d: Door): void }
+          typescript: `interface Mode {
+  press(d: Door): void;
+}
+
 class Door {
   mode: Mode = new Closed();
-  press() { this.mode.press(this); }
+
+  press() {
+    this.mode.press(this);
+  }
 }
-class Closed implements Mode { press(d: Door) { d.mode = new Open(); } }
-class Open implements Mode { press(d: Door) { d.mode = new Closed(); } }`,
-          java: `interface Mode { void press(Door d); }
+
+class Closed implements Mode {
+  press(d: Door) {
+    d.mode = new Open();
+  }
+}
+
+class Open implements Mode {
+  press(d: Door) {
+    d.mode = new Closed();
+  }
+}`,
+          java: `interface Mode {
+    void press(Door d);
+}
+
 class Door {
-  Mode mode = new Closed();
-  void press() { mode.press(this); }
+    Mode mode = new Closed();
+
+    void press() {
+        mode.press(this);
+    }
 }
-class Closed implements Mode { public void press(Door d) { d.mode = new Open(); } }
-class Open implements Mode { public void press(Door d) { d.mode = new Closed(); } }`,
+
+class Closed implements Mode {
+    public void press(Door d) {
+        d.mode = new Open();
+    }
+}
+
+class Open implements Mode {
+    public void press(Door d) {
+        d.mode = new Closed();
+    }
+}`,
         },
       },
       {
@@ -666,25 +941,53 @@ class Open implements Mode { public void press(Door d) { d.mode = new Closed(); 
         explanation:
           'Draft allows payment and transitions to Paid; Paid handles the same event differently.',
         code: {
-          typescript: `interface Phase { pay(i: Invoice): string }
+          typescript: `interface Phase {
+  pay(i: Invoice): string;
+}
+
 class Invoice {
   phase: Phase = new Draft();
-  pay() { return this.phase.pay(this); }
+
+  pay() {
+    return this.phase.pay(this);
+  }
 }
+
 class Draft implements Phase {
-  pay(i: Invoice) { i.phase = new Paid(); return "Payment recorded"; }
+  pay(i: Invoice) {
+    i.phase = new Paid();
+    return 'Payment recorded';
+  }
 }
-class Paid implements Phase { pay() { return "Already paid"; } }`,
-          java: `interface Phase { String pay(Invoice i); }
-class Invoice {
-  Phase phase = new Draft();
-  String pay() { return phase.pay(this); }
-}
-class Draft implements Phase {
-  public String pay(Invoice i) { i.phase = new Paid(); return "Payment recorded"; }
-}
+
 class Paid implements Phase {
-  public String pay(Invoice i) { return "Already paid"; }
+  pay() {
+    return 'Already paid';
+  }
+}`,
+          java: `interface Phase {
+    String pay(Invoice i);
+}
+
+class Invoice {
+    Phase phase = new Draft();
+
+    String pay() {
+        return phase.pay(this);
+    }
+}
+
+class Draft implements Phase {
+    public String pay(Invoice i) {
+        i.phase = new Paid();
+        return "Payment recorded";
+    }
+}
+
+class Paid implements Phase {
+    public String pay(Invoice i) {
+        return "Already paid";
+    }
 }`,
         },
       },
@@ -696,18 +999,22 @@ class Paid implements Phase {
         'Introduce state objects and delegate the event to the active state instead of branching on a status string throughout the class.',
       code: {
         typescript: `class Connection {
-  status = "connecting";
+  status = 'connecting';
+
   event(e: string) {
-    if (this.status === "connecting" && e === "ready") this.status = "connected";
-    else if (this.status === "connected" && e === "close") this.status = "closed";
+    if (this.status === 'connecting' && e === 'ready')
+      this.status = 'connected';
+    else if (this.status === 'connected' && e === 'close')
+      this.status = 'closed';
   }
 }`,
         java: `class Connection {
-  String status = "connecting";
-  void event(String e) {
-    if (status.equals("connecting") && e.equals("ready")) status = "connected";
-    else if (status.equals("connected") && e.equals("close")) status = "closed";
-  }
+    String status = "connecting";
+
+    void event(String e) {
+        if (status.equals("connecting") && e.equals("ready")) status = "connected";
+        else if (status.equals("connected") && e.equals("close")) status = "closed";
+    }
 }`,
       },
     },
@@ -748,20 +1055,55 @@ class Paid implements Phase {
         explanation:
           'Checkout delegates calculation to the supplied policy, which can vary independently.',
         code: {
-          typescript: `interface Pricing { total(base: number): number }
-class Regular implements Pricing { total(n: number) { return n; } }
-class Member implements Pricing { total(n: number) { return n * 0.9; } }
+          typescript: `interface Pricing {
+  total(base: number): number;
+}
+
+class Regular implements Pricing {
+  total(n: number) {
+    return n;
+  }
+}
+
+class Member implements Pricing {
+  total(n: number) {
+    return n * 0.9;
+  }
+}
+
 class Checkout {
   constructor(private pricing: Pricing) {}
-  bill(n: number) { return this.pricing.total(n); }
+
+  bill(n: number) {
+    return this.pricing.total(n);
+  }
 }`,
-          java: `interface Pricing { double total(double base); }
-class Regular implements Pricing { public double total(double n) { return n; } }
-class Member implements Pricing { public double total(double n) { return n * 0.9; } }
+          java: `interface Pricing {
+    double total(double base);
+}
+
+class Regular implements Pricing {
+    public double total(double n) {
+        return n;
+    }
+}
+
+class Member implements Pricing {
+    public double total(double n) {
+        return n * 0.9;
+    }
+}
+
 class Checkout {
-  private final Pricing pricing;
-  Checkout(Pricing p) { pricing = p; }
-  double bill(double n) { return pricing.total(n); }
+    private final Pricing pricing;
+
+    Checkout(Pricing p) {
+        pricing = p;
+    }
+
+    double bill(double n) {
+        return pricing.total(n);
+    }
 }`,
         },
       },
@@ -771,17 +1113,34 @@ class Checkout {
           'Planner composes an interchangeable route algorithm. A function can serve as a strategy without a separate concrete class.',
         code: {
           typescript: `type Route = (from: string, to: string) => string;
+
 class Planner {
   constructor(private route: Route) {}
-  use(route: Route) { this.route = route; }
-  plan(a: string, b: string) { return this.route(a, b); }
+
+  use(route: Route) {
+    this.route = route;
+  }
+
+  plan(a: string, b: string) {
+    return this.route(a, b);
+  }
 }`,
           java: `import java.util.function.BiFunction;
+
 class Planner {
-  private BiFunction<String, String, String> route;
-  Planner(BiFunction<String, String, String> r) { route = r; }
-  void use(BiFunction<String, String, String> r) { route = r; }
-  String plan(String a, String b) { return route.apply(a, b); }
+    private BiFunction<String, String, String> route;
+
+    Planner(BiFunction<String, String, String> r) {
+        route = r;
+    }
+
+    void use(BiFunction<String, String, String> r) {
+        route = r;
+    }
+
+    String plan(String a, String b) {
+        return route.apply(a, b);
+    }
 }`,
         },
       },
@@ -793,16 +1152,16 @@ class Planner {
         'Extract each shipping calculation behind one interface and pass the selected implementation to the calculator.',
       code: {
         typescript: `function shipping(mode: string, weight: number) {
-  if (mode === "air") return weight * 8;
-  if (mode === "road") return weight * 3;
+  if (mode === 'air') return weight * 8;
+  if (mode === 'road') return weight * 3;
   return 0;
 }`,
         java: `class Shipping {
-  double cost(String mode, double weight) {
-    if (mode.equals("air")) return weight * 8;
-    if (mode.equals("road")) return weight * 3;
-    return 0;
-  }
+    double cost(String mode, double weight) {
+        if (mode.equals("air")) return weight * 8;
+        if (mode.equals("road")) return weight * 3;
+        return 0;
+    }
 }`,
       },
     },
@@ -849,18 +1208,25 @@ class Planner {
   }
   protected abstract parse(raw: string): string;
 }
+
 class UpperImporter extends Importer {
-  protected parse(raw: string) { return raw.toUpperCase(); }
+  protected parse(raw: string) {
+    return raw.toUpperCase();
+  }
 }`,
           java: `abstract class Importer {
-  final String run(String raw) {
-    String result = parse(raw);
-    return result.trim();
-  }
-  protected abstract String parse(String raw);
+    final String run(String raw) {
+        String result = parse(raw);
+        return result.trim();
+    }
+
+    protected abstract String parse(String raw);
 }
+
 class UpperImporter extends Importer {
-  protected String parse(String raw) { return raw.toUpperCase(); }
+    protected String parse(String raw) {
+        return raw.toUpperCase();
+    }
 }`,
         },
       },
@@ -872,20 +1238,32 @@ class UpperImporter extends Importer {
           typescript: `abstract class TestCase {
   execute() {
     this.setup();
-    try { this.body(); } finally { this.cleanup(); }
+    try {
+      this.body();
+    } finally {
+      this.cleanup();
+    }
   }
   protected setup() {}
   protected abstract body(): void;
   protected cleanup() {}
 }`,
           java: `abstract class TestCase {
-  final void execute() {
-    setup();
-    try { body(); } finally { cleanup(); }
-  }
-  protected void setup() {}
-  protected abstract void body();
-  protected void cleanup() {}
+    final void execute() {
+        setup();
+        try {
+            body();
+        }
+        finally {
+            cleanup();
+        }
+    }
+
+    protected void setup() {}
+
+    protected abstract void body();
+
+    protected void cleanup() {}
 }`,
         },
       },
@@ -897,16 +1275,26 @@ class UpperImporter extends Importer {
         'Move trim-transform-wrap into a base method and introduce a protected transform hook.',
       code: {
         typescript: `class UpperJob {
-  run(s: string) { return "[" + s.trim().toUpperCase() + "]"; }
+  run(s: string) {
+    return '[' + s.trim().toUpperCase() + ']';
+  }
 }
+
 class LowerJob {
-  run(s: string) { return "[" + s.trim().toLowerCase() + "]"; }
+  run(s: string) {
+    return '[' + s.trim().toLowerCase() + ']';
+  }
 }`,
         java: `class UpperJob {
-  String run(String s) { return "[" + s.trim().toUpperCase() + "]"; }
+    String run(String s) {
+        return "[" + s.trim().toUpperCase() + "]";
+    }
 }
+
 class LowerJob {
-  String run(String s) { return "[" + s.trim().toLowerCase() + "]"; }
+    String run(String s) {
+        return "[" + s.trim().toLowerCase() + "]";
+    }
 }`,
       },
     },
@@ -948,19 +1336,59 @@ class LowerJob {
         explanation:
           'Each element accepts an Ops object and dispatches to its concrete-type operation.',
         code: {
-          typescript: `interface Ops { book(b: Book): string; film(f: Film): string }
-class Book { accept(o: Ops) { return o.book(this); } }
-class Film { accept(o: Ops) { return o.film(this); } }
+          typescript: `interface Ops {
+  book(b: Book): string;
+
+  film(f: Film): string;
+}
+
+class Book {
+  accept(o: Ops) {
+    return o.book(this);
+  }
+}
+
+class Film {
+  accept(o: Ops) {
+    return o.film(this);
+  }
+}
+
 class Label implements Ops {
-  book(_b: Book) { return "Book label"; }
-  film(_f: Film) { return "Film label"; }
+  book(_b: Book) {
+    return 'Book label';
+  }
+
+  film(_f: Film) {
+    return 'Film label';
+  }
 }`,
-          java: `interface Ops { String book(Book b); String film(Film f); }
-class Book { String accept(Ops o) { return o.book(this); } }
-class Film { String accept(Ops o) { return o.film(this); } }
+          java: `interface Ops {
+    String book(Book b);
+
+    String film(Film f);
+}
+
+class Book {
+    String accept(Ops o) {
+        return o.book(this);
+    }
+}
+
+class Film {
+    String accept(Ops o) {
+        return o.film(this);
+    }
+}
+
 class Label implements Ops {
-  public String book(Book b) { return "Book label"; }
-  public String film(Film f) { return "Film label"; }
+    public String book(Book b) {
+        return "Book label";
+    }
+
+    public String film(Film f) {
+        return "Film label";
+    }
 }`,
         },
       },
@@ -969,19 +1397,67 @@ class Label implements Ops {
         explanation:
           'Shapes expose accept(), and Area contains the type-specific computation for every shape type.',
         code: {
-          typescript: `interface Measure { circle(c: Circle): number; square(s: Square): number }
-class Circle { radius = 2; accept(m: Measure) { return m.circle(this); } }
-class Square { side = 3; accept(m: Measure) { return m.square(this); } }
+          typescript: `interface Measure {
+  circle(c: Circle): number;
+
+  square(s: Square): number;
+}
+
+class Circle {
+  radius = 2;
+
+  accept(m: Measure) {
+    return m.circle(this);
+  }
+}
+
+class Square {
+  side = 3;
+
+  accept(m: Measure) {
+    return m.square(this);
+  }
+}
+
 class Area implements Measure {
-  circle(c: Circle) { return Math.PI * c.radius ** 2; }
-  square(s: Square) { return s.side ** 2; }
+  circle(c: Circle) {
+    return Math.PI * c.radius ** 2;
+  }
+
+  square(s: Square) {
+    return s.side ** 2;
+  }
 }`,
-          java: `interface Measure { double circle(Circle c); double square(Square s); }
-class Circle { double radius = 2; double accept(Measure m) { return m.circle(this); } }
-class Square { double side = 3; double accept(Measure m) { return m.square(this); } }
+          java: `interface Measure {
+    double circle(Circle c);
+
+    double square(Square s);
+}
+
+class Circle {
+    double radius = 2;
+
+    double accept(Measure m) {
+        return m.circle(this);
+    }
+}
+
+class Square {
+    double side = 3;
+
+    double accept(Measure m) {
+        return m.square(this);
+    }
+}
+
 class Area implements Measure {
-  public double circle(Circle c) { return Math.PI * c.radius * c.radius; }
-  public double square(Square s) { return s.side * s.side; }
+    public double circle(Circle c) {
+        return Math.PI * c.radius * c.radius;
+    }
+
+    public double square(Square s) {
+        return s.side * s.side;
+    }
 }`,
         },
       },
@@ -992,19 +1468,31 @@ class Area implements Measure {
       explanation:
         'Introduce a visitor contract with one method per element type, and make elements dispatch to it through accept().',
       code: {
-        typescript: `class Book { pages = 100; }
-class Film { minutes = 90; }
+        typescript: `class Book {
+  pages = 100;
+}
+
+class Film {
+  minutes = 90;
+}
+
 function label(item: Book | Film) {
-  if (item instanceof Book) return item.pages + " pages";
-  return item.minutes + " minutes";
+  if (item instanceof Book) return item.pages + ' pages';
+  return item.minutes + ' minutes';
 }`,
-        java: `class Book { int pages = 100; }
-class Film { int minutes = 90; }
+        java: `class Book {
+    int pages = 100;
+}
+
+class Film {
+    int minutes = 90;
+}
+
 class Report {
-  String label(Object item) {
-    if (item instanceof Book b) return b.pages + " pages";
-    return ((Film) item).minutes + " minutes";
-  }
+    String label(Object item) {
+        if (item instanceof Book b) return b.pages + " pages";
+        return ((Film) item).minutes + " minutes";
+    }
 }`,
       },
     },
