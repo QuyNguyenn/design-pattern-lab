@@ -60,6 +60,7 @@ abstract class ReportJob {
     String run() {
         return makeWriter().write();
     }
+
     protected abstract Writer makeWriter();
 }
 
@@ -99,6 +100,7 @@ abstract class Delivery {
     void deliver() {
         courier().send();
     }
+
     protected abstract Courier courier();
 }
 
@@ -212,6 +214,7 @@ interface Menu {
 
 interface UiKit {
     Button button();
+
     Menu menu();
 }
 
@@ -219,6 +222,7 @@ class NightKit implements UiKit {
     public Button button() {
         return () -> "dark button";
     }
+
     public Menu menu() {
         return () -> new String[] {"dark item"};
     }
@@ -255,6 +259,7 @@ interface Mail {
 
 interface Platform {
     Billing billing();
+
     Mail mail();
 }
 
@@ -262,6 +267,7 @@ class SandboxPlatform implements Platform {
     public Billing billing() {
         return () -> "test charge";
     }
+
     public Mail mail() {
         return () -> "test mail";
     }
@@ -352,14 +358,17 @@ const meal = new MealPlan().main('Rice').side('Beans').build();`,
 
 class MealPlan {
     private final List<String> parts = new ArrayList<>();
+
     MealPlan main(String v) {
         parts.add(v);
         return this;
     }
+
     MealPlan side(String v) {
         parts.add(v);
         return this;
     }
+
     List<String> build() {
         return List.copyOf(parts);
     }
@@ -397,14 +406,17 @@ record Request(String path, Map<String, String> headers) {}
 class RequestDraft {
     private String path = "/";
     private final Map<String, String> headers = new HashMap<>();
+
     RequestDraft at(String p) {
         path = p;
         return this;
     }
+
     RequestDraft header(String k, String v) {
         headers.put(k, v);
         return this;
     }
+
     Request build() {
         return new Request(path, Map.copyOf(headers));
     }
@@ -497,6 +509,7 @@ class Note {
         text = t;
         this.tags = tags;
     }
+
     Note copy() {
         return new Note(text, new ArrayList<>(tags));
     }
@@ -534,6 +547,7 @@ class Palette {
         color = c;
         size = s;
     }
+
     Stamp copy() {
         return new Stamp(color, size);
     }
@@ -545,6 +559,7 @@ class Palette {
     Palette(Stamp preset) {
         this.preset = preset;
     }
+
     Stamp create() {
         return preset.copy();
     }
@@ -624,7 +639,9 @@ class Editor {
 }`,
           java: `final class Registry {
     private static final Registry SHARED = new Registry();
+
     private Registry() {}
+
     static Registry instance() {
         return SHARED;
     }
@@ -648,6 +665,7 @@ class Editor {
     private static class Holder {
         static final RuntimeSettings VALUE = new RuntimeSettings();
     }
+
     static RuntimeSettings current() {
         return Holder.VALUE;
     }
