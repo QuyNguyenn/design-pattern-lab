@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Icon, Meter, PageHeader, SectionHeading, StatCard } from '../components/index.ts';
 import { questions, kindLabels } from '../data/index.ts';
 import { createSession, statistics } from '../engine.ts';
@@ -7,6 +8,11 @@ import { useAppContext } from '../app-context.tsx';
 export function ProgressScreen() {
   const { stats, progress, focusPool, search, setSearch, begin, filteredPatterns } =
     useAppContext();
+  const [category, setCategory] = useState('All');
+  const [layout, setLayout] = useState<'grid' | 'list'>('grid');
+  const visiblePatterns = filteredPatterns.filter(
+    (pattern) => category === 'All' || pattern.category === category,
+  );
   return (
     <>
       <PageHeader
@@ -79,8 +85,38 @@ export function ProgressScreen() {
             </label>
           }
         />
-        <div className="pattern-grid">
-          {filteredPatterns.map((p) => {
+        <div className="pattern-toolbar">
+          <div className="pattern-filters" role="group" aria-label="Filter patterns by type">
+            {['All', 'Creational', 'Structural', 'Behavioral'].map((type) => (
+              <button
+                key={type}
+                className={`pattern-filter ${category === type ? 'selected' : ''}`}
+                aria-pressed={category === type}
+                onClick={() => setCategory(type)}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+          <div className="pattern-layout-toggle" role="group" aria-label="Pattern display">
+            <button
+              aria-pressed={layout === 'grid'}
+              className={layout === 'grid' ? 'selected' : ''}
+              onClick={() => setLayout('grid')}
+            >
+              Grid
+            </button>
+            <button
+              aria-pressed={layout === 'list'}
+              className={layout === 'list' ? 'selected' : ''}
+              onClick={() => setLayout('list')}
+            >
+              List
+            </button>
+          </div>
+        </div>
+        <div className={`pattern-grid ${layout === 'list' ? 'list-view' : ''}`}>
+          {visiblePatterns.map((p) => {
             const s = statistics(
               progress,
               questions.filter((q) => q.patternId === p.id),
@@ -124,8 +160,11 @@ export function ProgressScreen() {
             );
           })}
         </div>
-        {!filteredPatterns.length && (
-          <p className="empty-hint">No pattern matches “{search}”. Try another name.</p>
+        {!visiblePatterns.length && (
+          <p className="empty-hint">
+            No {category === 'All' ? 'pattern' : `${category.toLowerCase()} pattern`} matches
+            {search ? ` “${search}”` : ''}. Try another filter or search.
+          </p>
         )}
       </section>
     </>
