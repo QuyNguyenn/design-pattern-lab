@@ -381,11 +381,12 @@
   .practice-top h1 {
     font-size: 23px;
   }
-  .practice-top > .text-button {
-    font-size: 9px;
-    max-width: 80px;
+  .practice-session-actions .text-button {
+    min-height: 32px;
+    font-size: 10px;
+    max-width: 110px;
     line-height: 1.5;
-    text-align: left;
+    text-align: right;
     gap: 5px;
   }
   .question-panel {

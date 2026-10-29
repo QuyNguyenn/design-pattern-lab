@@ -7,6 +7,16 @@
 .practice-top h1 {
   font-size: 28px;
 }
+.practice-session-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.cancel-session-button {
+  color: var(--muted);
+}
 .session-progress {
   margin: 22px 0;
 }

@@ -14,6 +14,7 @@ export function PracticeScreen() {
     progress,
     navigate,
     restart,
+    cancelSession,
     toggleBookmark,
     setProgress,
     setLanguage,
@@ -107,10 +108,15 @@ export function PracticeScreen() {
           <p className="eyebrow">{active.title}</p>
           <h1>One problem. A better approach.</h1>
         </div>
-        <button className="text-button" onClick={restart}>
-          <Icon name="reset" size={16} />
-          Restart session
-        </button>
+        <div className="practice-session-actions">
+          <button className="text-button" onClick={restart}>
+            <Icon name="reset" size={16} />
+            Restart session
+          </button>
+          <button className="text-button cancel-session-button" onClick={cancelSession}>
+            Cancel session
+          </button>
+        </div>
       </div>
       <div className="session-progress">
         <div>

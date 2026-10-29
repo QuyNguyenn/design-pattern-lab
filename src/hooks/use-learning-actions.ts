@@ -89,5 +89,19 @@ export function useLearningActions({
     });
   }, [active, navigate, setConfirmation, setProgress]);
 
-  return { begin, focusPool, toggleBookmark, restart };
+  const cancelSession = useCallback(() => {
+    if (!active || active.finished) return;
+    setConfirmation({
+      title: 'Cancel this session?',
+      body: 'This clears the current session, including unchecked selections. Checked answers stay in your progress, and bookmarks are kept.',
+      action: 'End session',
+      danger: true,
+      run: () => {
+        setProgress((current) => ({ ...current, session: null }));
+        navigate('practice');
+      },
+    });
+  }, [active, navigate, setConfirmation, setProgress]);
+
+  return { begin, focusPool, toggleBookmark, restart, cancelSession };
 }

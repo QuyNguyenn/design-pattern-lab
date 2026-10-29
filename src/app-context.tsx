@@ -49,6 +49,7 @@ export interface AppContextValue {
   begin: (session: Session) => void;
   focusPool: (pool: Filters['pool']) => void;
   toggleBookmark: (questionId: string) => void;
+  cancelSession: () => void;
   restart: () => void;
   categoryOptions: Category[];
   kindOptions: QuestionKind[];
