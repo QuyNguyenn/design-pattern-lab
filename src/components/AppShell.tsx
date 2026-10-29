@@ -51,9 +51,12 @@ export function AppShell() {
           <span className="brand-mark">
             <Icon name="grid" size={24} />
           </span>
-          <span>
+          <span className="brand-name">
             Pattern<span className="brand-light">lab</span>
             <small>DESIGN BETTER. EVERY DAY.</small>
+          </span>
+          <span className="mobile-brand-label" aria-hidden="true">
+            Home
           </span>
         </a>
         <div className="sidebar-nav-heading">

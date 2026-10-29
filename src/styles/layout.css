@@ -27,6 +27,9 @@
 .brand:hover {
   text-decoration: none;
 }
+.mobile-brand-label {
+  display: none;
+}
 .brand-light {
   font-weight: 500;
 }
@@ -306,7 +309,7 @@ main {
     left: 43px;
     margin: 0;
   }
-  .app-shell .brand > span:last-child,
+  .app-shell .brand-name,
   .app-shell .nav-label,
   .app-shell .nav-caption {
     flex-shrink: 0;
@@ -315,7 +318,7 @@ main {
   .app-shell .sidebar-bottom {
     width: calc(var(--sidebar-expanded-width) - 24px);
   }
-  .app-shell .brand > span:last-child,
+  .app-shell .brand-name,
   .app-shell .nav-label,
   .app-shell .nav-caption,
   .app-shell .sidebar-bottom {
@@ -325,7 +328,7 @@ main {
       opacity 100ms ease 60ms,
       visibility 0s linear;
   }
-  .sidebar-collapsed .brand > span:last-child,
+  .sidebar-collapsed .brand-name,
   .sidebar-collapsed .nav-label,
   .sidebar-collapsed .nav-caption,
   .sidebar-collapsed .sidebar-bottom {
