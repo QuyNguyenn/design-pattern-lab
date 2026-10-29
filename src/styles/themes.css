@@ -53,6 +53,11 @@
 :root[data-theme='dark'] .stat-top svg {
   color: var(--subtle);
 }
+:root[data-theme='dark'] .empty-icon {
+  color: var(--amber);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+}
 :root[data-theme='dark'] .nav-link,
 :root[data-theme='dark'] .nav-caption,
 :root[data-theme='dark'] .topbar,

@@ -23,7 +23,7 @@ export function PracticeScreen() {
   return !active || !q ? (
     <div className="empty-state panel">
       <span className="empty-icon">
-        <Icon name="book" size={32} />
+        <Icon name="practice" size={32} />
       </span>
       <h1>Your next insight starts here.</h1>
       <p>Choose a session to begin exploring design patterns.</p>
