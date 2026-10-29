@@ -64,10 +64,10 @@ export function ProgressScreen() {
           return (
             <div className="panel" key={kind}>
               <span className="muted small">{kindLabels[kind]}</span>
-              <h3>
-                {s.accuracy === null ? '—' : `${s.accuracy}%`}
-                <small> accuracy</small>
-              </h3>
+              <div className="type-accuracy">
+                <span className="muted small">Answer accuracy</span>
+                <strong>{s.accuracy === null ? '—' : `${s.accuracy}%`}</strong>
+              </div>
               <Meter value={s.studied} total={s.total} />
               <p className="small muted">
                 {s.studied} / {s.total} studied

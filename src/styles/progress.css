@@ -7,15 +7,16 @@
 .type-stats .panel {
   padding: 20px;
 }
-.type-stats h3 {
+.type-accuracy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   margin: 14px 0 15px;
-  font-size: 26px;
 }
-.type-stats h3 small {
-  font:
-    400 10px 'DM Sans',
-    sans-serif;
-  color: #505d70;
+.type-accuracy strong {
+  color: var(--text);
+  font-size: 26px;
+  line-height: 1.15;
 }
 .type-stats p {
   margin: 10px 0 0;
