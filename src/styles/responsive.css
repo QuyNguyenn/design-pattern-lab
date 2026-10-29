@@ -434,19 +434,17 @@
     max-width: 115px;
   }
   .code-frame {
-    margin: 0;
+    margin: 0 -7px;
   }
   .code-caption {
-    min-height: 40px;
-    padding: 0 13px;
-    font-size: 10px;
+    font-size: 8px;
   }
   pre {
-    padding-right: 14px;
-    font-size: 12px;
+    font-size: 10px;
   }
-  .code-line {
-    column-gap: 1.1rem;
+  .line-number {
+    width: 25px;
+    margin-right: 12px;
   }
   .session-progress-header {
     font-size: 10px;
