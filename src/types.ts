@@ -43,9 +43,26 @@ export interface Session {
   answers: Record<string, string>;
   checked: string[];
   finished: boolean;
+  archived?: boolean;
+}
+export type SessionSnapshot = Readonly<
+  Omit<Session, 'questionIds' | 'checked' | 'options' | 'answers'> & {
+    questionIds: readonly string[];
+    checked: readonly string[];
+    options: Readonly<Record<string, readonly string[]>>;
+    answers: Readonly<Record<string, string>>;
+  }
+>;
+export interface SessionRecord {
+  readonly savedAt: string;
+  readonly outcome: 'completed' | 'cancelled' | 'restarted' | 'replaced';
+  readonly language: Language;
+  readonly correctCount: number;
+  readonly session: SessionSnapshot;
 }
 export interface Progress {
-  version: 1;
+  version: 2;
+  history: SessionRecord[];
   language: Language;
   theme: Theme;
   bookmarks: string[];

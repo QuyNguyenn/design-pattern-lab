@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { createSession, defaultFilters } from '../engine.ts';
+import { archiveSession, createSession, defaultFilters } from '../engine.ts';
 import { questionById } from '../data/index.ts';
 import type { Filters } from '../engine.ts';
 import type { Session } from '../types.ts';
@@ -30,14 +30,14 @@ export function useLearningActions({
       if (!session.questionIds.length) return;
       const start = () => {
         setPracticeSetup(false);
-        setProgress((current) => ({ ...current, session }));
+        setProgress((current) => ({ ...archiveSession(current, 'replaced'), session }));
         navigate('practice');
       };
 
       if (active && !active.finished) {
         setConfirmation({
           title: 'Start a new session?',
-          body: 'This replaces your current session, including any unchecked selection. Checked answers and bookmarks stay in your learning history.',
+          body: 'This saves a read-only record of your current session and starts a new one. Checked-answer history and bookmarks stay saved.',
           action: 'Start session',
           run: start,
         });
@@ -81,7 +81,9 @@ export function useLearningActions({
     if (!active) return;
     setConfirmation({
       title: 'Restart this session?',
-      body: 'Answers in this session will be cleared. Your checked-answer history and bookmarks will stay saved.',
+      body: active.archived
+        ? 'The restarted session begins with no answers. Existing session records, checked-answer history, and bookmarks stay saved.'
+        : 'Your current answers will be saved as a read-only record. The restarted session begins with no answers; checked-answer history and bookmarks stay saved.',
       action: 'Restart session',
       run: () => {
         const session = createSession(
@@ -91,7 +93,7 @@ export function useLearningActions({
           false,
         );
         session.options = active.options;
-        setProgress((current) => ({ ...current, session }));
+        setProgress((current) => ({ ...archiveSession(current, 'restarted'), session }));
         navigate('practice');
       },
     });
@@ -101,11 +103,11 @@ export function useLearningActions({
     if (!active || active.finished) return;
     setConfirmation({
       title: 'Cancel this session?',
-      body: 'This clears the current session, including unchecked selections. Checked answers stay in your progress, and bookmarks are kept.',
+      body: 'This ends the current session and saves a read-only record, including unchecked selections. Checked-answer history and bookmarks stay saved.',
       action: 'End session',
       danger: true,
       run: () => {
-        setProgress((current) => ({ ...current, session: null }));
+        setProgress((current) => ({ ...archiveSession(current, 'cancelled'), session: null }));
         navigate('practice');
       },
     });

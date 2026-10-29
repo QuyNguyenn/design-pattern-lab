@@ -4,6 +4,7 @@ import { Icon, LanguageSwitch, Meter } from '../components/index.ts';
 import { patternById, questionById, kindLabels } from '../data/index.ts';
 import {
   createSession,
+  finishSession,
   sessionMistakes,
   canCheckAllAnswered,
   checkAllAnswered,
@@ -271,13 +272,14 @@ export function PracticeScreen() {
                     active.index < active.questionIds.length - 1
                       ? active.index + 1
                       : active.questionIds.findIndex((id) => !active.checked.includes(id));
-                  setProgress((p) => ({
-                    ...p,
-                    session: {
-                      ...p.session!,
-                      ...(next < 0 ? { finished: true } : { index: next }),
-                    },
-                  }));
+                  setProgress((p) =>
+                    next < 0
+                      ? finishSession(p)
+                      : {
+                          ...p,
+                          session: { ...p.session!, index: next },
+                        },
+                  );
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                   heading.current?.focus();
                 }}

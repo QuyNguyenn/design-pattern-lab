@@ -1,9 +1,18 @@
 import { questionById, questions } from './data/index.ts';
-import type { Progress, Session, Question, Category, QuestionKind } from './types.ts';
+import type {
+  Progress,
+  Session,
+  Question,
+  Category,
+  QuestionKind,
+  SessionRecord,
+} from './types.ts';
 
+// Keep the established key so v1 payloads can migrate in place to the v2 schema.
 export const STORAGE_KEY = 'design-pattern-lab:progress:v1';
 export const emptyProgress = (): Progress => ({
-  version: 1,
+  version: 2,
+  history: [],
   language: 'typescript',
   theme: 'system',
   bookmarks: [],
@@ -134,6 +143,58 @@ export function checkAnswer(progress: Progress, questionId: string): Progress {
     ],
   };
 }
+export function archiveSession(
+  progress: Progress,
+  outcome: SessionRecord['outcome'],
+  savedAt = new Date().toISOString(),
+): Progress {
+  const session = progress.session;
+  if (!session || session.archived) return progress;
+  if (progress.history.some((record) => record.session.id === session.id)) {
+    return { ...progress, session: { ...session, archived: true } };
+  }
+  const snapshot = {
+    ...session,
+    archived: true,
+    questionIds: [...session.questionIds],
+    checked: [...session.checked],
+    answers: { ...session.answers },
+    options: Object.fromEntries(
+      Object.entries(session.options).map(([id, options]) => [id, [...options]]),
+    ),
+  };
+  return {
+    ...progress,
+    session: { ...session, archived: true },
+    history: [
+      ...progress.history,
+      {
+        savedAt,
+        outcome: session.finished ? 'completed' : outcome,
+        language: progress.language,
+        correctCount: session.checked.filter(
+          (id) => session.answers[id] === questionById[id].patternId,
+        ).length,
+        session: snapshot,
+      },
+    ],
+  };
+}
+
+export function finishSession(progress: Progress): Progress {
+  const session = progress.session;
+  if (!session || session.checked.length !== session.questionIds.length) return progress;
+  return archiveSession({ ...progress, session: { ...session, finished: true } }, 'completed');
+}
+
+export function deleteSessionRecord(progress: Progress, id: string): Progress {
+  return { ...progress, history: progress.history.filter((record) => record.session.id !== id) };
+}
+
+export function clearSessionHistory(progress: Progress): Progress {
+  return { ...progress, history: [] };
+}
+
 export function canCheckAllAnswered(progress: Progress): boolean {
   const session = progress.session;
   return (
@@ -148,10 +209,7 @@ export function checkAllAnswered(progress: Progress): Progress {
   const session = progress.session!;
 
   const checked = session.questionIds.reduce((current, id) => checkAnswer(current, id), progress);
-  return {
-    ...checked,
-    session: { ...checked.session!, finished: true },
-  };
+  return finishSession(checked);
 }
 // Validate the stored version and every reference before letting external JSON reach UI state.
 export function parseProgress(raw: string | null): Progress {
@@ -162,7 +220,7 @@ export function parseProgress(raw: string | null): Progress {
   };
   if (
     !data ||
-    data.version !== 1 ||
+    ![1, 2].includes(data.version) ||
     !['typescript', 'java'].includes(data.language) ||
     (data.theme !== undefined && !['light', 'dark', 'system'].includes(data.theme)) ||
     !Array.isArray(data.bookmarks) ||
@@ -187,30 +245,69 @@ export function parseProgress(raw: string | null): Progress {
     )
   )
     return fail();
-  const s = data.session;
+  validateSession(data.session);
+  const legacy = (data as unknown as { version: number }).version === 1;
+  if (legacy) {
+    data.version = 2;
+    data.history = [];
+    // Older versions cannot reconstruct past sessions from attempts alone.
+    // Preserve the one complete session still available in saved state.
+    if (data.session?.finished) return archiveSession(data, 'completed');
+  }
+  if (!Array.isArray(data.history)) return fail();
+  const ids = new Set<string>();
+  for (const record of data.history) {
+    if (
+      !record ||
+      !record.session ||
+      !['completed', 'cancelled', 'restarted', 'replaced'].includes(record.outcome) ||
+      !['java', 'typescript'].includes(record.language) ||
+      typeof record.savedAt !== 'string' ||
+      !Number.isFinite(Date.parse(record.savedAt))
+    )
+      return fail();
+    validateSession(record.session);
+    const snapshot = record.session;
+    if (
+      !snapshot.archived ||
+      ids.has(snapshot.id) ||
+      (record.outcome === 'completed') !== snapshot.finished ||
+      record.correctCount !==
+        snapshot.checked.filter((id) => snapshot.answers[id] === questionById[id].patternId).length
+    )
+      return fail();
+    ids.add(snapshot.id);
+  }
+  return data;
+}
+
+function validateSession(s: Session | SessionRecord['session'] | null): void {
   if (s !== null) {
     if (
       !s ||
       typeof s.id !== 'string' ||
       typeof s.title !== 'string' ||
       typeof s.finished !== 'boolean' ||
+      (s.archived !== undefined && typeof s.archived !== 'boolean') ||
       !Array.isArray(s.questionIds) ||
       !s.questionIds.length ||
       !Array.isArray(s.checked) ||
       !s.options ||
       !s.answers ||
       typeof s.options !== 'object' ||
+      Array.isArray(s.options) ||
+      Array.isArray(s.answers) ||
       typeof s.answers !== 'object' ||
       !Number.isInteger(s.index) ||
       s.index < 0 ||
       s.index >= s.questionIds.length
     )
-      return fail();
+      throw new Error('Saved session is damaged.');
     if (
       new Set(s.questionIds).size !== s.questionIds.length ||
       s.questionIds.some((id) => !questionById[id])
     )
-      return fail();
+      throw new Error('Saved session is damaged.');
     for (const id of s.questionIds) {
       const options = s.options[id];
       if (
@@ -219,20 +316,20 @@ export function parseProgress(raw: string | null): Progress {
         new Set(options).size !== 4 ||
         options.some((o) => !questionById[id].options.includes(o))
       )
-        return fail();
+        throw new Error('Saved session is damaged.');
     }
     if (
       Object.entries(s.answers).some(
         ([id, answer]) => !s.questionIds.includes(id) || !questionById[id].options.includes(answer),
       )
     )
-      return fail();
+      throw new Error('Saved session is damaged.');
     if (
       new Set(s.checked).size !== s.checked.length ||
       s.checked.some((id) => !s.questionIds.includes(id) || !s.answers[id])
     )
-      return fail();
-    if (s.finished && s.checked.length !== s.questionIds.length) return fail();
+      throw new Error('Saved session is damaged.');
+    if (s.finished && s.checked.length !== s.questionIds.length)
+      throw new Error('Saved session is damaged.');
   }
-  return data;
 }

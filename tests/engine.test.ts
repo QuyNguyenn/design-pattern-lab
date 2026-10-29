@@ -3,6 +3,10 @@ import assert from 'node:assert/strict';
 import { patterns, questions, questionById } from '../src/data/index.ts';
 import {
   emptyProgress,
+  archiveSession,
+  finishSession,
+  deleteSessionRecord,
+  clearSessionHistory,
   shuffle,
   createSession,
   sessionMistakes,
@@ -193,7 +197,7 @@ test('storage parsing rejects damaged state and supports a fresh/reset state', (
   assert.deepEqual(parseProgress(JSON.stringify(emptyProgress())), emptyProgress());
   assert.throws(() => parseProgress('{'));
   assert.throws(() => parseProgress('null'));
-  assert.throws(() => parseProgress(JSON.stringify({ ...emptyProgress(), version: 2 })));
+  assert.throws(() => parseProgress(JSON.stringify({ ...emptyProgress(), version: 99 })));
   const session = createSession(questions, 'Study', 10);
   assert.throws(() =>
     parseProgress(JSON.stringify({ ...emptyProgress(), session: { ...session, index: 99 } })),
@@ -273,4 +277,122 @@ test('session mistake review includes only checked wrong answers from that sessi
   assert.deepEqual(review.checked, []);
   assert.deepEqual(progress, snapshot);
   assert.deepEqual(sessionMistakes(createSession(pool, 'Fresh')), []);
+});
+
+test('session records are detached snapshots, survive reload, and stay fixed across retries', () => {
+  const [q, pending] = questions;
+  let progress = {
+    ...emptyProgress(),
+    bookmarks: [q.id],
+    language: 'java',
+    session: createSession([q, pending], 'Original', 2, false),
+  };
+  progress = chooseAnswer(
+    progress,
+    q.id,
+    q.options.find((id) => id !== q.patternId)!,
+  );
+  progress = checkAnswer(progress, q.id);
+  progress = chooseAnswer(progress, pending.id, pending.patternId);
+  const original = structuredClone(progress);
+  for (const outcome of ['cancelled', 'restarted', 'replaced']) {
+    const archived = archiveSession(progress, outcome);
+    assert.equal(archived.history[0].outcome, outcome);
+    assert.deepEqual(archived.history[0].session.answers, progress.session.answers);
+    assert.equal(archived.history[0].correctCount, 0);
+    assert.equal(archived.attempts.length, 1);
+    assert.notEqual(archived.history[0].session.answers, progress.session.answers);
+    assert.notEqual(archived.history[0].session.options[q.id], progress.session.options[q.id]);
+    assert.deepEqual(parseProgress(JSON.stringify(archived)), archived);
+  }
+  assert.deepEqual(progress, original);
+  let next = archiveSession(progress, 'restarted');
+  const record = structuredClone(next.history[0]);
+  next = { ...next, language: 'typescript', session: createSession([q], 'Retry', 1, false) };
+  next = finishSession(checkAnswer(chooseAnswer(next, q.id, q.patternId), q.id));
+  assert.deepEqual(next.history[0], record);
+  assert.equal(next.history[0].language, 'java');
+  assert.equal(next.history[1].correctCount, 1);
+  assert.equal(statistics(next).mistakes, 0);
+  assert.equal(next.attempts.length, 2);
+  assert.equal(finishSession(next).history.length, 2);
+  assert.deepEqual(parseProgress(JSON.stringify(next)), next);
+  const removed = deleteSessionRecord(next, next.session.id);
+  assert.equal(removed.history.length, 1);
+  assert.equal(archiveSession(removed, 'replaced').history.length, 1);
+  const cleared = clearSessionHistory(next);
+  assert.equal(cleared.history.length, 0);
+  assert.deepEqual(cleared.attempts, next.attempts);
+  assert.deepEqual(cleared.bookmarks, [q.id]);
+  assert.equal(
+    archiveSession(parseProgress(JSON.stringify(cleared)), 'replaced').history.length,
+    0,
+  );
+  assert.deepEqual(emptyProgress().history, []);
+});
+
+test('v1 migration preserves pending sessions and archives the available completed session once', () => {
+  const q = questions[0];
+  const legacy = {
+    ...emptyProgress(),
+    version: 1,
+    session: createSession([q], 'Legacy', 1, false),
+  };
+  delete legacy.history;
+  const pending = chooseAnswer({ ...emptyProgress(), session: legacy.session }, q.id, q.patternId);
+  const restored = parseProgress(JSON.stringify({ ...legacy, session: pending.session }));
+  assert.equal(restored.version, 2);
+  assert.deepEqual(restored.session, pending.session);
+  assert.deepEqual(restored.history, []);
+  const complete = checkAnswer(pending, q.id);
+  const migrated = parseProgress(
+    JSON.stringify({
+      ...legacy,
+      attempts: complete.attempts,
+      session: { ...complete.session, finished: true },
+    }),
+  );
+  assert.equal(migrated.history.length, 1);
+  assert.equal(migrated.history[0].outcome, 'completed');
+  assert.equal(parseProgress(JSON.stringify(migrated)).history.length, 1);
+});
+
+test('history validation rejects damaged snapshots, scores, dates, and duplicate records', () => {
+  const q = questions[0];
+  const complete = finishSession(
+    checkAnswer(
+      chooseAnswer({ ...emptyProgress(), session: createSession([q], 'One') }, q.id, q.patternId),
+      q.id,
+    ),
+  );
+  for (const change of [
+    (p) => {
+      p.history = null;
+    },
+    (p) => {
+      p.history.push(p.history[0]);
+    },
+    (p) => {
+      p.history[0].correctCount = 10;
+    },
+    (p) => {
+      p.history[0].savedAt = 'invalid';
+    },
+    (p) => {
+      p.history[0].session.options[q.id] = [];
+    },
+    (p) => {
+      p.history[0].session.archived = false;
+    },
+    (p) => {
+      p.history[0].outcome = 'cancelled';
+    },
+    (p) => {
+      p.history[0].language = 'unknown';
+    },
+  ]) {
+    const damaged = structuredClone(complete);
+    change(damaged);
+    assert.throws(() => parseProgress(JSON.stringify(damaged)));
+  }
 });

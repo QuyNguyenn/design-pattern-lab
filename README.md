@@ -30,6 +30,7 @@ Each answer includes an explanation, reasons the alternatives fit less well, and
 - Progress by pattern and question type; coverage counts unique checked questions, accuracy counts all checked attempts.
 - Review mistakes uses the **latest checked answer** per question. A correct retry removes the question from that pool.
 - Restart the session without deleting history, or reset all progress with confirmation.
+- Browse read-only session records in Progress. Completed, cancelled, restarted, and replaced sessions retain their answers, question/choice order, language, and score. Delete one record or all session records with confirmation; learning statistics and bookmarks are retained.
 - Responsive layout, native keyboard-operable controls, visible focus, and a skip link.
 
 ## Run locally
@@ -66,7 +67,9 @@ The repository includes `.github/workflows/deploy.yml`. Pull requests run checks
 
 ## Persistence
 
-The versioned key is `design-pattern-lab:progress:v1`. It stores the language and theme preferences, bookmarks, checked attempt history, and active session. Stored IDs, answers, and option order are validated before use. The app warns if browser storage is inaccessible or the saved state cannot be loaded. Older saved progress without a theme preference opens in the light theme. The System setting follows the device appearance and updates when that setting changes.
+The storage key remains `design-pattern-lab:progress:v1` so existing installations can migrate in place. The payload is version 2 and stores preferences, bookmarks, checked attempt history, the active session, and immutable session records. Version 1 payloads migrate automatically, preserving pending answers and question/choice order. Only the last completed session still present in old saved data can become a session record; older sessions cannot be reconstructed from attempts alone. The saved timestamp records when a snapshot was captured.
+
+Stored IDs, answers, option order, scores, and session records are validated before use. The app warns if browser storage is inaccessible, full, or saved data cannot be loaded. Missing theme preferences default to System, which follows device appearance. Reset all also removes session records.
 
 Data belongs to the current browser and origin, is not synced between devices, and is removed when browser site data is cleared. Changing the port, host, or deployment domain starts a separate local-storage area. There is no login or backend. Google Fonts is optional; system fonts are used if it is unavailable.
 

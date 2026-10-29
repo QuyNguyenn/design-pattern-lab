@@ -141,13 +141,11 @@
   color: #c0cad5;
 }
 :root[data-theme='dark'] .avatar,
-:root[data-theme='dark'] .category,
 :root[data-theme='dark'] .mode-icon.green {
   background: #3c321f;
   color: #f4cd86;
   border-color: #66512e;
 }
-:root[data-theme='dark'] .category.structural,
 :root[data-theme='dark'] .mode-icon.orange {
   background: #43311c;
   color: #f4bd5c;
@@ -252,4 +250,15 @@
 }
 :root[data-theme='dark'] .question-dots .current {
   outline-color: var(--amber);
+}
+
+:root[data-theme='dark'] .category.creational {
+  background: #193d34;
+  color: #9ae1c4;
+  border-color: #427a65;
+}
+:root[data-theme='dark'] .category.structural {
+  background: #223b59;
+  color: #afcfff;
+  border-color: #526f9b;
 }

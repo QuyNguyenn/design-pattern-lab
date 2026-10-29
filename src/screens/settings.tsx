@@ -68,8 +68,8 @@ export function SettingsScreen() {
           <div>
             <h2>Reset all progress</h2>
             <p>
-              Remove all answers, history, bookmarks, and preferences from this browser. This cannot
-              be undone.
+              Remove all answers, session records, bookmarks, and preferences from this browser.
+              This cannot be undone.
             </p>
           </div>
           <button
@@ -77,7 +77,7 @@ export function SettingsScreen() {
             onClick={() =>
               setConfirmation({
                 title: 'Reset all progress?',
-                body: 'All checked answers, bookmarks, your active session, and preferences will be removed from this browser. This cannot be undone.',
+                body: 'All checked answers, session records, bookmarks, your active session, and preferences will be removed from this browser. This cannot be undone.',
                 action: 'Reset everything',
                 danger: true,
                 run: () => {
