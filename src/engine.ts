@@ -5,7 +5,7 @@ export const STORAGE_KEY = 'design-pattern-lab:progress:v1';
 export const emptyProgress = (): Progress => ({
   version: 1,
   language: 'typescript',
-  theme: 'light',
+  theme: 'system',
   bookmarks: [],
   attempts: [],
   session: null,
@@ -143,7 +143,7 @@ export function parseProgress(raw: string | null): Progress {
   )
     return fail();
   // Keep saved progress from before theme preferences were added readable.
-  data.theme ??= 'light';
+  data.theme ??= 'system';
   if (
     data.bookmarks.some((id) => typeof id !== 'string' || !questionById[id]) ||
     new Set(data.bookmarks).size !== data.bookmarks.length

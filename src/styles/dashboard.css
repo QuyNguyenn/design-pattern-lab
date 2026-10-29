@@ -98,6 +98,99 @@
   background-image: radial-gradient(#c1d3b918 0.7px, transparent 0.7px);
   background-size: 17px 17px;
 }
+.hero {
+  border-radius: 3px;
+  background: #243b50;
+  border-left: 5px solid #d89935;
+}
+.hero-copy {
+  flex: 0 0 56%;
+}
+.field-note {
+  align-self: stretch;
+  flex: 1;
+  margin: 23px 24px 23px 0;
+  padding: 22px 25px;
+  color: #263547;
+  background: #f5f0e4;
+  border: 1px solid #d9cdb4;
+  box-shadow: 4px 5px 0 #10263866;
+  transform: rotate(0.6deg);
+  font-family: Georgia, serif;
+}
+.field-note-kicker,
+.field-note-foot {
+  font:
+    700 9px 'DM Sans',
+    sans-serif;
+  letter-spacing: 1.4px;
+  color: #8a6331;
+}
+.field-note > div {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 1px 9px;
+  padding: 13px 0;
+  border-bottom: 1px solid #d9cdb4;
+}
+.field-note > div > span {
+  grid-row: span 2;
+  color: #a17435;
+  font:
+    12px 'DM Sans',
+    sans-serif;
+}
+.field-note strong {
+  font-size: 14px;
+}
+.field-note small {
+  color: #6c6c60;
+  font:
+    11px 'DM Sans',
+    sans-serif;
+}
+.field-note-foot {
+  margin: 18px 0 0;
+}
+.field-note-foot span {
+  display: block;
+  margin-top: 6px;
+  color: #526649;
+  font:
+    italic 13px Georgia,
+    serif;
+  letter-spacing: 0;
+}
+.how-step {
+  border-radius: 3px;
+  box-shadow: none;
+}
+.stat-card,
+.mode-card,
+.builder,
+.panel {
+  border-radius: 4px;
+  box-shadow: none;
+}
+.mode-grid {
+  gap: 14px;
+}
+.mode-card {
+  border-top: 2px solid var(--amber);
+}
+@media (max-width: 650px) {
+  .hero {
+    display: block;
+  }
+  .hero-copy {
+    padding: 24px;
+  }
+  .field-note {
+    margin: 0 18px 22px;
+    padding: 14px 18px;
+    transform: none;
+  }
+}
 .hero-art:after {
   content: '';
   position: absolute;
