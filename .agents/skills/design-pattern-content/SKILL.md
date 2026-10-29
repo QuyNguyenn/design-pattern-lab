@@ -13,12 +13,12 @@ Find the repository root containing `package.json` and `src/data/index.ts`. Read
 
 The current schema stores six examples per pattern:
 
-| Slot / ID suffix | Field | Learning objective |
-| --- | --- | --- |
-| 1, 2 | `scenarios[0]`, `scenarios[1]` | Recognize intent from two different situations |
-| 3 | `scenarios[2]` | Distinguish a plausible competing pattern |
-| 4, 5 | `code[0]`, `code[1]` | Identify collaborations in two code examples |
-| 6 | `refactor` | Select a pattern under an explicit change requirement |
+| Slot / ID suffix | Field                          | Learning objective                                    |
+| ---------------- | ------------------------------ | ----------------------------------------------------- |
+| 1, 2             | `scenarios[0]`, `scenarios[1]` | Recognize intent from two different situations        |
+| 3                | `scenarios[2]`                 | Distinguish a plausible competing pattern             |
+| 4, 5             | `code[0]`, `code[1]`           | Identify collaborations in two code examples          |
+| 6                | `refactor`                     | Select a pattern under an explicit change requirement |
 
 `alternatives` and aligned `contrasts` are shared across all six examples. Review every affected question when changing those fields. Questions, references, and option rotations are assembled by `index.ts`; edit the source records rather than generated results. Preserve slot identities for saved progress.
 

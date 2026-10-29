@@ -11,10 +11,12 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
-    "lint": "node scripts/lint.mjs",
+    "lint": "npm run format:check && node scripts/lint.mjs",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "check": "npm run lint && npm run typecheck && npm test && npm run build",
-    "test:examples": "node --experimental-strip-types scripts/check-examples.ts"
+    "test:examples": "node --experimental-strip-types scripts/check-examples.ts",
+    "format": "prettier --write \"**/*.{ts,tsx,css,json,md,yml,yaml,html}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,css,json,md,yml,yaml,html}\""
   },
   "dependencies": {
     "react": "19.3.1",
@@ -23,6 +25,7 @@
   "devDependencies": {
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
+    "prettier": "^3.9.10",
     "typescript": "7.0.2",
     "vite": "8.3.4"
   }

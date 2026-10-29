@@ -8,7 +8,9 @@ Keep UI copy, questions, explanations, and repository documentation in English. 
 
 ## Where changes belong
 
-- `src/App.tsx`: screens, navigation, and interactions. Extract components when a change makes this file harder to maintain.
+- `src/App.tsx`: app shell, navigation, state orchestration, and screen composition. Keep screen markup in `src/screens/`.
+- `src/app-context.tsx`: typed view-model boundary shared by the screen components. Keep its contract explicit; move reusable domain behavior to `engine.ts`.
+- `src/components/ui.tsx`: shared presentational controls and dialogs. Keep screen-specific UI inside its screen module.
 - `src/engine.ts`: session creation, answer checking, filters, statistics, and saved-data validation. Keep learning-state rules here rather than duplicating them in views.
 - `src/types.ts`: shared contracts.
 - `src/data/{creational,structural,behavioral}.ts`: authored pattern records.
@@ -39,14 +41,14 @@ Keep answers and reference links hidden until checking on the practice screen. P
 
 Use the existing scripts; do not introduce a second package manager or replace the lockfile without a task-specific reason.
 
-| Change | Relevant checks |
-| --- | --- |
-| Application logic or UI | `npm run check`; inspect affected UI flows when a browser is available |
-| Questions, answers, or code snippets | `npm run check` and `npm run test:examples` |
-| Documentation or skill only | Validate links and instructions; validate a changed skill with the available skill validator |
-| Build/deployment configuration | Production build and review of base path, workflow conditions, and artifact paths |
+| Change                               | Relevant checks                                                                              |
+| ------------------------------------ | -------------------------------------------------------------------------------------------- |
+| Application logic or UI              | `npm run check`; inspect affected UI flows when a browser is available                       |
+| Questions, answers, or code snippets | `npm run check` and `npm run test:examples`                                                  |
+| Documentation or skill only          | Validate links and instructions; validate a changed skill with the available skill validator |
+| Build/deployment configuration       | Production build and review of base path, workflow conditions, and artifact paths            |
 
-`npm run check` runs source hygiene, strict typechecking, tests, and a production build. `lint` is a lightweight hygiene check, not ESLint. `test:examples` requires JDK 17+ and compiles both languages in isolated temporary directories.
+`npm run format` applies the repository Prettier config. `npm run lint` checks formatting before source hygiene checks, and `npm run check` starts with that lint step before strict typechecking, tests, and a production build. Run the formatter after editing source, documentation, configuration, or tests. `test:examples` requires JDK 17+ and compiles both languages in isolated temporary directories.
 
 For persistence changes, exercise a pending answer across refresh, language switching, a correct retry after a wrong answer, and reset/restart semantics. For layout changes, inspect desktop and narrow mobile widths. Report blocked or skipped checks honestly rather than substituting an assumption of success.
 

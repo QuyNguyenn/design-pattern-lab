@@ -16,15 +16,15 @@ The deployment boundary is the merge to `master`. A branch and its pull request 
 
 ## Branch names
 
-| Prefix | Purpose | Example |
-| --- | --- | --- |
-| `feat/` | New behavior | `feat/spaced-repetition` |
-| `fix/` | Bug correction | `fix/restore-pending-answer` |
-| `content/` | Quiz content | `content/strategy-state-distinction` |
-| `refactor/` | Internal restructuring | `refactor/practice-components` |
-| `docs/` | Documentation and agent guidance | `docs/contributor-workflow` |
-| `chore/` | Dependencies and tooling | `chore/update-vite` |
-| `hotfix/` | Urgent production correction | `hotfix/pages-base-path` |
+| Prefix      | Purpose                          | Example                              |
+| ----------- | -------------------------------- | ------------------------------------ |
+| `feat/`     | New behavior                     | `feat/spaced-repetition`             |
+| `fix/`      | Bug correction                   | `fix/restore-pending-answer`         |
+| `content/`  | Quiz content                     | `content/strategy-state-distinction` |
+| `refactor/` | Internal restructuring           | `refactor/practice-components`       |
+| `docs/`     | Documentation and agent guidance | `docs/contributor-workflow`          |
+| `chore/`    | Dependencies and tooling         | `chore/update-vite`                  |
+| `hotfix/`   | Urgent production correction     | `hotfix/pages-base-path`             |
 
 Keep one coherent change per branch. A hotfix still follows a focused PR with relevant checks; it does not need a permanent hotfix branch.
 
