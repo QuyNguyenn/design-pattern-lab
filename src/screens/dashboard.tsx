@@ -9,6 +9,7 @@ export function DashboardScreen() {
   const {
     active,
     navigate,
+    focusPool,
     begin,
     stats,
     progress,
@@ -107,34 +108,63 @@ export function DashboardScreen() {
           description="A few markers help you decide what to study next."
         />
         <ol className="how-steps">
-          <li className="how-step">
-            <span className="step-number" aria-hidden="true">
-              1
-            </span>
-            <div>
-              <h3>
-                {stats.studied} / {stats.total} studied
-              </h3>
-              <p>Distinct questions checked so far.</p>
-            </div>
+          <li>
+            <button type="button" className="how-step" onClick={() => navigate('progress')}>
+              <span className="step-number" aria-hidden="true">
+                <Icon name="chart" size={15} />
+              </span>
+              <span className="how-step-copy">
+                <span className="how-step-title">
+                  {stats.studied} / {stats.total} studied
+                </span>
+                <span className="how-step-detail">Open your learning overview.</span>
+              </span>
+              <Icon name="arrow" size={14} />
+            </button>
           </li>
-          <li className="how-step">
-            <span className="step-number" aria-hidden="true">
-              2
-            </span>
-            <div>
-              <h3>{stats.mistakes} to revisit</h3>
-              <p>Latest answers that could use another look.</p>
-            </div>
+          <li>
+            <button
+              type="button"
+              className="how-step"
+              disabled={stats.mistakes === 0}
+              onClick={() => focusPool('mistakes')}
+            >
+              <span className="step-number" aria-hidden="true">
+                <Icon name="reset" size={15} />
+              </span>
+              <span className="how-step-copy">
+                <span className="how-step-title">
+                  {stats.mistakes ? `${stats.mistakes} to revisit` : 'All caught up'}
+                </span>
+                <span className="how-step-detail">
+                  {stats.mistakes
+                    ? 'Review questions you missed.'
+                    : 'No answers to revisit right now.'}
+                </span>
+              </span>
+              {stats.mistakes > 0 && <Icon name="arrow" size={14} />}
+            </button>
           </li>
-          <li className="how-step">
-            <span className="step-number" aria-hidden="true">
-              3
-            </span>
-            <div>
-              <h3>{progress.bookmarks.length} saved notes</h3>
-              <p>Questions you bookmarked for later.</p>
-            </div>
+          <li>
+            <button
+              type="button"
+              className="how-step"
+              disabled={progress.bookmarks.length === 0}
+              onClick={() => focusPool('bookmarks')}
+            >
+              <span className="step-number" aria-hidden="true">
+                <Icon name="bookmark" size={15} />
+              </span>
+              <span className="how-step-copy">
+                <span className="how-step-title">{progress.bookmarks.length} saved notes</span>
+                <span className="how-step-detail">
+                  {progress.bookmarks.length
+                    ? 'Return to questions you saved.'
+                    : 'Bookmark a question to keep it here.'}
+                </span>
+              </span>
+              {progress.bookmarks.length > 0 && <Icon name="arrow" size={14} />}
+            </button>
           </li>
         </ol>
       </section>

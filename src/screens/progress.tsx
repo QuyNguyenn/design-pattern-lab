@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Icon, Meter, PageHeader, SectionHeading, StatCard } from '../components/index.ts';
 import { patternById, questions, kindLabels } from '../data/index.ts';
 import { createSession, statistics } from '../engine.ts';
@@ -10,9 +10,16 @@ export function ProgressScreen() {
     useAppContext();
   const [category, setCategory] = useState('All');
   const [layout, setLayout] = useState<'grid' | 'list'>('grid');
+  const [compareId, setCompareId] = useState<string | null>(null);
+  const compareDialog = useRef<HTMLDialogElement>(null);
+  const comparedPattern = compareId ? patternById[compareId] : null;
   const visiblePatterns = filteredPatterns.filter(
     (pattern) => category === 'All' || pattern.category === category,
   );
+
+  useEffect(() => {
+    if (compareId) compareDialog.current?.showModal();
+  }, [compareId]);
   return (
     <>
       <PageHeader
@@ -155,18 +162,15 @@ export function ProgressScreen() {
                   >
                     Reference ↗
                   </a>
+                  <button
+                    className="text-button pattern-compare-trigger"
+                    onClick={() => setCompareId(p.id)}
+                    aria-haspopup="dialog"
+                    aria-label={`Compare ${p.name} with similar patterns`}
+                  >
+                    Compare
+                  </button>
                 </div>
-                <details className="pattern-contrasts">
-                  <summary>Often confused with</summary>
-                  <ul>
-                    {p.alternatives.map((id, index) => (
-                      <li key={id}>
-                        <strong>{patternById[id].name}</strong>
-                        <span>{p.contrasts[index]}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
               </article>
             );
           })}
@@ -178,6 +182,41 @@ export function ProgressScreen() {
           </p>
         )}
       </section>
+      <dialog
+        ref={compareDialog}
+        className="pattern-compare-dialog"
+        aria-labelledby="pattern-compare-title"
+        onClose={() => setCompareId(null)}
+      >
+        {comparedPattern && (
+          <>
+            <p className="eyebrow">PATTERN FIELD NOTES</p>
+            <h2 id="pattern-compare-title">What sets {comparedPattern.name} apart?</h2>
+            <div className="compare-target">
+              <span>THE INTENT</span>
+              <p>{comparedPattern.intent}</p>
+            </div>
+            <p className="compare-label">Compare the dividing line</p>
+            <ol className="compare-list">
+              {comparedPattern.alternatives.map((id, index) => (
+                <li key={id}>
+                  <strong>{patternById[id].name}</strong>
+                  <span>{comparedPattern.contrasts[index]}</span>
+                </li>
+              ))}
+            </ol>
+            <div className="dialog-actions">
+              <button
+                className="button secondary"
+                autoFocus
+                onClick={() => compareDialog.current?.close()}
+              >
+                Close notes
+              </button>
+            </div>
+          </>
+        )}
+      </dialog>
     </>
   );
 }

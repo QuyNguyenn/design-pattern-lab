@@ -109,33 +109,37 @@
 .field-note {
   align-self: stretch;
   flex: 1;
-  margin: 23px 24px 23px 0;
-  padding: 22px 25px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-content: center;
+  gap: 0 14px;
+  margin: 16px 18px 16px 0;
+  padding: 18px 20px;
   color: #263547;
   background: #f5f0e4;
   border: 1px solid #d9cdb4;
   box-shadow: 4px 5px 0 #10263866;
-  transform: rotate(0.6deg);
+  transform: none;
   font-family: Georgia, serif;
 }
 .field-note-kicker,
 .field-note-foot {
+  grid-column: 1 / -1;
   font:
     700 9px 'DM Sans',
     sans-serif;
   letter-spacing: 1.4px;
-  color: #8a6331;
+  color: #775014;
 }
 .field-note > div {
   display: grid;
-  grid-template-columns: 28px 1fr;
-  gap: 1px 9px;
-  padding: 13px 0;
-  border-bottom: 1px solid #d9cdb4;
+  align-content: start;
+  gap: 4px;
+  padding: 9px 0 8px 10px;
+  border-left: 1px solid #d9cdb4;
 }
 .field-note > div > span {
-  grid-row: span 2;
-  color: #a17435;
+  color: #775014;
   font:
     12px 'DM Sans',
     sans-serif;
@@ -144,18 +148,20 @@
   font-size: 14px;
 }
 .field-note small {
-  color: #6c6c60;
+  color: #56594f;
   font:
     11px 'DM Sans',
     sans-serif;
 }
 .field-note-foot {
-  margin: 18px 0 0;
+  margin: 8px 0 0;
+  padding-top: 9px;
+  border-top: 1px solid #d9cdb4;
 }
 .field-note-foot span {
   display: block;
   margin-top: 6px;
-  color: #526649;
+  color: #43552e;
   font:
     italic 13px Georgia,
     serif;
@@ -186,6 +192,8 @@
     padding: 24px;
   }
   .field-note {
+    grid-template-columns: 1fr;
+    gap: 0;
     margin: 0 18px 22px;
     padding: 14px 18px;
     transform: none;
@@ -315,6 +323,30 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
+  width: 100%;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    transform 0.15s;
+}
+.how-step:not(:disabled):hover {
+  border-color: var(--amber);
+  background: var(--surface-hover);
+  transform: translateY(-1px);
+}
+.how-step:disabled {
+  opacity: 1;
+  cursor: default;
+}
+.how-step > svg:last-child {
+  align-self: center;
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: var(--muted);
 }
 .step-number {
   display: grid;
@@ -328,12 +360,23 @@
   font-size: 12px;
   font-weight: 750;
 }
-.how-step h3 {
-  margin: 2px 0 5px;
-  font-size: 13px;
+.step-number svg {
+  width: 15px;
+  height: 15px;
 }
-.how-step p {
-  margin: 0;
+.how-step-copy {
+  display: block;
+  min-width: 0;
+}
+.how-step-title {
+  display: block;
+  margin: 2px 0 5px;
+  font:
+    750 13px Manrope,
+    sans-serif;
+}
+.how-step-detail {
+  display: block;
   color: var(--muted);
   font-size: 11px;
   line-height: 1.55;

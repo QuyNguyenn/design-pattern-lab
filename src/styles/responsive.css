@@ -4,19 +4,19 @@
     padding-right: 60px;
   }
   .hero-copy {
-    padding: 40px;
+    padding: 30px;
   }
   .hero-art {
     width: 45%;
   }
   .hero {
-    min-height: 340px;
+    min-height: 290px;
   }
   .art-code {
     width: 320px;
   }
   .hero h2 {
-    font-size: 40px;
+    font-size: 35px;
   }
 }
 @media (max-width: 1180px) {
