@@ -149,6 +149,10 @@
   .hero-copy {
     padding: 28px;
   }
+  .field-note {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
   .hero-art .left-node {
     left: -15px;
   }

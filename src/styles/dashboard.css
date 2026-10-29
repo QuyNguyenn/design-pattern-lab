@@ -133,21 +133,31 @@
 }
 .field-note > div {
   display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  grid-template-rows: minmax(2.7em, auto) auto;
   align-content: start;
   gap: 4px;
   padding: 9px 0 8px 10px;
   border-left: 1px solid #d9cdb4;
 }
 .field-note > div > span {
+  grid-column: 1;
+  grid-row: 1 / 3;
   color: #775014;
   font:
     12px 'DM Sans',
     sans-serif;
 }
 .field-note strong {
+  grid-column: 2;
+  grid-row: 1;
+  min-height: 2.7em;
   font-size: 14px;
+  line-height: 1.35;
 }
 .field-note small {
+  grid-column: 2;
+  grid-row: 2;
   color: #56594f;
   font:
     11px 'DM Sans',
