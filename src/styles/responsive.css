@@ -282,6 +282,16 @@
     margin: 17px 0 28px;
     gap: 10px;
   }
+  .how-it-works {
+    margin: 22px 0 8px;
+  }
+  .how-steps {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+  .how-step {
+    padding: 14px;
+  }
   .stat-card {
     padding: 17px;
   }

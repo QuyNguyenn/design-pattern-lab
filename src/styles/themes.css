@@ -3,6 +3,7 @@
 }
 :root[data-theme='dark'] .sidebar,
 :root[data-theme='dark'] .topbar,
+:root[data-theme='dark'] .how-step,
 :root[data-theme='dark'] .panel,
 :root[data-theme='dark'] .stat-card,
 :root[data-theme='dark'] .builder,
@@ -29,6 +30,7 @@
 }
 :root[data-theme='dark'] .brand,
 :root[data-theme='dark'] .brand-light,
+:root[data-theme='dark'] .how-step h3,
 :root[data-theme='dark'] .topbar strong,
 :root[data-theme='dark'] .nav-link.active,
 :root[data-theme='dark'] .question-prompt,
@@ -118,6 +120,10 @@
   background: #343047;
   color: #c6b5e4;
   border-color: #514968;
+}
+:root[data-theme='dark'] .step-number {
+  background: #44351e;
+  color: #f4cd86;
 }
 :root[data-theme='dark'] .answer.right,
 :root[data-theme='dark'] .answer.correct {

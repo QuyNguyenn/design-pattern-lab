@@ -24,25 +24,20 @@ export function DashboardScreen() {
   return (
     <>
       <PageHeader
-        eyebrow="Your daily dose of better design"
-        title="Small sessions. Lasting understanding."
-        description="Go beyond the names. Learn when, why, and how to use design patterns."
+        eyebrow="Interactive design-pattern practice"
+        title="Learn patterns by solving problems."
+        description="Read a scenario or code sample, choose the best-fit pattern, then learn why it fits."
         aside={<span className="edition">22 PATTERNS · 132 QUESTIONS</span>}
       />
       <section className="hero">
         <div className="hero-copy">
           <span className="hero-pill">
-            <span /> LEARN BY SOLVING
+            <span /> START HERE
           </span>
-          <h2>
-            Recognize the problem.
-            <br />
-            <em>Find the pattern.</em>
-          </h2>
+          <h2>Start with a quick practice.</h2>
           <p>
-            Real-world scenarios. Code you can read.
-            <br />
-            Clear explanations that make it click.
+            Answer 10 mixed questions. Explore all 22 patterns, with Java and TypeScript code
+            examples and a reference after every answer.
           </p>
           <button
             className="button lime"
@@ -52,13 +47,13 @@ export function DashboardScreen() {
                 : begin(createSession(questions, 'Quick practice', 10))
             }
           >
-            {active && !active.finished ? 'Continue learning' : 'Start a quick practice'}
+            {active && !active.finished ? 'Continue your session' : 'Start 10-question practice'}
             <Icon name="arrow" size={18} />
           </button>
           <small>
             {active && !active.finished
               ? `${active.checked.length} of ${active.questionIds.length} checked · ${active.title}`
-              : '10 questions · A small step forward'}
+              : 'No account needed · Progress saves in this browser'}
           </small>
         </div>
         <div className="hero-art" aria-hidden="true">
@@ -86,6 +81,41 @@ export function DashboardScreen() {
             <span className="art-tag">LESS GUESSWORK. MORE INTENT.</span>
           </div>
         </div>
+      </section>
+      <section className="how-it-works" aria-label="How it works">
+        <SectionHeading
+          title="How it works"
+          description="A simple loop takes you from recognition to understanding."
+        />
+        <ol className="how-steps">
+          <li className="how-step">
+            <span className="step-number" aria-hidden="true">
+              1
+            </span>
+            <div>
+              <h3>Choose a session</h3>
+              <p>Try 10 mixed questions, study 20, or create a focused set.</p>
+            </div>
+          </li>
+          <li className="how-step">
+            <span className="step-number" aria-hidden="true">
+              2
+            </span>
+            <div>
+              <h3>Pick the pattern</h3>
+              <p>Read a scenario or inspect code, then choose the best fit.</p>
+            </div>
+          </li>
+          <li className="how-step">
+            <span className="step-number" aria-hidden="true">
+              3
+            </span>
+            <div>
+              <h3>Review the reasoning</h3>
+              <p>Compare alternatives and open the pattern reference.</p>
+            </div>
+          </li>
+        </ol>
       </section>
       <section className="stats-grid" aria-label="Learning summary">
         <StatCard
