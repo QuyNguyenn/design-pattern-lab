@@ -34,25 +34,28 @@ function highlight(line: string): ReactNode[] {
 }
 
 export function CodeBlock({ code, language }: { code: string; language: Language }) {
-  const fileName = language === 'java' ? 'Example.java · Java 17+' : 'example.ts · TypeScript';
+  const fileName = language === 'java' ? 'Example.java' : 'example.ts';
+  const languageLabel = language === 'java' ? 'Java 17+' : 'TypeScript';
+  const lines = code.replace(/\n$/, '').split('\n');
 
   return (
     <div className="code-frame">
       <div className="code-caption">
-        <span className="code-dots" aria-hidden="true">
-          ● ● ●
+        <span className="code-file-name">{fileName}</span>
+        <span className="code-caption-meta">
+          <span>{languageLabel}</span>
+          <span aria-hidden="true">·</span>
+          <span>{lines.length} lines</span>
         </span>
-        <span>{fileName}</span>
       </div>
       <pre tabIndex={0} aria-label={`${language} code example`}>
         <code>
-          {code.split('\n').map((line, lineNumber) => (
+          {lines.map((line, lineNumber) => (
             <span className="code-line" key={lineNumber}>
               <span className="line-number" aria-hidden="true">
                 {lineNumber + 1}
               </span>
               <span>{highlight(line)}</span>
-              {'\n'}
             </span>
           ))}
         </code>
