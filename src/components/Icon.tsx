@@ -15,6 +15,13 @@ const iconPaths: Record<string, ReactNode> = {
       <path d="M12 5v15" />
     </>
   ),
+  practice: (
+    <>
+      <rect x="5" y="4" width="14" height="17" rx="2" />
+      <path d="M8 9h5M8 12h3" />
+      <path d="m13.5 17 4.9-4.9 2 2-4.9 4.9-2.8.8.8-2.8Z" />
+    </>
+  ),
   chart: <path d="M4 3v17h17M9 16v-5M14 16V7M19 16V3" />,
   settings: (
     <>

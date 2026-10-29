@@ -17,7 +17,7 @@ const pageLabels: Record<Page, string> = {
 
 const pageIcons: Record<Page, string> = {
   dashboard: 'grid',
-  practice: 'book',
+  practice: 'practice',
   progress: 'chart',
   settings: 'settings',
 };
