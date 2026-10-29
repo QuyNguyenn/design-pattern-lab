@@ -267,7 +267,7 @@ export function PracticeScreen() {
               {active.questionIds.map((id, index) => (
                 <button
                   key={id}
-                  aria-label={`Question ${index + 1}${active.checked.includes(id) ? ', checked' : ', unchecked'}`}
+                  aria-label={`Question ${index + 1}${active.checked.includes(id) ? (active.answers[id] === questionById[id].patternId ? ', correct' : ', incorrect, revisit') : ', unchecked'}`}
                   aria-current={index === active.index ? 'step' : undefined}
                   className={`${index === active.index ? 'current' : ''} ${active.checked.includes(id) ? (active.answers[id] === questionById[id].patternId ? 'done-right' : 'done-wrong') : ''}`}
                   onClick={() => {
@@ -276,6 +276,11 @@ export function PracticeScreen() {
                   }}
                 >
                   {index + 1}
+                  {active.checked.includes(id) && (
+                    <span className="question-dot-status" aria-hidden="true">
+                      {active.answers[id] === questionById[id].patternId ? '✓' : '×'}
+                    </span>
+                  )}
                 </button>
               ))}
             </div>

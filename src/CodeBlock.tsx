@@ -57,6 +57,9 @@ export function CodeBlock({ code, language }: { code: string; language: Language
           ))}
         </code>
       </pre>
+      <p className="code-scroll-hint">
+        Long lines? Scroll sideways, or focus the code and use arrow keys.
+      </p>
     </div>
   );
 }
