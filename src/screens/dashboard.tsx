@@ -20,6 +20,30 @@ export function DashboardScreen() {
     sessionSize,
     setSessionSize,
   } = useAppContext();
+  if (stats.studied === 0 && !active) {
+    return (
+      <section className="first-start" aria-labelledby="first-start-title">
+        <span className="first-start-mark" aria-hidden="true">
+          <Icon name="book" size={22} />
+        </span>
+        <p className="eyebrow">DESIGN PATTERN PRACTICE</p>
+        <h1 id="first-start-title">Learn one pattern at a time.</h1>
+        <p className="first-start-copy">
+          Read a short problem, choose a pattern, and see why it fits.
+        </p>
+        <button
+          className="button primary"
+          onClick={() => begin(createSession(questions, 'Quick practice', 10))}
+        >
+          Start practicing <Icon name="arrow" size={18} />
+        </button>
+        <p className="first-start-foot">10 questions · Progress saves in this browser</p>
+        <button className="first-start-browse" onClick={() => navigate('progress')}>
+          Browse the pattern library
+        </button>
+      </section>
+    );
+  }
   return (
     <>
       <PageHeader
