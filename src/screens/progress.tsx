@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Icon, Meter, PageHeader, SectionHeading, StatCard } from '../components/index.ts';
-import { questions, kindLabels } from '../data/index.ts';
+import { patternById, questions, kindLabels } from '../data/index.ts';
 import { createSession, statistics } from '../engine.ts';
 import type { QuestionKind } from '../types.ts';
 import { useAppContext } from '../app-context.tsx';
@@ -156,6 +156,17 @@ export function ProgressScreen() {
                     Reference ↗
                   </a>
                 </div>
+                <details className="pattern-contrasts">
+                  <summary>Often confused with</summary>
+                  <ul>
+                    {p.alternatives.map((id, index) => (
+                      <li key={id}>
+                        <strong>{patternById[id].name}</strong>
+                        <span>{p.contrasts[index]}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
               </article>
             );
           })}
