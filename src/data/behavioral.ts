@@ -41,6 +41,7 @@ export const behavioral: Pattern[] = [
     private limit: number,
     private next?: Support,
   ) {}
+
   resolve(level: number): string {
     if (level <= this.limit) return 'Resolved';
     return this.next?.resolve(level) ?? 'Unresolved';
@@ -49,6 +50,7 @@ export const behavioral: Pattern[] = [
           java: `class Support {
     private final int limit;
     private final Support next;
+
     Support(int limit, Support next) {
         this.limit = limit;
         this.next = next;
@@ -70,15 +72,18 @@ export const behavioral: Pattern[] = [
     private valid: (s: string) => boolean,
     private next?: Gate,
   ) {}
+
   accept(s: string): boolean {
     if (!this.valid(s)) return false;
     return this.next?.accept(s) ?? true;
   }
 }`,
           java: `import java.util.function.Predicate;
+
 class Gate {
     private final Predicate<String> valid;
     private final Gate next;
+
     Gate(Predicate<String> v, Gate n) {
         valid = v;
         next = n;
@@ -151,14 +156,17 @@ class Gate {
           typescript: `class Document {
   text = '';
 }
+
 interface Action {
   execute(): void;
 }
+
 class Insert implements Action {
   constructor(
     private doc: Document,
     private value: string,
   ) {}
+
   execute() {
     this.doc.text += this.value;
   }
@@ -166,12 +174,15 @@ class Insert implements Action {
           java: `class Document {
     String text = "";
 }
+
 interface Action {
     void execute();
 }
+
 class Insert implements Action {
     private final Document doc;
     private final String value;
+
     Insert(Document d, String v) {
         doc = d;
         value = v;
@@ -190,19 +201,24 @@ class Insert implements Action {
           typescript: `interface Task {
   execute(): void;
 }
+
 class JobQueue {
   private jobs: Task[] = [];
+
   add(job: Task) {
     this.jobs.push(job);
   }
+
   run() {
     this.jobs.splice(0).forEach((job) => job.execute());
   }
 }`,
           java: `import java.util.*;
+
 interface Task {
     void execute();
 }
+
 class JobQueue {
     private final Queue<Task> jobs = new ArrayDeque<>();
     void add(Task job) {
@@ -223,8 +239,10 @@ class JobQueue {
       code: {
         typescript: `class Editor {
   save() {}
+
   print() {}
 }
+
 function click(name: string, editor: Editor) {
   if (name === 'save') editor.save();
   if (name === 'print') editor.print();
@@ -233,6 +251,7 @@ function click(name: string, editor: Editor) {
     void save() {}
     void print() {}
 }
+
 class Toolbar {
     void click(String name, Editor editor) {
         if (name.equals("save")) editor.save();
@@ -281,19 +300,24 @@ class Toolbar {
         code: {
           typescript: `class Cursor<T> {
   private index = 0;
+
   constructor(private items: readonly T[]) {}
+
   hasNext() {
     return this.index < this.items.length;
   }
+
   next() {
     if (!this.hasNext()) throw new Error('Exhausted');
     return this.items[this.index++];
   }
 }`,
           java: `import java.util.*;
+
 class Cursor<T> {
     private int index;
     private final List<T> items;
+
     Cursor(List<T> items) {
         this.items = items;
     }
@@ -319,8 +343,10 @@ class Cursor<T> {
   }
 }`,
           java: `import java.util.*;
+
 class Shelf implements Iterable<String> {
     private final List<String> titles;
+
     Shelf(List<String> titles) {
         this.titles = List.copyOf(titles);
     }
@@ -339,12 +365,14 @@ class Shelf implements Iterable<String> {
         typescript: `class Playlist {
   tracks = ['A', 'B'];
 }
+
 function play(p: Playlist) {
   for (let i = 0; i < p.tracks.length; i++) console.log(p.tracks[i]);
 }`,
         java: `class Playlist {
     String[] tracks = {"A", "B"};
 }
+
 class Player {
     void play(Playlist p) {
         for (int i = 0; i < p.tracks.length; i++) System.out.println(p.tracks[i]);
@@ -393,14 +421,18 @@ class Player {
           typescript: `class Button {
   enabled = false;
 }
+
 class Dialog {
   constructor(private button: Button) {}
+
   changed(value: string) {
     this.button.enabled = value.length > 0;
   }
 }
+
 class Field {
   constructor(private dialog: Dialog) {}
+
   input(value: string) {
     this.dialog.changed(value);
   }
@@ -408,8 +440,10 @@ class Field {
           java: `class Button {
     boolean enabled;
 }
+
 class Dialog {
     private final Button button;
+
     Dialog(Button b) {
         button = b;
     }
@@ -417,8 +451,10 @@ class Dialog {
         button.enabled = !value.isEmpty();
     }
 }
+
 class Field {
     private final Dialog dialog;
+
     Field(Dialog d) {
         dialog = d;
     }
@@ -436,14 +472,18 @@ class Field {
           typescript: `class Alarm {
   ringing = false;
 }
+
 class ControlRoom {
   constructor(private alarm: Alarm) {}
+
   temperatureChanged(n: number) {
     this.alarm.ringing = n > 50;
   }
 }
+
 class Sensor {
   constructor(private room: ControlRoom) {}
+
   report(n: number) {
     this.room.temperatureChanged(n);
   }
@@ -451,8 +491,10 @@ class Sensor {
           java: `class Alarm {
     boolean ringing;
 }
+
 class ControlRoom {
     private final Alarm alarm;
+
     ControlRoom(Alarm a) {
         alarm = a;
     }
@@ -460,8 +502,10 @@ class ControlRoom {
         alarm.ringing = n > 50;
     }
 }
+
 class Sensor {
     private final ControlRoom room;
+
     Sensor(ControlRoom r) {
         room = r;
     }
@@ -481,9 +525,11 @@ class Sensor {
         typescript: `class Submit {
   enabled = false;
 }
+
 class Warning {
   visible = true;
 }
+
 class Field {
   changed(value: string, submit: Submit, warning: Warning) {
     submit.enabled = value.length > 0;
@@ -493,9 +539,11 @@ class Field {
         java: `class Submit {
     boolean enabled;
 }
+
 class Warning {
     boolean visible = true;
 }
+
 class Field {
     void changed(String value, Submit submit, Warning warning) {
         submit.enabled = !value.isEmpty();
@@ -545,14 +593,17 @@ class Field {
           typescript: `class Editor {
   private text = '';
   private saved = new WeakMap<object, string>();
+
   write(s: string) {
     this.text = s;
   }
+
   save(): object {
     const token = {};
     this.saved.set(token, this.text);
     return token;
   }
+
   restore(token: object) {
     if (this.saved.has(token)) this.text = this.saved.get(token)!;
   }
@@ -585,14 +636,17 @@ class Field {
           typescript: `class Player {
   private x = 0;
   private snapshots = new WeakMap<object, number>();
+
   move(x: number) {
     this.x = x;
   }
+
   checkpoint() {
     const token = {};
     this.snapshots.set(token, this.x);
     return token;
   }
+
   restore(token: object) {
     if (this.snapshots.has(token)) this.x = this.snapshots.get(token)!;
   }
@@ -628,9 +682,11 @@ class Field {
   text = '';
   cursor = 0;
 }
+
 function backup(e: Editor) {
   return { text: e.text, cursor: e.cursor };
 }
+
 function restore(e: Editor, s: { text: string; cursor: number }) {
   e.text = s.text;
   e.cursor = s.cursor;
@@ -639,7 +695,9 @@ function restore(e: Editor, s: { text: string; cursor: number }) {
     String text = "";
     int cursor;
 }
+
 record Backup(String text, int cursor) {}
+
 class History {
     Backup save(Editor e) {
         return new Backup(e.text, e.cursor);
@@ -690,16 +748,19 @@ class History {
         code: {
           typescript: `class Feed {
   private listeners = new Set<(n: number) => void>();
+
   subscribe(fn: (n: number) => void) {
     this.listeners.add(fn);
     return () => this.listeners.delete(fn);
   }
+
   publish(n: number) {
     this.listeners.forEach((fn) => fn(n));
   }
 }`,
           java: `import java.util.*;
 import java.util.function.IntConsumer;
+
 class Feed {
     private final Set<IntConsumer> listeners = new LinkedHashSet<>();
     Runnable subscribe(IntConsumer fn) {
@@ -719,15 +780,18 @@ class Feed {
         code: {
           typescript: `class Model {
   private views: Array<(s: string) => void> = [];
+
   observe(view: (s: string) => void) {
     this.views.push(view);
   }
+
   update(value: string) {
     this.views.forEach((view) => view(value));
   }
 }`,
           java: `import java.util.*;
 import java.util.function.Consumer;
+
 class Model {
     private final List<Consumer<String>> views = new ArrayList<>();
     void observe(Consumer<String> view) {
@@ -803,17 +867,21 @@ class Model {
           typescript: `interface Mode {
   press(d: Door): void;
 }
+
 class Door {
   mode: Mode = new Closed();
+
   press() {
     this.mode.press(this);
   }
 }
+
 class Closed implements Mode {
   press(d: Door) {
     d.mode = new Open();
   }
 }
+
 class Open implements Mode {
   press(d: Door) {
     d.mode = new Closed();
@@ -822,17 +890,20 @@ class Open implements Mode {
           java: `interface Mode {
     void press(Door d);
 }
+
 class Door {
     Mode mode = new Closed();
     void press() {
         mode.press(this);
     }
 }
+
 class Closed implements Mode {
     public void press(Door d) {
         d.mode = new Open();
     }
 }
+
 class Open implements Mode {
     public void press(Door d) {
         d.mode = new Closed();
@@ -848,18 +919,22 @@ class Open implements Mode {
           typescript: `interface Phase {
   pay(i: Invoice): string;
 }
+
 class Invoice {
   phase: Phase = new Draft();
+
   pay() {
     return this.phase.pay(this);
   }
 }
+
 class Draft implements Phase {
   pay(i: Invoice) {
     i.phase = new Paid();
     return 'Payment recorded';
   }
 }
+
 class Paid implements Phase {
   pay() {
     return 'Already paid';
@@ -868,18 +943,21 @@ class Paid implements Phase {
           java: `interface Phase {
     String pay(Invoice i);
 }
+
 class Invoice {
     Phase phase = new Draft();
     String pay() {
         return phase.pay(this);
     }
 }
+
 class Draft implements Phase {
     public String pay(Invoice i) {
         i.phase = new Paid();
         return "Payment recorded";
     }
 }
+
 class Paid implements Phase {
     public String pay(Invoice i) {
         return "Already paid";
@@ -896,6 +974,7 @@ class Paid implements Phase {
       code: {
         typescript: `class Connection {
   status = 'connecting';
+
   event(e: string) {
     if (this.status === 'connecting' && e === 'ready')
       this.status = 'connected';
@@ -952,18 +1031,22 @@ class Paid implements Phase {
           typescript: `interface Pricing {
   total(base: number): number;
 }
+
 class Regular implements Pricing {
   total(n: number) {
     return n;
   }
 }
+
 class Member implements Pricing {
   total(n: number) {
     return n * 0.9;
   }
 }
+
 class Checkout {
   constructor(private pricing: Pricing) {}
+
   bill(n: number) {
     return this.pricing.total(n);
   }
@@ -971,18 +1054,22 @@ class Checkout {
           java: `interface Pricing {
     double total(double base);
 }
+
 class Regular implements Pricing {
     public double total(double n) {
         return n;
     }
 }
+
 class Member implements Pricing {
     public double total(double n) {
         return n * 0.9;
     }
 }
+
 class Checkout {
     private final Pricing pricing;
+
     Checkout(Pricing p) {
         pricing = p;
     }
@@ -998,18 +1085,23 @@ class Checkout {
           'Planner composes an interchangeable route algorithm. A function can serve as a strategy without a separate concrete class.',
         code: {
           typescript: `type Route = (from: string, to: string) => string;
+
 class Planner {
   constructor(private route: Route) {}
+
   use(route: Route) {
     this.route = route;
   }
+
   plan(a: string, b: string) {
     return this.route(a, b);
   }
 }`,
           java: `import java.util.function.BiFunction;
+
 class Planner {
     private BiFunction<String, String, String> route;
+
     Planner(BiFunction<String, String, String> r) {
         route = r;
     }
@@ -1086,6 +1178,7 @@ class Planner {
   }
   protected abstract parse(raw: string): string;
 }
+
 class UpperImporter extends Importer {
   protected parse(raw: string) {
     return raw.toUpperCase();
@@ -1098,6 +1191,7 @@ class UpperImporter extends Importer {
     }
     protected abstract String parse(String raw);
 }
+
 class UpperImporter extends Importer {
     protected String parse(String raw) {
         return raw.toUpperCase();
@@ -1151,6 +1245,7 @@ class UpperImporter extends Importer {
     return '[' + s.trim().toUpperCase() + ']';
   }
 }
+
 class LowerJob {
   run(s: string) {
     return '[' + s.trim().toLowerCase() + ']';
@@ -1161,6 +1256,7 @@ class LowerJob {
         return "[" + s.trim().toUpperCase() + "]";
     }
 }
+
 class LowerJob {
     String run(String s) {
         return "[" + s.trim().toLowerCase() + "]";
@@ -1208,22 +1304,27 @@ class LowerJob {
         code: {
           typescript: `interface Ops {
   book(b: Book): string;
+
   film(f: Film): string;
 }
+
 class Book {
   accept(o: Ops) {
     return o.book(this);
   }
 }
+
 class Film {
   accept(o: Ops) {
     return o.film(this);
   }
 }
+
 class Label implements Ops {
   book(_b: Book) {
     return 'Book label';
   }
+
   film(_f: Film) {
     return 'Film label';
   }
@@ -1232,16 +1333,19 @@ class Label implements Ops {
     String book(Book b);
     String film(Film f);
 }
+
 class Book {
     String accept(Ops o) {
         return o.book(this);
     }
 }
+
 class Film {
     String accept(Ops o) {
         return o.film(this);
     }
 }
+
 class Label implements Ops {
     public String book(Book b) {
         return "Book label";
@@ -1259,24 +1363,31 @@ class Label implements Ops {
         code: {
           typescript: `interface Measure {
   circle(c: Circle): number;
+
   square(s: Square): number;
 }
+
 class Circle {
   radius = 2;
+
   accept(m: Measure) {
     return m.circle(this);
   }
 }
+
 class Square {
   side = 3;
+
   accept(m: Measure) {
     return m.square(this);
   }
 }
+
 class Area implements Measure {
   circle(c: Circle) {
     return Math.PI * c.radius ** 2;
   }
+
   square(s: Square) {
     return s.side ** 2;
   }
@@ -1285,18 +1396,21 @@ class Area implements Measure {
     double circle(Circle c);
     double square(Square s);
 }
+
 class Circle {
     double radius = 2;
     double accept(Measure m) {
         return m.circle(this);
     }
 }
+
 class Square {
     double side = 3;
     double accept(Measure m) {
         return m.square(this);
     }
 }
+
 class Area implements Measure {
     public double circle(Circle c) {
         return Math.PI * c.radius * c.radius;
@@ -1317,9 +1431,11 @@ class Area implements Measure {
         typescript: `class Book {
   pages = 100;
 }
+
 class Film {
   minutes = 90;
 }
+
 function label(item: Book | Film) {
   if (item instanceof Book) return item.pages + ' pages';
   return item.minutes + ' minutes';
@@ -1327,9 +1443,11 @@ function label(item: Book | Film) {
         java: `class Book {
     int pages = 100;
 }
+
 class Film {
     int minutes = 90;
 }
+
 class Report {
     String label(Object item) {
         if (item instanceof Book b) return b.pages + " pages";
