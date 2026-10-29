@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=Manrope:wght@400;500;600;650;700;750;800&display=swap');
+:root {
+  font-family:
+    'DM Sans',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  color: var(--text);
+  background: var(--canvas);
+  font-synthesis: none;
+  color-scheme: light;
+  --navy: #18324a;
+  --navy-hover: #102638;
+  --amber: #f2a93b;
+  --amber-hover: #e49a28;
+  --amber-soft: #fff2d8;
+  --amber-ink: #775014;
+  --green: var(--navy);
+  --lime: var(--amber);
+  --canvas: #f7f5f0;
+  --surface: #fff;
+  --surface-subtle: #f1efe9;
+  --surface-hover: #ece8df;
+  --text: #263547;
+  --muted: #667085;
+  --subtle: #89909b;
+  --border: #e3e0d8;
+  --white: #fff;
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --canvas: #111a24;
+  --surface: #192532;
+  --surface-subtle: #202f3e;
+  --surface-hover: #2a3a4a;
+  --text: #e8edf3;
+  --muted: #a8b4c2;
+  --subtle: #8291a2;
+  --border: #2c3b49;
+  --navy: #f2b64d;
+  --navy-hover: #ffd078;
+  --amber: #f2b64d;
+  --amber-hover: #ffd078;
+  --amber-soft: #44351e;
+  --amber-ink: #f4cd86;
+  --green: var(--navy);
+  --lime: var(--amber);
+  --white: var(--surface);
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+a {
+  color: var(--green);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+button {
+  color: inherit;
+}
+button,
+select,
+input {
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+input:focus-visible,
+pre:focus-visible {
+  outline: 3px solid #b97812;
+  outline-offset: 4px;
+}
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+h1,
+h2,
+h3 {
+  font-family: 'Manrope', 'DM Sans', sans-serif;
+  letter-spacing: -0.04em;
+}
+h1 {
+  font-size: clamp(24px, 2.3vw, 32px);
+  font-weight: 750;
+  line-height: 1.3;
+  margin-bottom: 9px;
+}
+h2 {
+  font-size: 21px;
+  font-weight: 750;
+  margin-bottom: 8px;
+}
+h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+p {
+  line-height: 1.65;
+}
+svg {
+  flex-shrink: 0;
+}

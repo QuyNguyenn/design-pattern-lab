@@ -8,14 +8,16 @@ Keep UI copy, questions, explanations, and repository documentation in English. 
 
 ## Where changes belong
 
-- `src/App.tsx`: app shell, navigation, state orchestration, and screen composition. Keep screen markup in `src/screens/`.
+- `src/App.tsx`: compose app state and provide the screen view model. Keep shell markup in `components/AppShell.tsx` and screen markup in `src/screens/`.
+- `src/hooks/`: isolate browser integrations and app actions, such as saved progress, hash navigation, and system theme behavior.
+- `src/components/AppShell.tsx`: global navigation, page frame, and shared chrome around the active screen.
 - `src/app-context.tsx`: typed view-model boundary shared by the screen components. Keep its contract explicit; move reusable domain behavior to `engine.ts`.
 - `src/components/`: shared presentational components grouped by responsibility. Keep screen-specific UI inside its screen module; extract repeated layout such as page and section headings when multiple screens use the same structure.
 - `src/engine.ts`: session creation, answer checking, filters, statistics, and saved-data validation. Keep learning-state rules here rather than duplicating them in views.
 - `src/types.ts`: shared contracts.
 - `src/data/{creational,structural,behavioral}.ts`: authored pattern records.
 - `src/data/index.ts`: question assembly, stable IDs, options, and reference links.
-- `src/CodeBlock.tsx` and `src/styles.css`: code presentation and responsive UI.
+- `src/CodeBlock.tsx` and `src/styles/`: code presentation, design tokens, shell layout, screen styles, themes, and responsive rules.
 - `tests/engine.test.ts`: regression checks for content integrity and learning behavior.
 
 For question-writing or content review, use the repository skill at [.agents/skills/design-pattern-content/SKILL.md](.agents/skills/design-pattern-content/SKILL.md). Read it when the task affects educational content; it is not necessary for unrelated UI or tooling edits.

@@ -1,0 +1,109 @@
+.settings-stack {
+  display: grid;
+  gap: 20px;
+  max-width: 950px;
+}
+.settings-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+  padding: 26px;
+}
+.settings-card h2,
+.about-card h2 {
+  font-size: 18px;
+}
+.settings-card p,
+.about-card p {
+  font-size: 13px;
+  color: #849174;
+  margin: 0;
+  max-width: 520px;
+}
+.settings-card button {
+  white-space: nowrap;
+}
+.theme-options button {
+  min-width: 66px;
+}
+.danger-zone {
+  border-color: #eadfd5;
+}
+.danger-zone h2 {
+  color: #9b694a;
+}
+.danger-outline {
+  border-color: #d8bca7;
+  color: #a57551;
+  background: #fff;
+}
+.danger-outline:hover {
+  background: #fff4eb;
+}
+.danger {
+  color: #fff;
+  background: #a65c3b;
+}
+.about-card {
+  padding: 27px;
+}
+.about-card p {
+  max-width: none;
+  margin-top: 15px;
+}
+dialog {
+  border: 1px solid #d9e2ce;
+  border-radius: 14px;
+  box-shadow: 0 25px 90px #18331f40;
+  padding: 29px;
+  max-width: 470px;
+  width: calc(100% - 32px);
+  color: #284535;
+}
+dialog::backdrop {
+  background: #172f2480;
+  backdrop-filter: blur(3px);
+}
+dialog h2 {
+  font-size: 22px;
+}
+dialog p {
+  font-size: 14px;
+  color: #7c8a6e;
+}
+.app-shell {
+  background: var(--canvas);
+  color: var(--text);
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link {
+  position: fixed;
+  left: 15px;
+  top: -70px;
+  z-index: 100;
+  background: white;
+  padding: 14px;
+  border: 2px solid var(--green);
+  border-radius: 5px;
+}
+.skip-link:focus {
+  top: 15px;
+}
