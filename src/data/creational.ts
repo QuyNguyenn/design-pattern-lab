@@ -36,25 +36,33 @@ export const creational: Pattern[] = [
         prompt: 'Which pattern connects ReportJob to CsvJob?',
         explanation: 'run() is shared, but makeWriter() is the creation hook overridden by CsvJob.',
         code: {
-          typescript: `interface Writer { write(): string }
+          typescript: `interface Writer {
+  write(): string;
+}
 abstract class ReportJob {
-  run() { return this.makeWriter().write(); }
+  run() {
+    return this.makeWriter().write();
+  }
   protected abstract makeWriter(): Writer;
 }
 class CsvJob extends ReportJob {
   protected makeWriter(): Writer {
-    return { write: () => "CSV report" };
+    return { write: () => 'CSV report' };
   }
 }`,
-          java: `interface Writer { String write(); }
+          java: `interface Writer {
+    String write();
+}
 abstract class ReportJob {
-  String run() { return makeWriter().write(); }
-  protected abstract Writer makeWriter();
+    String run() {
+        return makeWriter().write();
+    }
+    protected abstract Writer makeWriter();
 }
 class CsvJob extends ReportJob {
-  protected Writer makeWriter() {
-    return () -> "CSV report";
-  }
+    protected Writer makeWriter() {
+        return () -> "CSV report";
+    }
 }`,
         },
       },
@@ -63,25 +71,33 @@ class CsvJob extends ReportJob {
         explanation:
           'Delivery owns deliver(); LocalDelivery overrides the method that supplies its Courier product.',
         code: {
-          typescript: `interface Courier { send(): void }
+          typescript: `interface Courier {
+  send(): void;
+}
 abstract class Delivery {
-  deliver() { this.courier().send(); }
+  deliver() {
+    this.courier().send();
+  }
   protected abstract courier(): Courier;
 }
 class LocalDelivery extends Delivery {
   protected courier(): Courier {
-    return { send: () => console.log("By bike") };
+    return { send: () => console.log('By bike') };
   }
 }`,
-          java: `interface Courier { void send(); }
+          java: `interface Courier {
+    void send();
+}
 abstract class Delivery {
-  void deliver() { courier().send(); }
-  protected abstract Courier courier();
+    void deliver() {
+        courier().send();
+    }
+    protected abstract Courier courier();
 }
 class LocalDelivery extends Delivery {
-  protected Courier courier() {
-    return () -> System.out.println("By bike");
-  }
+    protected Courier courier() {
+        return () -> System.out.println("By bike");
+    }
 }`,
         },
       },
@@ -92,19 +108,27 @@ class LocalDelivery extends Delivery {
       explanation:
         'Extract new JsonParser() into an overridable createParser() method returning a parser interface.',
       code: {
-        typescript: `class JsonParser { parse(s: string) { return JSON.parse(s); } }
+        typescript: `class JsonParser {
+  parse(s: string) {
+    return JSON.parse(s);
+  }
+}
 class ImportJob {
   importData(source: string) {
     const parser = new JsonParser();
     return parser.parse(source);
   }
 }`,
-        java: `class JsonParser { Object parse(String s) { return s; } }
+        java: `class JsonParser {
+    Object parse(String s) {
+        return s;
+    }
+}
 class ImportJob {
-  Object importData(String source) {
-    var parser = new JsonParser();
-    return parser.parse(source);
-  }
+    Object importData(String source) {
+        var parser = new JsonParser();
+        return parser.parse(source);
+    }
 }`,
       },
     },
@@ -145,19 +169,41 @@ class ImportJob {
         prompt: 'Which pattern is represented by the UiKit contract?',
         explanation: 'UiKit provides two related product types, and NightKit supplies one family.',
         code: {
-          typescript: `interface Button { paint(): string }
-interface Menu { items(): string[] }
-interface UiKit { button(): Button; menu(): Menu }
+          typescript: `interface Button {
+  paint(): string;
+}
+interface Menu {
+  items(): string[];
+}
+interface UiKit {
+  button(): Button;
+  menu(): Menu;
+}
 class NightKit implements UiKit {
-  button() { return { paint: () => "dark button" }; }
-  menu() { return { items: () => ["dark item"] }; }
+  button() {
+    return { paint: () => 'dark button' };
+  }
+  menu() {
+    return { items: () => ['dark item'] };
+  }
 }`,
-          java: `interface Button { String paint(); }
-interface Menu { String[] items(); }
-interface UiKit { Button button(); Menu menu(); }
+          java: `interface Button {
+    String paint();
+}
+interface Menu {
+    String[] items();
+}
+interface UiKit {
+    Button button();
+    Menu menu();
+}
 class NightKit implements UiKit {
-  public Button button() { return () -> "dark button"; }
-  public Menu menu() { return () -> new String[]{"dark item"}; }
+    public Button button() {
+        return () -> "dark button";
+    }
+    public Menu menu() {
+        return () -> new String[] {"dark item"};
+    }
 }`,
         },
       },
@@ -171,15 +217,30 @@ class NightKit implements UiKit {
   mail(): { send(): string };
 }
 class SandboxPlatform implements Platform {
-  billing() { return { charge: () => "test charge" }; }
-  mail() { return { send: () => "test mail" }; }
+  billing() {
+    return { charge: () => 'test charge' };
+  }
+  mail() {
+    return { send: () => 'test mail' };
+  }
 }`,
-          java: `interface Billing { String charge(); }
-interface Mail { String send(); }
-interface Platform { Billing billing(); Mail mail(); }
+          java: `interface Billing {
+    String charge();
+}
+interface Mail {
+    String send();
+}
+interface Platform {
+    Billing billing();
+    Mail mail();
+}
 class SandboxPlatform implements Platform {
-  public Billing billing() { return () -> "test charge"; }
-  public Mail mail() { return () -> "test mail"; }
+    public Billing billing() {
+        return () -> "test charge";
+    }
+    public Mail mail() {
+        return () -> "test mail";
+    }
 }`,
         },
       },
@@ -192,17 +253,17 @@ class SandboxPlatform implements Platform {
       code: {
         typescript: `function configure(connectionVendor: string, dialectVendor: string) {
   return {
-    connection: connectionVendor === "A" ? "A connection" : "B connection",
-    dialect: dialectVendor === "A" ? "A dialect" : "B dialect"
+    connection: connectionVendor === 'A' ? 'A connection' : 'B connection',
+    dialect: dialectVendor === 'A' ? 'A dialect' : 'B dialect',
   };
 }`,
         java: `class Setup {
-  String[] configure(String connectionVendor, String dialectVendor) {
-    return new String[]{
-      connectionVendor.equals("A") ? "A connection" : "B connection",
-      dialectVendor.equals("A") ? "A dialect" : "B dialect"
-    };
-  }
+    String[] configure(String connectionVendor, String dialectVendor) {
+        return new String[] {
+        connectionVendor.equals("A") ? "A connection" : "B connection",
+        dialectVendor.equals("A") ? "A dialect" : "B dialect"
+};
+    }
 }`,
       },
     },
@@ -246,17 +307,33 @@ class SandboxPlatform implements Platform {
         code: {
           typescript: `class MealPlan {
   private parts: string[] = [];
-  main(value: string) { this.parts.push(value); return this; }
-  side(value: string) { this.parts.push(value); return this; }
-  build() { return [...this.parts]; }
+  main(value: string) {
+    this.parts.push(value);
+    return this;
+  }
+  side(value: string) {
+    this.parts.push(value);
+    return this;
+  }
+  build() {
+    return [...this.parts];
+  }
 }
-const meal = new MealPlan().main("Rice").side("Beans").build();`,
+const meal = new MealPlan().main('Rice').side('Beans').build();`,
           java: `import java.util.*;
 class MealPlan {
-  private final List<String> parts = new ArrayList<>();
-  MealPlan main(String v) { parts.add(v); return this; }
-  MealPlan side(String v) { parts.add(v); return this; }
-  List<String> build() { return List.copyOf(parts); }
+    private final List<String> parts = new ArrayList<>();
+    MealPlan main(String v) {
+        parts.add(v);
+        return this;
+    }
+    MealPlan side(String v) {
+        parts.add(v);
+        return this;
+    }
+    List<String> build() {
+        return List.copyOf(parts);
+    }
 }
 // new MealPlan().main("Rice").side("Beans").build();`,
         },
@@ -267,20 +344,36 @@ class MealPlan {
           'RequestDraft holds temporary construction state and produces a separate request value on build().',
         code: {
           typescript: `class RequestDraft {
-  private path = "/";
+  private path = '/';
   private headers: Record<string, string> = {};
-  at(path: string) { this.path = path; return this; }
-  header(k: string, v: string) { this.headers[k] = v; return this; }
-  build() { return Object.freeze({ path: this.path, headers: { ...this.headers } }); }
+  at(path: string) {
+    this.path = path;
+    return this;
+  }
+  header(k: string, v: string) {
+    this.headers[k] = v;
+    return this;
+  }
+  build() {
+    return Object.freeze({ path: this.path, headers: { ...this.headers } });
+  }
 }`,
           java: `import java.util.*;
 record Request(String path, Map<String, String> headers) {}
 class RequestDraft {
-  private String path = "/";
-  private final Map<String, String> headers = new HashMap<>();
-  RequestDraft at(String p) { path = p; return this; }
-  RequestDraft header(String k, String v) { headers.put(k, v); return this; }
-  Request build() { return new Request(path, Map.copyOf(headers)); }
+    private String path = "/";
+    private final Map<String, String> headers = new HashMap<>();
+    RequestDraft at(String p) {
+        path = p;
+        return this;
+    }
+    RequestDraft header(String k, String v) {
+        headers.put(k, v);
+        return this;
+    }
+    Request build() {
+        return new Request(path, Map.copyOf(headers));
+    }
 }`,
         },
       },
@@ -292,13 +385,17 @@ class RequestDraft {
         'A trip builder can expose destination(), withHotel(), and withInsurance() before build(), making the configuration explicit.',
       code: {
         typescript: `class Trip {
-  constructor(public city: string, public hotel: boolean,
-    public car: boolean, public insurance: boolean) {}
+  constructor(
+    public city: string,
+    public hotel: boolean,
+    public car: boolean,
+    public insurance: boolean,
+  ) {}
 }
-const trip = new Trip("Hanoi", true, false, true);`,
+const trip = new Trip('Hanoi', true, false, true);`,
         java: `record Trip(String city, boolean hotel, boolean car, boolean insurance) {}
 class Booking {
-  Trip trip = new Trip("Hanoi", true, false, true);
+    Trip trip = new Trip("Hanoi", true, false, true);
 }`,
       },
     },
@@ -341,16 +438,27 @@ class Booking {
           'copy() creates a new Note from the current instance and duplicates the mutable tags array.',
         code: {
           typescript: `class Note {
-  constructor(public text: string, public tags: string[]) {}
-  copy() { return new Note(this.text, [...this.tags]); }
+  constructor(
+    public text: string,
+    public tags: string[],
+  ) {}
+  copy() {
+    return new Note(this.text, [...this.tags]);
+  }
 }
-const original = new Note("Draft", ["work"]);
+const original = new Note('Draft', ['work']);
 const duplicate = original.copy();`,
           java: `import java.util.*;
 class Note {
-  String text; List<String> tags;
-  Note(String t, List<String> tags) { text = t; this.tags = tags; }
-  Note copy() { return new Note(text, new ArrayList<>(tags)); }
+    String text;
+    List<String> tags;
+    Note(String t, List<String> tags) {
+        text = t;
+        this.tags = tags;
+    }
+    Note copy() {
+        return new Note(text, new ArrayList<>(tags));
+    }
 }`,
         },
       },
@@ -360,22 +468,39 @@ class Note {
           'The palette stores a preconfigured instance and asks it for an independent copy.',
         code: {
           typescript: `class Stamp {
-  constructor(public color: string, public size: number) {}
-  copy() { return new Stamp(this.color, this.size); }
+  constructor(
+    public color: string,
+    public size: number,
+  ) {}
+  copy() {
+    return new Stamp(this.color, this.size);
+  }
 }
 class Palette {
   constructor(private preset: Stamp) {}
-  create() { return this.preset.copy(); }
+  create() {
+    return this.preset.copy();
+  }
 }`,
           java: `class Stamp {
-  String color; int size;
-  Stamp(String c, int s) { color = c; size = s; }
-  Stamp copy() { return new Stamp(color, size); }
+    String color;
+    int size;
+    Stamp(String c, int s) {
+        color = c;
+        size = s;
+    }
+    Stamp copy() {
+        return new Stamp(color, size);
+    }
 }
 class Palette {
-  private final Stamp preset;
-  Palette(Stamp preset) { this.preset = preset; }
-  Stamp create() { return preset.copy(); }
+    private final Stamp preset;
+    Palette(Stamp preset) {
+        this.preset = preset;
+    }
+    Stamp create() {
+        return preset.copy();
+    }
 }`,
         },
       },
@@ -387,16 +512,19 @@ class Palette {
         'Introduce a common copy() operation implemented by each concrete shape; callers no longer reconstruct the fields themselves.',
       code: {
         typescript: `class Circle {
-  constructor(public radius: number, public color: string) {}
+  constructor(
+    public radius: number,
+    public color: string,
+  ) {}
 }
 function duplicate(c: Circle) {
   return new Circle(c.radius, c.color);
 }`,
         java: `record Circle(int radius, String color) {}
 class Editor {
-  Circle duplicate(Circle c) {
-    return new Circle(c.radius(), c.color());
-  }
+    Circle duplicate(Circle c) {
+        return new Circle(c.radius(), c.color());
+    }
 }`,
       },
     },
@@ -441,12 +569,16 @@ class Editor {
           typescript: `class Registry {
   private static readonly shared = new Registry();
   private constructor() {}
-  static instance() { return Registry.shared; }
+  static instance() {
+    return Registry.shared;
+  }
 }`,
           java: `final class Registry {
-  private static final Registry SHARED = new Registry();
-  private Registry() {}
-  static Registry instance() { return SHARED; }
+    private static final Registry SHARED = new Registry();
+    private Registry() {}
+    static Registry instance() {
+        return SHARED;
+    }
 }`,
         },
       },
@@ -459,15 +591,17 @@ class Editor {
   private static value: RuntimeSettings | undefined;
   private constructor() {}
   static current() {
-    return this.value ??= new RuntimeSettings();
+    return (this.value ??= new RuntimeSettings());
   }
 }`,
           java: `final class RuntimeSettings {
-  private RuntimeSettings() {}
-  private static class Holder {
-    static final RuntimeSettings VALUE = new RuntimeSettings();
-  }
-  static RuntimeSettings current() { return Holder.VALUE; }
+    private RuntimeSettings() {}
+    private static class Holder {
+        static final RuntimeSettings VALUE = new RuntimeSettings();
+    }
+    static RuntimeSettings current() {
+        return Holder.VALUE;
+    }
 }`,
         },
       },
@@ -478,14 +612,18 @@ class Editor {
       explanation:
         'Make construction private and expose one stored instance. This is a local lifetime policy, not a distributed lock or a guarantee of thread-safe mutable methods.',
       code: {
-        typescript: `class JobRegistry { jobs: string[] = []; }
+        typescript: `class JobRegistry {
+  jobs: string[] = [];
+}
 const first = new JobRegistry();
 const second = new JobRegistry();`,
         java: `import java.util.*;
-class JobRegistry { List<String> jobs = new ArrayList<>(); }
+class JobRegistry {
+    List<String> jobs = new ArrayList<>();
+}
 class Startup {
-  JobRegistry first = new JobRegistry();
-  JobRegistry second = new JobRegistry();
+    JobRegistry first = new JobRegistry();
+    JobRegistry second = new JobRegistry();
 }`,
       },
     },

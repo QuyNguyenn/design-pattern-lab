@@ -36,18 +36,36 @@ export const structural: Pattern[] = [
         prompt: 'Which pattern does SensorPort implement?',
         explanation: 'SensorPort satisfies degreesC() by translating a legacy Fahrenheit reading.',
         code: {
-          typescript: `class OldSensor { readF() { return 77; } }
-interface Sensor { degreesC(): number }
+          typescript: `class OldSensor {
+  readF() {
+    return 77;
+  }
+}
+interface Sensor {
+  degreesC(): number;
+}
 class SensorPort implements Sensor {
   constructor(private device: OldSensor) {}
-  degreesC() { return (this.device.readF() - 32) * 5 / 9; }
+  degreesC() {
+    return ((this.device.readF() - 32) * 5) / 9;
+  }
 }`,
-          java: `class OldSensor { double readF() { return 77; } }
-interface Sensor { double degreesC(); }
+          java: `class OldSensor {
+    double readF() {
+        return 77;
+    }
+}
+interface Sensor {
+    double degreesC();
+}
 class SensorPort implements Sensor {
-  private final OldSensor device;
-  SensorPort(OldSensor d) { device = d; }
-  public double degreesC() { return (device.readF() - 32) * 5 / 9; }
+    private final OldSensor device;
+    SensorPort(OldSensor d) {
+        device = d;
+    }
+    public double degreesC() {
+        return (device.readF() - 32) * 5 / 9;
+    }
 }`,
         },
       },
@@ -56,18 +74,36 @@ class SensorPort implements Sensor {
         explanation:
           'CheckoutPort implements the desired contract while translating its argument for VendorPay.',
         code: {
-          typescript: `interface Payments { charge(cents: number): void }
-class VendorPay { payDollars(n: number) { console.log(n); } }
+          typescript: `interface Payments {
+  charge(cents: number): void;
+}
+class VendorPay {
+  payDollars(n: number) {
+    console.log(n);
+  }
+}
 class CheckoutPort implements Payments {
   constructor(private vendor: VendorPay) {}
-  charge(cents: number) { this.vendor.payDollars(cents / 100); }
+  charge(cents: number) {
+    this.vendor.payDollars(cents / 100);
+  }
 }`,
-          java: `interface Payments { void charge(int cents); }
-class VendorPay { void payDollars(double n) { System.out.println(n); } }
+          java: `interface Payments {
+    void charge(int cents);
+}
+class VendorPay {
+    void payDollars(double n) {
+        System.out.println(n);
+    }
+}
 class CheckoutPort implements Payments {
-  private final VendorPay vendor;
-  CheckoutPort(VendorPay v) { vendor = v; }
-  public void charge(int cents) { vendor.payDollars(cents / 100.0); }
+    private final VendorPay vendor;
+    CheckoutPort(VendorPay v) {
+        vendor = v;
+    }
+    public void charge(int cents) {
+        vendor.payDollars(cents / 100.0);
+    }
 }`,
         },
       },
@@ -78,13 +114,23 @@ class CheckoutPort implements Payments {
       explanation:
         'Move the interface and unit conversion into an adapter so checkout code only knows its own payment contract.',
       code: {
-        typescript: `class Vendor { payDollars(n: number) { console.log(n); } }
+        typescript: `class Vendor {
+  payDollars(n: number) {
+    console.log(n);
+  }
+}
 function buy(vendor: Vendor, cents: number) {
   vendor.payDollars(cents / 100);
 }`,
-        java: `class Vendor { void payDollars(double n) { System.out.println(n); } }
+        java: `class Vendor {
+    void payDollars(double n) {
+        System.out.println(n);
+    }
+}
 class Checkout {
-  void buy(Vendor vendor, int cents) { vendor.payDollars(cents / 100.0); }
+    void buy(Vendor vendor, int cents) {
+        vendor.payDollars(cents / 100.0);
+    }
 }`,
       },
     },
@@ -126,23 +172,35 @@ class Checkout {
         explanation:
           'Circle belongs to the shape hierarchy and delegates rendering to an independently supplied Renderer.',
         code: {
-          typescript: `interface Renderer { circle(r: number): void }
+          typescript: `interface Renderer {
+  circle(r: number): void;
+}
 abstract class Shape {
   constructor(protected renderer: Renderer) {}
   abstract draw(): void;
 }
 class Circle extends Shape {
-  draw() { this.renderer.circle(10); }
+  draw() {
+    this.renderer.circle(10);
+  }
 }`,
-          java: `interface Renderer { void circle(int r); }
+          java: `interface Renderer {
+    void circle(int r);
+}
 abstract class Shape {
-  protected final Renderer renderer;
-  Shape(Renderer r) { renderer = r; }
-  abstract void draw();
+    protected final Renderer renderer;
+    Shape(Renderer r) {
+        renderer = r;
+    }
+    abstract void draw();
 }
 class Circle extends Shape {
-  Circle(Renderer r) { super(r); }
-  void draw() { renderer.circle(10); }
+    Circle(Renderer r) {
+        super(r);
+    }
+    void draw() {
+        renderer.circle(10);
+    }
 }`,
         },
       },
@@ -151,23 +209,39 @@ class Circle extends Shape {
         explanation:
           'Remote and QuietRemote use the Device interface without inheriting from a specific device implementation.',
         code: {
-          typescript: `interface Device { volume(n: number): void }
+          typescript: `interface Device {
+  volume(n: number): void;
+}
 class Remote {
   constructor(protected device: Device) {}
-  setVolume(n: number) { this.device.volume(n); }
+  setVolume(n: number) {
+    this.device.volume(n);
+  }
 }
 class QuietRemote extends Remote {
-  mute() { this.device.volume(0); }
+  mute() {
+    this.device.volume(0);
+  }
 }`,
-          java: `interface Device { void volume(int n); }
+          java: `interface Device {
+    void volume(int n);
+}
 class Remote {
-  protected final Device device;
-  Remote(Device d) { device = d; }
-  void setVolume(int n) { device.volume(n); }
+    protected final Device device;
+    Remote(Device d) {
+        device = d;
+    }
+    void setVolume(int n) {
+        device.volume(n);
+    }
 }
 class QuietRemote extends Remote {
-  QuietRemote(Device d) { super(d); }
-  void mute() { device.volume(0); }
+    QuietRemote(Device d) {
+        super(d);
+    }
+    void mute() {
+        device.volume(0);
+    }
 }`,
         },
       },
@@ -228,19 +302,37 @@ class CanvasSquare {}
         explanation:
           'Box is a component containing other components and aggregates their prices recursively.',
         code: {
-          typescript: `interface Item { price(): number }
-class Product implements Item { price() { return 12; } }
+          typescript: `interface Item {
+  price(): number;
+}
+class Product implements Item {
+  price() {
+    return 12;
+  }
+}
 class Box implements Item {
   constructor(private children: Item[]) {}
-  price(): number { return this.children.reduce((n, c) => n + c.price(), 0); }
+  price(): number {
+    return this.children.reduce((n, c) => n + c.price(), 0);
+  }
 }`,
           java: `import java.util.*;
-interface Item { int price(); }
-class Product implements Item { public int price() { return 12; } }
+interface Item {
+    int price();
+}
+class Product implements Item {
+    public int price() {
+        return 12;
+    }
+}
 class Box implements Item {
-  private final List<Item> children;
-  Box(List<Item> c) { children = c; }
-  public int price() { return children.stream().mapToInt(Item::price).sum(); }
+    private final List<Item> children;
+    Box(List<Item> c) {
+        children = c;
+    }
+    public int price() {
+        return children.stream().mapToInt(Item::price).sum();
+    }
 }`,
         },
       },
@@ -249,25 +341,39 @@ class Box implements Item {
         explanation:
           'A Group implements the same Graphic operation as its children and delegates to every child.',
         code: {
-          typescript: `interface Graphic { move(dx: number): void }
+          typescript: `interface Graphic {
+  move(dx: number): void;
+}
 class Dot implements Graphic {
   x = 0;
-  move(dx: number) { this.x += dx; }
+  move(dx: number) {
+    this.x += dx;
+  }
 }
 class Group implements Graphic {
   constructor(private children: Graphic[]) {}
-  move(dx: number) { this.children.forEach(c => c.move(dx)); }
+  move(dx: number) {
+    this.children.forEach((c) => c.move(dx));
+  }
 }`,
           java: `import java.util.*;
-interface Graphic { void move(int dx); }
+interface Graphic {
+    void move(int dx);
+}
 class Dot implements Graphic {
-  int x;
-  public void move(int dx) { x += dx; }
+    int x;
+    public void move(int dx) {
+        x += dx;
+    }
 }
 class Group implements Graphic {
-  private final List<Graphic> children;
-  Group(List<Graphic> c) { children = c; }
-  public void move(int dx) { children.forEach(c -> c.move(dx)); }
+    private final List<Graphic> children;
+    Group(List<Graphic> c) {
+        children = c;
+    }
+    public void move(int dx) {
+        children.forEach(c -> c.move(dx));
+    }
 }`,
         },
       },
@@ -281,16 +387,16 @@ class Group implements Graphic {
         typescript: `type FileEntry = { bytes: number };
 type FolderEntry = { files: FileEntry[] };
 function size(e: FileEntry | FolderEntry) {
-  return "bytes" in e ? e.bytes : e.files.reduce((s, f) => s + f.bytes, 0);
+  return 'bytes' in e ? e.bytes : e.files.reduce((s, f) => s + f.bytes, 0);
 }`,
         java: `import java.util.*;
 record FileEntry(int bytes) {}
 record FolderEntry(List<FileEntry> files) {}
 class Disk {
-  int size(Object e) {
-    if (e instanceof FileEntry f) return f.bytes();
-    return ((FolderEntry) e).files().stream().mapToInt(FileEntry::bytes).sum();
-  }
+    int size(Object e) {
+        if (e instanceof FileEntry f) return f.bytes();
+        return ((FolderEntry) e).files().stream().mapToInt(FileEntry::bytes).sum();
+    }
 }`,
       },
     },
@@ -332,18 +438,36 @@ class Disk {
         explanation:
           'Border is itself a View and wraps another View to add markup around its result.',
         code: {
-          typescript: `interface View { render(): string }
-class Label implements View { render() { return "Hello"; } }
+          typescript: `interface View {
+  render(): string;
+}
+class Label implements View {
+  render() {
+    return 'Hello';
+  }
+}
 class Border implements View {
   constructor(private inner: View) {}
-  render() { return "[" + this.inner.render() + "]"; }
+  render() {
+    return '[' + this.inner.render() + ']';
+  }
 }`,
-          java: `interface View { String render(); }
-class Label implements View { public String render() { return "Hello"; } }
+          java: `interface View {
+    String render();
+}
+class Label implements View {
+    public String render() {
+        return "Hello";
+    }
+}
 class Border implements View {
-  private final View inner;
-  Border(View v) { inner = v; }
-  public String render() { return "[" + inner.render() + "]"; }
+    private final View inner;
+    Border(View v) {
+        inner = v;
+    }
+    public String render() {
+        return "[" + inner.render() + "]";
+    }
 }`,
         },
       },
@@ -352,19 +476,37 @@ class Border implements View {
         explanation:
           'OatMilk implements Drink and adds to another Drink, so another add-on can wrap it again.',
         code: {
-          typescript: `interface Drink { cost(): number }
-class Coffee implements Drink { cost() { return 3; } }
+          typescript: `interface Drink {
+  cost(): number;
+}
+class Coffee implements Drink {
+  cost() {
+    return 3;
+  }
+}
 class OatMilk implements Drink {
   constructor(private inner: Drink) {}
-  cost() { return this.inner.cost() + 1; }
+  cost() {
+    return this.inner.cost() + 1;
+  }
 }
 const order = new OatMilk(new Coffee());`,
-          java: `interface Drink { int cost(); }
-class Coffee implements Drink { public int cost() { return 3; } }
+          java: `interface Drink {
+    int cost();
+}
+class Coffee implements Drink {
+    public int cost() {
+        return 3;
+    }
+}
 class OatMilk implements Drink {
-  private final Drink inner;
-  OatMilk(Drink d) { inner = d; }
-  public int cost() { return inner.cost() + 1; }
+    private final Drink inner;
+    OatMilk(Drink d) {
+        inner = d;
+    }
+    public int cost() {
+        return inner.cost() + 1;
+    }
 }`,
         },
       },
@@ -424,19 +566,40 @@ class BorderedShadowedTextView extends TextView {}`,
           'Studio hides a sequence of calls to several subsystem objects behind start().',
         code: {
           typescript: `class Studio {
-  constructor(private lights: { dim(): void },
-    private sound: { on(): void }, private screen: { play(): void }) {}
+  constructor(
+    private lights: { dim(): void },
+    private sound: { on(): void },
+    private screen: { play(): void },
+  ) {}
   start() {
-    this.lights.dim(); this.sound.on(); this.screen.play();
+    this.lights.dim();
+    this.sound.on();
+    this.screen.play();
   }
 }`,
-          java: `interface Lights { void dim(); }
-interface Sound { void on(); }
-interface Screen { void play(); }
+          java: `interface Lights {
+    void dim();
+}
+interface Sound {
+    void on();
+}
+interface Screen {
+    void play();
+}
 class Studio {
-  private final Lights lights; private final Sound sound; private final Screen screen;
-  Studio(Lights l, Sound s, Screen p) { lights = l; sound = s; screen = p; }
-  void start() { lights.dim(); sound.on(); screen.play(); }
+    private final Lights lights;
+    private final Sound sound;
+    private final Screen screen;
+    Studio(Lights l, Sound s, Screen p) {
+        lights = l;
+        sound = s;
+        screen = p;
+    }
+    void start() {
+        lights.dim();
+        sound.on();
+        screen.play();
+    }
 }`,
         },
       },
@@ -445,16 +608,30 @@ class Studio {
         explanation: 'Release supplies one convenient operation over build and publish services.',
         code: {
           typescript: `class Release {
-  constructor(private compiler: { build(): string },
-    private store: { publish(artifact: string): void }) {}
-  ship() { this.store.publish(this.compiler.build()); }
+  constructor(
+    private compiler: { build(): string },
+    private store: { publish(artifact: string): void },
+  ) {}
+  ship() {
+    this.store.publish(this.compiler.build());
+  }
 }`,
-          java: `interface Compiler { String build(); }
-interface Store { void publish(String artifact); }
+          java: `interface Compiler {
+    String build();
+}
+interface Store {
+    void publish(String artifact);
+}
 class Release {
-  private final Compiler compiler; private final Store store;
-  Release(Compiler c, Store s) { compiler = c; store = s; }
-  void ship() { store.publish(compiler.build()); }
+    private final Compiler compiler;
+    private final Store store;
+    Release(Compiler c, Store s) {
+        compiler = c;
+        store = s;
+    }
+    void ship() {
+        store.publish(compiler.build());
+    }
 }`,
         },
       },
@@ -465,18 +642,27 @@ class Release {
       explanation:
         'A meeting facade can encapsulate the microphone, camera, and connection setup in one operation.',
       code: {
-        typescript: `function join(mic: { enable(): void }, camera: { enable(): void },
-  connection: { open(): void }) {
+        typescript: `function join(
+  mic: { enable(): void },
+  camera: { enable(): void },
+  connection: { open(): void },
+) {
   mic.enable();
   camera.enable();
   connection.open();
 }`,
-        java: `interface Switch { void enable(); }
-interface Connection { void open(); }
+        java: `interface Switch {
+    void enable();
+}
+interface Connection {
+    void open();
+}
 class Client {
-  void join(Switch mic, Switch camera, Connection connection) {
-    mic.enable(); camera.enable(); connection.open();
-  }
+    void join(Switch mic, Switch camera, Connection connection) {
+        mic.enable();
+        camera.enable();
+        connection.open();
+    }
 }`,
       },
     },
@@ -525,13 +711,19 @@ function style(species: string): Style {
   return styles.get(species)!;
 }
 class Tree {
-  constructor(public x: number, public y: number, public style: Style) {}
+  constructor(
+    public x: number,
+    public y: number,
+    public style: Style,
+  ) {}
 }`,
           java: `import java.util.*;
 record Style(String species) {}
 class Styles {
-  private final Map<String, Style> pool = new HashMap<>();
-  Style get(String species) { return pool.computeIfAbsent(species, Style::new); }
+    private final Map<String, Style> pool = new HashMap<>();
+    Style get(String species) {
+        return pool.computeIfAbsent(species, Style::new);
+    }
 }
 record Tree(int x, int y, Style style) {}`,
         },
@@ -546,13 +738,15 @@ function glyph(symbol: string) {
   if (!glyphs.has(symbol)) glyphs.set(symbol, Object.freeze({ symbol }));
   return glyphs.get(symbol)!;
 }
-const line = [0, 10, 20].map(x => ({ x, glyph: glyph("a") }));`,
+const line = [0, 10, 20].map((x) => ({ x, glyph: glyph('a') }));`,
           java: `import java.util.*;
 record Glyph(String symbol) {}
 record GlyphPosition(int x, Glyph glyph) {}
 class FontCache {
-  private final Map<String, Glyph> pool = new HashMap<>();
-  Glyph get(String s) { return pool.computeIfAbsent(s, Glyph::new); }
+    private final Map<String, Glyph> pool = new HashMap<>();
+    Glyph get(String s) {
+        return pool.computeIfAbsent(s, Glyph::new);
+    }
 }`,
         },
       },
@@ -565,14 +759,20 @@ class FontCache {
       code: {
         typescript: `class Tree {
   texture: Uint8Array;
-  constructor(public x: number, public y: number) {
+  constructor(
+    public x: number,
+    public y: number,
+  ) {
     this.texture = new Uint8Array(100_000);
   }
 }`,
         java: `class Tree {
-  final byte[] texture = new byte[100_000];
-  final int x, y;
-  Tree(int x, int y) { this.x = x; this.y = y; }
+    final byte[] texture = new byte[100_000];
+    final int x, y;
+    Tree(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 }`,
       },
     },
@@ -612,20 +812,34 @@ class FontCache {
         prompt: 'Which pattern does LazyImage implement?',
         explanation: 'It preserves ImageView and defers creating the real image until draw().',
         code: {
-          typescript: `interface ImageView { draw(): string }
-class DiskImage implements ImageView { draw() { return "pixels"; } }
+          typescript: `interface ImageView {
+  draw(): string;
+}
+class DiskImage implements ImageView {
+  draw() {
+    return 'pixels';
+  }
+}
 class LazyImage implements ImageView {
   private real?: DiskImage;
-  draw() { return (this.real ??= new DiskImage()).draw(); }
-}`,
-          java: `interface ImageView { String draw(); }
-class DiskImage implements ImageView { public String draw() { return "pixels"; } }
-class LazyImage implements ImageView {
-  private DiskImage real;
-  public String draw() {
-    if (real == null) real = new DiskImage();
-    return real.draw();
+  draw() {
+    return (this.real ??= new DiskImage()).draw();
   }
+}`,
+          java: `interface ImageView {
+    String draw();
+}
+class DiskImage implements ImageView {
+    public String draw() {
+        return "pixels";
+    }
+}
+class LazyImage implements ImageView {
+    private DiskImage real;
+    public String draw() {
+        if (real == null) real = new DiskImage();
+        return real.draw();
+    }
 }`,
         },
       },
@@ -634,23 +848,34 @@ class LazyImage implements ImageView {
         explanation:
           'GuardedVault implements the same contract and decides whether to forward a read request.',
         code: {
-          typescript: `interface Vault { read(): string }
+          typescript: `interface Vault {
+  read(): string;
+}
 class GuardedVault implements Vault {
-  constructor(private real: Vault, private allowed: () => boolean) {}
+  constructor(
+    private real: Vault,
+    private allowed: () => boolean,
+  ) {}
   read() {
-    if (!this.allowed()) throw new Error("Denied");
+    if (!this.allowed()) throw new Error('Denied');
     return this.real.read();
   }
 }`,
           java: `import java.util.function.BooleanSupplier;
-interface Vault { String read(); }
+interface Vault {
+    String read();
+}
 class GuardedVault implements Vault {
-  private final Vault real; private final BooleanSupplier allowed;
-  GuardedVault(Vault r, BooleanSupplier a) { real = r; allowed = a; }
-  public String read() {
-    if (!allowed.getAsBoolean()) throw new SecurityException("Denied");
-    return real.read();
-  }
+    private final Vault real;
+    private final BooleanSupplier allowed;
+    GuardedVault(Vault r, BooleanSupplier a) {
+        real = r;
+        allowed = a;
+    }
+    public String read() {
+        if (!allowed.getAsBoolean()) throw new SecurityException("Denied");
+        return real.read();
+    }
 }`,
         },
       },
@@ -661,17 +886,21 @@ class GuardedVault implements Vault {
       explanation:
         'Place the permission check in a protection proxy that implements Store and forwards approved requests.',
       code: {
-        typescript: `interface Store { read(): string }
+        typescript: `interface Store {
+  read(): string;
+}
 function view(store: Store, allowed: boolean) {
-  if (!allowed) throw new Error("Denied");
+  if (!allowed) throw new Error('Denied');
   return store.read();
 }`,
-        java: `interface Store { String read(); }
+        java: `interface Store {
+    String read();
+}
 class Page {
-  String view(Store store, boolean allowed) {
-    if (!allowed) throw new SecurityException("Denied");
-    return store.read();
-  }
+    String view(Store store, boolean allowed) {
+        if (!allowed) throw new SecurityException("Denied");
+        return store.read();
+    }
 }`,
       },
     },
