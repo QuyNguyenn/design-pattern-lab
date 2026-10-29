@@ -67,6 +67,8 @@ The repository includes `.github/workflows/deploy.yml`. Pull requests run checks
 
 ## Persistence
 
+On desktop, the sidebar can collapse to an icon rail. Its state is saved in browser preferences; narrow layouts retain their compact navigation.
+
 The storage key remains `design-pattern-lab:progress:v1` so existing installations can migrate in place. The payload is version 2 and stores preferences, bookmarks, checked attempt history, the active session, and immutable session records. Version 1 payloads migrate automatically, preserving pending answers and question/choice order. Only the last completed session still present in old saved data can become a session record; older sessions cannot be reconstructed from attempts alone. The saved timestamp records when a snapshot was captured.
 
 Stored IDs, answers, option order, scores, and session records are validated before use. The app warns if browser storage is inaccessible, full, or saved data cannot be loaded. Missing theme preferences default to System, which follows device appearance. Reset all also removes session records.

@@ -140,7 +140,6 @@
 :root[data-theme='dark'] .hero p {
   color: #c0cad5;
 }
-:root[data-theme='dark'] .avatar,
 :root[data-theme='dark'] .mode-icon.green {
   background: #3c321f;
   color: #f4cd86;

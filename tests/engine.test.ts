@@ -396,3 +396,13 @@ test('history validation rejects damaged snapshots, scores, dates, and duplicate
     assert.throws(() => parseProgress(JSON.stringify(damaged)));
   }
 });
+
+test('sidebar preference persists and older payloads default to an expanded sidebar', () => {
+  const stored = { ...emptyProgress(), sidebarCollapsed: true };
+  assert.equal(parseProgress(JSON.stringify(stored)).sidebarCollapsed, true);
+  const older = { ...emptyProgress() };
+  delete older.sidebarCollapsed;
+  assert.equal(parseProgress(JSON.stringify(older)).sidebarCollapsed, false);
+  assert.throws(() => parseProgress(JSON.stringify({ ...stored, sidebarCollapsed: 'true' })));
+  assert.equal(emptyProgress().sidebarCollapsed, false);
+});
