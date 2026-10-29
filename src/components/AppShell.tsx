@@ -57,7 +57,6 @@ export function AppShell() {
           </span>
         </a>
         <div className="sidebar-nav-heading">
-          <div className="nav-caption">YOUR WORKSPACE</div>
           <button
             type="button"
             className="sidebar-toggle"
@@ -77,6 +76,7 @@ export function AppShell() {
               size={18}
             />
           </button>
+          <div className="nav-caption">YOUR WORKSPACE</div>
         </div>
         <nav aria-label="Main navigation">
           {(Object.keys(pageLabels) as Page[]).map((item) => (

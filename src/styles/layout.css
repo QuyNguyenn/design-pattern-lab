@@ -241,47 +241,105 @@ main {
   background: var(--surface-hover);
   color: var(--text);
 }
+/* Keep one fixed icon rail; collapse only clips/fades the adjacent text. */
 @media (min-width: 941px) {
-  .sidebar-collapsed .sidebar {
-    width: 78px;
+  .app-shell {
+    --sidebar-width: 238px;
+    --sidebar-expanded-width: 238px;
+    --sidebar-duration: 180ms;
+    --sidebar-easing: cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .app-shell.sidebar-collapsed {
+    --sidebar-width: 78px;
+  }
+  .app-shell .sidebar {
+    width: var(--sidebar-width);
     padding: 35px 12px 22px;
+    overflow: hidden;
+    contain: layout paint;
+    transition: width var(--sidebar-duration) var(--sidebar-easing);
   }
-  .sidebar-collapsed .main-shell {
-    margin-left: 78px;
+  .app-shell .main-shell {
+    margin-left: var(--sidebar-width);
+    transition: margin-left var(--sidebar-duration) var(--sidebar-easing);
   }
-  .sidebar-collapsed .brand {
-    justify-content: center;
-    padding: 0;
+  .app-shell .brand {
+    justify-content: flex-start;
+    padding: 0 7px;
+    white-space: nowrap;
   }
-  .sidebar-collapsed .brand-mark {
+  .app-shell .brand-mark {
     flex-shrink: 0;
     width: 40px;
     height: 40px;
   }
-  .sidebar-collapsed .brand > span:last-child,
-  .sidebar-collapsed .nav-caption,
-  .sidebar-collapsed .nav-label,
-  .sidebar-collapsed .sidebar-bottom {
-    display: none;
-  }
-  .sidebar-collapsed .sidebar-nav-heading {
-    justify-content: center;
+  .app-shell .sidebar-nav-heading {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 0;
+    margin: 36px 0 16px;
     padding: 0;
-    margin: 18px 0 0;
+    min-height: 36px;
   }
-  .sidebar-collapsed .sidebar nav {
-    margin-top: 20px;
+  .app-shell .sidebar-toggle {
+    justify-self: center;
   }
-  .sidebar-collapsed .nav-link {
-    justify-content: center;
-    padding: 14px;
+  .app-shell .sidebar nav {
+    margin-top: 0;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .app-shell .nav-link {
+    justify-content: flex-start;
+    padding: 14px 17px;
     position: relative;
+    white-space: nowrap;
+    min-width: 0;
+    overflow: hidden;
   }
-  .sidebar-collapsed .nav-dot {
+  .app-shell .nav-link > svg {
+    flex-shrink: 0;
+  }
+  .app-shell .nav-dot {
     position: absolute;
-    top: 9px;
-    right: 8px;
+    top: 10px;
+    left: 43px;
     margin: 0;
+  }
+  .app-shell .brand > span:last-child,
+  .app-shell .nav-label,
+  .app-shell .nav-caption {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .app-shell .sidebar-bottom {
+    width: calc(var(--sidebar-expanded-width) - 24px);
+  }
+  .app-shell .brand > span:last-child,
+  .app-shell .nav-label,
+  .app-shell .nav-caption,
+  .app-shell .sidebar-bottom {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 100ms ease 60ms,
+      visibility 0s linear;
+  }
+  .sidebar-collapsed .brand > span:last-child,
+  .sidebar-collapsed .nav-label,
+  .sidebar-collapsed .nav-caption,
+  .sidebar-collapsed .sidebar-bottom {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 80ms ease,
+      visibility 0s linear 80ms;
+  }
+}
+@media (min-width: 941px) and (max-width: 1180px) {
+  .app-shell {
+    --sidebar-width: 205px;
+    --sidebar-expanded-width: 205px;
   }
 }
 @media (max-width: 940px) {
